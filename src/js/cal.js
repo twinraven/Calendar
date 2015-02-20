@@ -103,7 +103,7 @@ var app = app || {};
 
             if (daysMissingAtFront > 0) {
                 prev = this.getPrevMonth(year, month);
-                prevMonthData = this.createMonthData(prev.getYear(), prev.getMonth());
+                prevMonthData = this.createMonthData(prev.getFullYear(), prev.getMonth());
                 prevMonthData = prevMonthData.slice(-daysMissingAtFront); // just the day/s we need to fill the gap
             }
 
@@ -111,8 +111,7 @@ var app = app || {};
 
             if (daysMissingAtEnd > 0) {
                 next = this.getNextMonth(year, month);
-                nextMonthData = this.createMonthData(next.getYear(), next.getMonth());
-
+                nextMonthData = this.createMonthData(next.getFullYear(), next.getMonth());
                 nextMonthData = nextMonthData.slice(0, daysMissingAtEnd); // just the day/s we need
             }
 

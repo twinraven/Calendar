@@ -10,10 +10,7 @@ var app = app || {};
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
 	var Grid = Backbone.Collection.extend({
-<<<<<<< HEAD:src/js/collections/grid.js
-=======
-		url: '',
->>>>>>> 3a51cec879a21752a5729f32c34790a87b74b3cd:src/js/collections/grid.js
+		url: '/',
 		// Reference to this collection's model.
 		model: app.day,
 

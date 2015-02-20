@@ -2,17 +2,21 @@
 var app = app || {};
 
 (function () {
-	'use strict';
+    'use strict';
 
-	// Model
-	// ----------
+    // Model
+    // ----------
 
-	app.day = Backbone.Model.extend({
-		// Default attributes for the model
-		defaults: {
-			num: 0,
-			label: 'day',
-			events: {}
-		}
-	});
+    app.day = Backbone.Model.extend({
+        // Default attributes for the model
+        defaults: {
+            events: []
+        },
+
+        addEvent: function(data) {
+            var ary = this.get('events');
+            ary[ary.length] = data
+            this.set({ 'events': ary });
+        }
+    });
 })();

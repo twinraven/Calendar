@@ -28,7 +28,7 @@ var app = app || {};
             //this.listenTo(this.activeMonth, 'change', this.render);
 
             // load data
-            // app.collection.fetch({reset: true});
+            //app.grid.add();
         },
 
         // Re-rendering the App just means refreshing the statistics -- the rest

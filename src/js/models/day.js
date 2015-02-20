@@ -7,8 +7,12 @@ var app = app || {};
 	// Model
 	// ----------
 
-	app.model = Backbone.Model.extend({
+	app.day = Backbone.Model.extend({
 		// Default attributes for the model
-		defaults: {}
+		defaults: {
+			num: 0,
+			label: 'day',
+			events: {}
+		}
 	});
 })();

@@ -8,6 +8,6 @@ $(function () {
 	'use strict';
 
 	// kick things off by creating the `App`
-	var calApp = new app.view();
+	var calApp = new app.appView();
     calApp.render();
 });

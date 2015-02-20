@@ -1,4 +1,5 @@
 html, body {
+    overflow: hidden;
     padding: 0;
     margin: 0;
     width: 100%;
@@ -10,15 +11,33 @@ ul {
     padding: 0;
 }
 
- .day {
+.grid {
+    border: 1px solid #ccc;
+    border-width: 1px 0 0 1px;
+}
+
+.day {
     box-sizing: border-box;
     border: 1px solid #ccc;
+    border-width: 0 1px 1px 0;
     display: flex;
     float: left;
-    min-height: calc(100vh / 6);
+    min-height: calc(80vh / 6);
     list-style: none;
     text-align: center;
-    justify-content: center;
-    align-items: center;
+    align-items: stretch;
     width: calc(100% / 7);
  }
+
+ .day-inner {
+    display: block;
+    width: 100%;
+ }
+
+ .day .is-current {
+    background: #ddf;
+ }
+
+ [data-cal-rows="4"] .day { min-height: calc(80vh / 4); }
+ [data-cal-rows="5"] .day { min-height: calc(80vh / 5); }
+ [data-cal-rows="6"] .day { min-height: calc(80vh / 6); }

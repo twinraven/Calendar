@@ -9,14 +9,14 @@
 		<div class="container" id="calapp">
 			<h1 class="title"></h1>
 
-			<a class="back" href="#">Previous month</a>
+			<a class="prev" href="#">Previous month</a>
 			<a class="next" href="#">Next month</a>
 
-			<ul id="grid"></ul>
+			<ul id="grid" class="grid"></ul>
 		</div>
 
 		<script type="text/template" id="day-template">
-			<div class="day-inner">
+			<div class="day-inner <% if (isCurrentMonth) { %>is-current<% } %>">
 				<%= num %>: <%= weekday %>
 				<%= events %>
 			</div>

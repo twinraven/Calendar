@@ -18,32 +18,35 @@ var app = app || {};
 
         initialize: function () {
             this.$grid = this.$('#grid');
+            this.$title = this.$('.title');
 
-            var now = app.cal.getMonthAndYearFromDate(new Date());
-            this.setActiveMonth(now.year, now.month);
+            this.setActiveMonth(new Date());
 
             // bind to change events in model/collection
             //this.listenTo(this.activeMonth, 'change', this.render);
 
-            // load data
-            var data = app.cal.createGridData(this.activeMonth.getFullYear(), this.activeMonth.getMonth());
-
-            data.map(function(d) {
-                app.grid.add(d);
-            });
-
-            //app.grid.fetch();
+            this.addMonthDataToCollection();
         },
 
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
         render: function () {
             this.addAll();
+            this.$title.text(app.cal.getMonthName(this.activeMonth) + " " + app.cal.getYear(this.activeMonth));
+
+            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.activeMonth));
             return this;
         },
 
         addDay: function (day) {
             var view = new app.dayView({ model: day });
+            
+            if (day.get('month') == app.cal.getMonthNum(this.activeMonth)) {
+                day.set('isCurrentMonth', true);
+            } else {
+                day.set('isCurrentMonth', false);
+            }
+            
             this.$grid.append(view.render().el);
         },
 
@@ -52,16 +55,39 @@ var app = app || {};
             app.grid.each(this.addDay, this);
         },
 
-        gotoNextMonth: function () {
+        gotoNextMonth: function (e) {
+            e.preventDefault();
+
             this.setActiveMonth(app.cal.getNextMonth(this.activeMonth));
+            this.addMonthDataToCollection();
+
+            this.render();
         },
 
-        gotoPrevMonth: function () {
+        gotoPrevMonth: function (e) {
+            e.preventDefault();
+
             this.setActiveMonth(app.cal.getPrevMonth(this.activeMonth));
+            this.addMonthDataToCollection();
+
+            this.render();
         },
 
-        setActiveMonth: function (year, month) {
-            this.activeMonth = new Date(year, month, 1);
+        setActiveMonth: function (newDate) {
+            this.activeMonth = new Date(newDate);
+        },
+
+        addMonthDataToCollection: function () {
+            // load data
+            var data = app.cal.getNewGridData(this.activeMonth);
+
+            app.grid.reset();
+
+            data.map(function(d) {
+                app.grid.add(d);
+            });
+
+            //app.grid.fetch();
         }
     });
 })(jQuery);

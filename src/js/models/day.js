@@ -11,12 +11,10 @@ var app = app || {};
         // Default attributes for the model
         defaults: {
             events: []
-        },
-
-        addEvent: function(data) {
-            var ary = this.get('events');
-            ary[ary.length] = data
-            this.set({ 'events': ary });
         }
+
+        /*addEvent: function(data) {
+            this.set({ 'events': data.id });
+        }*/
     });
 })();

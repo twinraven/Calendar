@@ -13,9 +13,9 @@ var app = app || {};
         className: 'day',
         template: _.template($('#day-template').html()),
 
-        events: {
+       /* events: {
             'click': 'addEvent'
-        },
+        },*/
 
         initialize: function () {
             this.listenTo(this.model, 'change', this.render);

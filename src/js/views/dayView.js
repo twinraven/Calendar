@@ -37,22 +37,25 @@ var app = app || {};
             
             var today = new Date().toDateString();
 
+            // highlight today
             if (this.model.get('date') === today) {
                 this.$el.addClass('is-today');
             }
 
+            // highlight if this day is currently in our active range
             if (this.model.get('isInRange') == true) {
                 this.$el.addClass('is-range');
             }
 
+            // add to the DOM
             this.$el.html(this.template(this.model.toJSON()));
 
             return this;
         },
 
-        addEvent: function() {
-            //this.model.addEvent( {'id': this.model.id} );
-        },
+        /*addEvent: function() {
+            this.model.addEvent( {'id': this.model.id} );
+        },*/
 
         // Remove the item, destroy the model from *localStorage* and delete its view.
         clear: function () {

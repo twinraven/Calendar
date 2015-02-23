@@ -47,6 +47,11 @@ var app = app || {};
             this.$grid.append(view.render().el);
         },
 
+        addAll: function () {
+            this.$grid.html('');
+            app.grid.each(this.addDay, this);
+        },
+
         highlightDateRange: function(dateFrom, dateTo) {
             app.grid.each(function(day) {
                 var date = new Date(day.get('date'));
@@ -69,11 +74,6 @@ var app = app || {};
         highlightDaysFrom: function (dateFrom, total) {
             var dateTo = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate() + total);
             this.highlightDateRange(dateFrom, dateTo);
-        },
-
-        addAll: function () {
-            this.$grid.html('');
-            app.grid.each(this.addDay, this);
         },
 
         gotoNextMonth: function (e) {

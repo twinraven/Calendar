@@ -28,11 +28,21 @@ var app = app || {};
             // creating a model.  This causes our TodoView to render twice. Once
             // after creating a model and once on `id` change.  We want to
             // filter out the second redundant render, which is caused by this
-            // `id` change.  It's known Backbone LocalStorage bug, therefore
+            // `ind` change.  It's known Backbone LocalStorage bug, therefore
             // we've to create a workaround.
             // https://github.com/tastejs/todomvc/issues/469
             if (this.model.changed.id !== undefined) {
                 return;
+            }
+            
+            var today = new Date().toDateString();
+
+            if (this.model.get('date') === today) {
+                this.$el.addClass('is-today');
+            }
+
+            if (this.model.get('isInRange') == true) {
+                this.$el.addClass('is-range');
             }
 
             this.$el.html(this.template(this.model.toJSON()));
@@ -41,7 +51,7 @@ var app = app || {};
         },
 
         addEvent: function() {
-            this.model.addEvent( {'id': this.model.id} );
+            //this.model.addEvent( {'id': this.model.id} );
         },
 
         // Remove the item, destroy the model from *localStorage* and delete its view.

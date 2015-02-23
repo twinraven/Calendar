@@ -10,6 +10,7 @@ var app = app || {};
     app.day = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
+            isInRange: false,
             events: []
         }
 

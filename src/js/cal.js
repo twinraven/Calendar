@@ -170,9 +170,10 @@ var app = app || {};
         getNewDayData : function (year, month, day) {
             return {
                 id : this.getNewDateId(year, month + 1, day),
-                num : day.toString(),
+                day : day.toString(),
                 month: month.toString(),
                 year: year.toString(),
+                date: new Date(year, month, day).toDateString(),
                 weekday : this.getDayOfWeekName(this.getDayOfWeekNum(year, month, day))
             };
         }

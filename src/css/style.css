@@ -30,12 +30,17 @@ ul {
  }
 
  .day-inner {
-    display: block;
+    align-items: center;
+    display: flex;
     width: 100%;
  }
 
- .day .is-current {
+ .day.is-range {
     background: #ddf;
+ }
+
+ .day.is-today {
+    background: red;
  }
 
  [data-cal-rows="4"] .day { min-height: calc(80vh / 4); }

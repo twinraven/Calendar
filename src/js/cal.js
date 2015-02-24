@@ -59,7 +59,7 @@ var app = app || {};
             return app.labels.month[date.getMonth()];
         },
 
-        getDate: function (date) {
+        getDate : function (date) {
             return date.getDate();
         },
 
@@ -101,12 +101,6 @@ var app = app || {};
             return ('0' + num).slice(-2);
         },
 
-        incrementWithinLimit : function (num, limit) {
-            if (num + 1 >= limit) { return 0; }
-
-            return num + 1;
-        },
-
         getNextMonth : function (date) {
             var d = this.getMonthYearFrom(date);
 
@@ -119,13 +113,21 @@ var app = app || {};
             return new Date(d.year, d.month - 1);
         },
 
-        getNewDateId : function (year, month, day) {
-            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
+        getNewMonthData : function (date) {
+            var x = 1;
+            var y = this.getDaysInMonth(date);
+            var data = [];
+            var d = this.getMonthYearFrom(date);
+
+            for (x, y; x <= y; x++) {
+                data.push(this.getNewDayData(d.year, d.month, x));
+            }
+
+            return data;
         },
 
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getNewGridData : function (date) {
-
             var thisMonthData = this.getNewMonthData(date);
             var totalBlocksInGrid = this.getRowsInMonth(date) * app.const.DAYS_IN_WEEK;
 
@@ -158,17 +160,8 @@ var app = app || {};
             return output;
         },
 
-        getNewMonthData : function (date) {
-            var x = 1;
-            var y = this.getDaysInMonth(date);
-            var data = [];
-            var d = this.getMonthYearFrom(date);
-
-            for (x, y; x <= y; x++) {
-                data.push(this.getNewDayData(d.year, d.month, x));
-            }
-
-            return data;
+        getNewDateId : function (year, month, day) {
+            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
         },
 
         getNewDayData : function (year, month, day) {

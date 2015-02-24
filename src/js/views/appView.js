@@ -13,37 +13,80 @@ var app = app || {};
 
         events: {
             'click .prev': 'gotoPrevMonth',
-            'click .next': 'gotoNextMonth'
+            'click .next': 'gotoNextMonth',
+
+            'mousedown': 'handleMouseDown',
+            'mouseup': 'handleMouseUp',
+            'mouseover .day': 'handleMouseOver',
+            'mouseout .day': 'handleMouseOut'
+        },
+
+        handleMouseDown: function (e) {
+            var $el = $(e.target);
+
+            if ($el.is('.day-inner')) {
+                this.isDragging = true;
+                this.setDragStartDate($el, $el.data('ref'));
+            }
+        },
+
+        handleMouseUp: function (e) {
+            var $el = $(e.target);
+
+            if ($el.is('.day-inner')) {
+                this.isDragging = false;
+
+                this.actionDates();
+            }
+        },
+
+        handleMouseOver: function (e) {
+            var $el = $(e.target);
+
+            if (this.isDragging) {
+                this.setDragEndDate($el, $el.data('ref'));
+            }
+        },
+
+        handleMouseOut: function () {
+            //
         },
 
         initialize: function () {
             this.$grid = this.$('#grid');
             this.$title = this.$('.title');
 
-            this.setActiveMonth(new Date());
+            this.setCurrentMonth(new Date());
 
             // bind to change events in model/collection
-            //this.listenTo(this.activeMonth, 'change', this.render);
+            //this.listenTo(this.currentMonth, 'change', this.render);
 
             this.addMonthDataToCollection();
 
-            this.highlightActiveMonth();
-            //this.highlightDaysFrom(new Date(2015,1,16), 7);
+            this.markCurrentMonth();
+            //this.markDaysFrom(new Date(2015,1,16), 7);
         },
 
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
         render: function () {
             this.addAll();
-            this.$title.text(app.cal.getMonthName(this.activeMonth) + " " + app.cal.getYear(this.activeMonth));
 
-            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.activeMonth));
+            this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
+            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
+
             return this;
+        },
+
+        actionDates: function () {
+            // fire popup to handle date range - add event
+
+            console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
         },
 
         addDay: function (day) {
             var view = new app.dayView({ model: day });
-            
+
             this.$grid.append(view.render().el);
         },
 
@@ -52,67 +95,102 @@ var app = app || {};
             app.grid.each(this.addDay, this);
         },
 
-        highlightDateRange: function(dateFrom, dateTo) {
-            app.grid.each(function(day) {
+        tagDateRange: function (dateFrom, dateTo, attr) {
+            app.grid.each(function (day) {
                 var date = new Date(day.get('date'));
-                if (date >= dateFrom && date < dateTo) {
-                    day.save({ 'isInRange' : true });
+                var prop = {};
+                if (date >= dateFrom && date <= dateTo) {
+                    prop[attr] = true;
                 } else {
-                    day.save({ 'isInRange' : false });
+                    prop[attr] = false;
                 }
+                day.save(prop);
             });
         },
 
-        highlightActiveMonth: function() {
-            var date = this.activeMonth;
-            var monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
-            var monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 1);
-
-            this.highlightDateRange(monthStart, monthEnd);
+        tagCurrentDateRange: function (dateFrom, dateTo) {
+            this.tagDateRange(dateFrom, dateTo, 'isCurrent');
         },
 
-        highlightDaysFrom: function (dateFrom, total) {
-            var dateTo = new Date(dateFrom.getFullYear(), dateFrom.getMonth(), dateFrom.getDate() + total);
-            this.highlightDateRange(dateFrom, dateTo);
+        tagHighlightDateRange: function (dateFrom, dateTo) {
+            this.tagDateRange(dateFrom, dateTo, 'isHighlight');
+        },
+
+        markCurrentMonth: function () {
+            var date = this.currentMonth;
+            var monthStart = new Date(app.cal.getYear(date), app.cal.getMonthNum(date), 1);
+            var monthEnd = new Date(app.cal.getYear(date), app.cal.getMonthNum(date) + 1, 0);
+
+            this.tagCurrentDateRange(monthStart, monthEnd);
+        },
+
+        markDaysFrom: function (dateFrom, total) {
+            var dateTo = new Date(app.cal.getYear(dateFrom), app.cal.getMonthNum(dateFrom), app.cal.getDate(dateFrom) + total);
+
+            this.tagCurrentDateRange(dateFrom, dateTo);
         },
 
         gotoNextMonth: function (e) {
             e.preventDefault();
 
-            this.setActiveMonth(app.cal.getNextMonth(this.activeMonth));
-            this.addMonthDataToCollection();
-
-            this.highlightActiveMonth();
-
-            this.render();
+            this.gotoMonth('next');
         },
 
         gotoPrevMonth: function (e) {
             e.preventDefault();
 
-            this.setActiveMonth(app.cal.getPrevMonth(this.activeMonth));
-            this.addMonthDataToCollection();
+            this.gotoMonth('prev');
+        },
 
-            this.highlightActiveMonth();
+        gotoMonth: function(type) {
+            var month;
+
+            if (type === 'next') {
+                month = app.cal.getNextMonth(this.currentMonth);
+
+            } else if (type === 'prev') {
+                month = app.cal.getPrevMonth(this.currentMonth);
+            }
+
+            this.setCurrentMonth(month);
+            this.addMonthDataToCollection();
+            this.markCurrentMonth();
 
             this.render();
         },
 
-        setActiveMonth: function (newDate) {
-            this.activeMonth = new Date(newDate);
+        setCurrentMonth: function (newDate) {
+            this.currentMonth = new Date(newDate);
         },
 
         addMonthDataToCollection: function () {
             // load data
-            var data = app.cal.getNewGridData(this.activeMonth);
+            var data = app.cal.getNewGridData(this.currentMonth);
 
             app.grid.reset();
 
-            data.map(function(d) {
+            data.map(function (d) {
                 app.grid.add(d);
             });
+        },
 
-            //app.grid.fetch();
+        setDragStartDate: function ($el, date) {
+            this.dragDateStart = new Date(date);
+            this.setDragEndDate($el, date);
+        },
+
+        setDragEndDate: function ($el, date) {
+            this.dragDateEnd = new Date(date);
+
+            if (this.dragDateStart < this.dragDateEnd) {
+                this.tagHighlightDateRange(this.dragDateStart, this.dragDateEnd);
+
+            } else {
+                // swap order if we're dragging backwards
+                this.tagHighlightDateRange(this.dragDateEnd, this.dragDateStart);
+            }
+
+            this.render();
         }
     });
 })(jQuery);

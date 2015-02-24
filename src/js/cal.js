@@ -47,6 +47,10 @@ var app = app || {};
             return new Date(d.year, d.month + 1, 0).getDate();
         },
 
+        getYear : function (date) {
+            return date.getFullYear();
+        },
+
         getMonthNum : function (date) {
             return date.getMonth();
         },
@@ -55,8 +59,8 @@ var app = app || {};
             return app.labels.month[date.getMonth()];
         },
 
-        getYear : function (date) {
-            return date.getFullYear();
+        getDate: function (date) {
+            return date.getDate();
         },
 
         getDayOfWeekName : function (num) {
@@ -94,7 +98,7 @@ var app = app || {};
         },
 
         asTwoDigits : function (num) {
-            return ("0" + num).slice(-2);
+            return ('0' + num).slice(-2);
         },
 
         incrementWithinLimit : function (num, limit) {
@@ -111,12 +115,12 @@ var app = app || {};
 
         getPrevMonth : function (date) {
             var d = this.getMonthYearFrom(date);
-            
+
             return new Date(d.year, d.month - 1);
         },
 
         getNewDateId : function (year, month, day) {
-            return "" + year + this.asTwoDigits(month) + this.asTwoDigits(day);
+            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
         },
 
         // we want to build a full grid of days, so may need days from preceding and proceeding months

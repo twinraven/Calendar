@@ -9,11 +9,12 @@ var app = app || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     app.appView = Backbone.View.extend({
-        el: '#calapp',
+        el: '#app',
 
         events: {
             'click .prev': 'gotoPrevMonth',
             'click .next': 'gotoNextMonth',
+            'click .home': 'gotoThisMonth',
 
             'mousedown': 'handleMouseDown',
             'mouseup': 'handleMouseUp',
@@ -35,8 +36,10 @@ var app = app || {};
 
             if ($el.is('.day-inner')) {
                 this.isDragging = false;
-
                 this.actionDates();
+
+            } else {
+                this.clearDrag();
             }
         },
 
@@ -53,7 +56,17 @@ var app = app || {};
         },
 
         initialize: function () {
-            this.$grid = this.$('#grid');
+            var self = this;
+
+            $('body').on('DOMMouseScroll mousewheel', function (e) {
+                if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
+                    self.gotoNextMonth();
+
+                } else {
+                    self.gotoPrevMonth();
+                }
+            });
+
             this.$title = this.$('.title');
 
             this.setCurrentMonth(new Date());
@@ -70,7 +83,8 @@ var app = app || {};
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
         render: function () {
-            this.addAll();
+            this.addAll('#grid-mini');
+            this.addAll('#grid-max');
 
             this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
             this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
@@ -84,15 +98,17 @@ var app = app || {};
             console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
         },
 
-        addDay: function (day) {
+        addDay: function (day, $grid) {
             var view = new app.dayView({ model: day });
 
-            this.$grid.append(view.render().el);
+            $grid.append(view.render().el);
         },
 
-        addAll: function () {
-            this.$grid.html('');
-            app.grid.each(this.addDay, this);
+        addAll: function (grid) {
+            var $grid = $(grid);
+
+            $grid.html('');
+            app.grid.each(function(day) { this.addDay(day, $grid); }, this);
         },
 
         tagDateRange: function (dateFrom, dateTo, attr) {
@@ -131,28 +147,38 @@ var app = app || {};
         },
 
         gotoNextMonth: function (e) {
-            e.preventDefault();
+            if (e) { e.preventDefault(); }
 
             this.gotoMonth('next');
         },
 
         gotoPrevMonth: function (e) {
-            e.preventDefault();
+            if (e) { e.preventDefault(); }
 
-            this.gotoMonth('prev');
+            this.gotoMonth('previous');
         },
 
-        gotoMonth: function(type) {
-            var month;
+        gotoThisMonth: function (e) {
+            if (e) { e.preventDefault(); }
 
-            if (type === 'next') {
-                month = app.cal.getNextMonth(this.currentMonth);
+            this.gotoMonth(null, new Date());
+        },
 
-            } else if (type === 'prev') {
-                month = app.cal.getPrevMonth(this.currentMonth);
+        gotoMonth: function (type, newDate) {
+            var date;
+
+            if (type) {
+                if (type === 'next') {
+                    date = app.cal.getNextMonth(this.currentMonth);
+
+                } else if (type === 'previous') {
+                    date = app.cal.getPrevMonth(this.currentMonth);
+                }
             }
 
-            this.setCurrentMonth(month);
+            if (newDate) { date = newDate; }
+
+            this.setCurrentMonth(date);
             this.addMonthDataToCollection();
             this.markCurrentMonth();
 
@@ -189,6 +215,12 @@ var app = app || {};
                 // swap order if we're dragging backwards
                 this.tagHighlightDateRange(this.dragDateEnd, this.dragDateStart);
             }
+
+            this.render();
+        },
+
+        clearDrag: function () {
+            this.tagHighlightDateRange(null, null);
 
             this.render();
         }

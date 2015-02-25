@@ -6,20 +6,32 @@
 		<link rel="stylesheet" href="css/style.css">
 	</head>
 	<body>
-		<div class="container" id="calapp">
-			<h1 class="title"></h1>
+		<div class="container" id="app">
+			<nav class="nav">
+				<h1 class="title"></h1>
+				<a class="prev" href="#">Previous month</a>
+				<a class="next" href="#">Next month</a>
+				<a class="home" href="#">Current</a>
+			</nav>
 
-			<a class="prev" href="#">Previous month</a>
-			<a class="next" href="#">Next month</a>
+			<aside class="sidebar">
+				<ul id="grid-mini" class="grid grid__mini"></ul>
+			</aside>
 
-			<ul id="grid" class="grid"></ul>
+			<main class="content">
+				<ul id="grid-max" class="grid grid__max"></ul>
+			</main>
 		</div>
 
 		<script type="text/template" id="day-template">
 			<div class="day-inner" data-ref="<%= id %>">
-				<%= day %>: <%= weekday %>
+				<h3 class="date" id="date-<%= id %>"><span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span></h3>
 				<%= events %>
 			</div>
+		</script>
+
+		<script type="text/template" id="day-title-template">
+			<h2><%= weekday %></h2>
 		</script>
 
 		<script src="js/vendor/jquery.js"></script>

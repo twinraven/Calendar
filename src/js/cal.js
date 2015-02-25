@@ -77,6 +77,25 @@ var app = app || {};
             return num;
         },
 
+        getOrdinalSuffix : function (num) {
+            var dec = num % 10,
+                cent = num % 100;
+
+            if (dec == 1 && cent != 11) {
+                return "st";
+            }
+
+            if (dec == 2 && cent != 12) {
+                return "nd";
+            }
+
+            if (dec == 3 && cent != 13) {
+                return "rd";
+            }
+
+            return "th";
+        },
+
         // returns a number 0-6 for day of week
         getMonthStartDayNum : function (date) {
              var d = this.getMonthYearFrom(date);
@@ -165,12 +184,15 @@ var app = app || {};
         },
 
         getNewDayData : function (year, month, day) {
+            var date = new Date(year, month, day);
             return {
                 id : this.getNewDateId(year, month + 1, day),
                 day : day.toString(),
                 month: month.toString(),
+                monthName: this.getMonthName(date),
                 year: year.toString(),
-                date: new Date(year, month, day).toDateString(),
+                date: date.toDateString(),
+                suffix: this.getOrdinalSuffix(day),
                 weekday : this.getDayOfWeekName(this.getDayOfWeekNum(year, month, day))
             };
         }

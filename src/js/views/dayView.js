@@ -9,8 +9,14 @@ var app = app || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     app.dayView = Backbone.View.extend({
-        tagName: 'div',
+        tagName: 'li',
         className: 'day',
+        attributes: function () {
+            return {
+                'aria-labelledby': 'date-' + this.model.get('id')
+            };
+        },
+
         template: _.template($('#day-template').html()),
 
         /*events: {
@@ -37,7 +43,7 @@ var app = app || {};
             if (this.model.changed.id !== undefined) {
                 return;
             }
-            
+
             var today = new Date().toDateString();
 
             // highlight today

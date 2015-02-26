@@ -1,5 +1,6 @@
 html, body {
     box-sizing: border-box;
+    font-family: Arial, sans-serif;
     overflow: hidden;
     padding: 30px 0 0;
     margin: 0;
@@ -37,8 +38,15 @@ html, body {
 }
 
 .content {
+    display: flex;
+    flex-direction: column;
     flex: 1 1 auto;
     height: 100%;
+}
+
+.grid-wrapper {
+    flex: 1;
+    position: relative;
 }
 
 ul {
@@ -46,17 +54,19 @@ ul {
     padding: 0;
 }
 
-.grid {
-    border: 1px solid #ccc;
-    border-width: 1px 0 0 1px;
-}
+.grid {}
 
 .grid__mini {
+    border: 1px solid #ccc;
     height: 200px;
 }
 
 .grid__max {
     height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
 }
 
 .sidebar {
@@ -70,8 +80,6 @@ ul {
 
 .day {
     box-sizing: border-box;
-    border: 1px solid #ccc;
-    border-width: 0 1px 1px 0;
     display: flex;
     float: left;
     list-style: none;
@@ -94,30 +102,68 @@ ul {
 
 .day-inner {
     align-items: center;
+    border: 1px solid #ccc;
     display: flex;
     justify-content: center;
+    margin: -1px 0 0 -1px;
     width: 100%;
 }
 
-.day:hover {
-    background-color: lightyellow;
+.grid-title {
+    overflow: hidden;
+}
+
+.grid__mini .day-inner {
+    border: none;
+    margin: 0;
+}
+
+.grid__max .day:hover .day-inner {
+    border: 1px solid #333;
+    z-index: 10;
+}
+
+.day__title {
+    padding: 5px;
 }
 
 .day .date {
     font-size: 14px;
+    font-weight: normal;
     left: 4px;
     margin: 0;
+    pointer-events: none;
     position: absolute;
     top: 4px;
 }
 
+.day__title--initial {
+    display: none;
+}
+
+.sidebar .day__title--initial {
+    display: block;
+}
+.sidebar .day__title--name {
+    display: none;
+}
+
 .is-range {
+    background: #fff;
+}
+
+.is-range .date {
+    font-weight: bold;
+}
+
+.is-not-range {
     background: #ddf;
+    color: #888;
+    font-weight: normal;
 }
 
 .is-today {
-    background: #aaa;
-    border: 1px solid black;
+    background: #bbb;
 }
 
 .is-highlight {

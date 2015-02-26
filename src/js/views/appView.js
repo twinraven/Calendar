@@ -11,6 +11,10 @@ var app = app || {};
     app.appView = Backbone.View.extend({
         el: '#app',
 
+        titleTemplate: _.template($('#day-title-template').html()),
+
+        // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
         events: {
             'click .prev': 'gotoPrevMonth',
             'click .next': 'gotoNextMonth',
@@ -55,30 +59,45 @@ var app = app || {};
             //
         },
 
+        handleKeyPress: function (e) {
+            var code = e.keyCode || e.which;
+
+            if (code === 27) {
+                this.clearDrag();
+            }
+        },
+
+        handleScroll: function (e) {
+            if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
+                this.gotoNextMonth();
+
+            } else {
+                this.gotoPrevMonth();
+            }
+        },
+
+        // Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
+
         initialize: function () {
             var self = this;
-
-            $('body').on('DOMMouseScroll mousewheel', function (e) {
-                if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
-                    self.gotoNextMonth();
-
-                } else {
-                    self.gotoPrevMonth();
-                }
-            });
-
             this.$title = this.$('.title');
+            this.$gridTitles = this.$('.grid-title');
+
+            $('body').on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e); });
+            $('body').on('keydown', function (e) { self.handleKeyPress.call(self, e); });
+
+            this.addGridTitles();
 
             this.setCurrentMonth(new Date());
-
-            // bind to change events in model/collection
-            //this.listenTo(this.currentMonth, 'change', this.render);
 
             this.addMonthDataToCollection();
 
             this.markCurrentMonth();
-            //this.markDaysFrom(new Date(2015,1,16), 7);
         },
+
+        // Rendering ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
 
         // Re-rendering the App just means refreshing the statistics -- the rest
         // of the app doesn't change.
@@ -86,16 +105,10 @@ var app = app || {};
             this.addAll('#grid-mini');
             this.addAll('#grid-max');
 
-            this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
-            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
+            this.renderTitle();
+            this.setRowsInMonth();
 
             return this;
-        },
-
-        actionDates: function () {
-            // fire popup to handle date range - add event
-
-            console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
         },
 
         addDay: function (day, $grid) {
@@ -111,6 +124,38 @@ var app = app || {};
             app.grid.each(function(day) { this.addDay(day, $grid); }, this);
         },
 
+
+        // furniture setup ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
+        renderTitle: function () {
+            this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
+        },
+
+        setRowsInMonth: function () {
+            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
+        },
+
+        actionDates: function () {
+            // fire popup to handle date range - add event
+
+            console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
+        },
+
+        addGridTitles: function () {
+            var self = this;
+
+            _.each(app.labels.week, function (day, i) {
+                var data = {
+                    'label': app.labels.week[i],
+                    'initial': app.labels.week[i].slice(0, 1)
+                };
+                self.$gridTitles.append(self.titleTemplate(data));
+            });
+        },
+
+
+        // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
         tagDateRange: function (dateFrom, dateTo, attr) {
             app.grid.each(function (day) {
                 var date = new Date(day.get('date'));
@@ -145,6 +190,33 @@ var app = app || {};
 
             this.tagCurrentDateRange(dateFrom, dateTo);
         },
+
+        setDragStartDate: function ($el, date) {
+            this.dragDateStart = new Date(date);
+            this.setDragEndDate($el, date);
+        },
+
+        setDragEndDate: function ($el, date) {
+            this.dragDateEnd = new Date(date);
+
+            if (this.dragDateStart < this.dragDateEnd) {
+                this.tagHighlightDateRange(this.dragDateStart, this.dragDateEnd);
+
+            } else {
+                // swap order if we're dragging backwards
+                this.tagHighlightDateRange(this.dragDateEnd, this.dragDateStart);
+            }
+
+            this.render();
+        },
+
+        clearDrag: function () {
+            this.tagHighlightDateRange(null, null);
+
+            this.render();
+        },
+
+        // Traversing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         gotoNextMonth: function (e) {
             if (e) { e.preventDefault(); }
@@ -189,6 +261,8 @@ var app = app || {};
             this.currentMonth = new Date(newDate);
         },
 
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         addMonthDataToCollection: function () {
             // load data
             var data = app.cal.getNewGridData(this.currentMonth);
@@ -198,31 +272,6 @@ var app = app || {};
             data.map(function (d) {
                 app.grid.add(d);
             });
-        },
-
-        setDragStartDate: function ($el, date) {
-            this.dragDateStart = new Date(date);
-            this.setDragEndDate($el, date);
-        },
-
-        setDragEndDate: function ($el, date) {
-            this.dragDateEnd = new Date(date);
-
-            if (this.dragDateStart < this.dragDateEnd) {
-                this.tagHighlightDateRange(this.dragDateStart, this.dragDateEnd);
-
-            } else {
-                // swap order if we're dragging backwards
-                this.tagHighlightDateRange(this.dragDateEnd, this.dragDateStart);
-            }
-
-            this.render();
-        },
-
-        clearDrag: function () {
-            this.tagHighlightDateRange(null, null);
-
-            this.render();
         }
     });
 })(jQuery);

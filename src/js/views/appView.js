@@ -80,68 +80,42 @@ var app = app || {};
         //
 
         initialize: function () {
+            // cache selectors
             var self = this;
             this.$title = this.$('.title');
             this.$gridTitles = this.$('.grid-title');
 
+            // bind traversal events
             $('body').on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e); });
             $('body').on('keydown', function (e) { self.handleKeyPress.call(self, e); });
 
-            this.addGridTitles();
-
             this.setCurrentMonth(new Date());
 
-            this.addMonthDataToCollection();
+            // rendering done here, as these don't change
+            this.renderTitle();
+            this.renderGridTitles();
 
+            this.addMonthDataToCollection();
             this.markCurrentMonth();
         },
 
         // Rendering ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
-
-        // Re-rendering the App just means refreshing the statistics -- the rest
-        // of the app doesn't change.
         render: function () {
-            this.addAll('#grid-mini');
-            this.addAll('#grid-max');
+            this.renderAllDays('#grid-mini');
+            this.renderAllDays('#grid-max');
 
-            this.renderTitle();
+            // possibly remove? If using table/tr/td for layout, this isn't required
             this.setRowsInMonth();
 
             return this;
         },
 
-        addDay: function (day, $grid) {
-            var view = new app.dayView({ model: day });
-
-            $grid.append(view.render().el);
-        },
-
-        addAll: function (grid) {
-            var $grid = $(grid);
-
-            $grid.html('');
-            app.grid.each(function(day) { this.addDay(day, $grid); }, this);
-        },
-
-
-        // furniture setup ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //
         renderTitle: function () {
             this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
         },
 
-        setRowsInMonth: function () {
-            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
-        },
-
-        actionDates: function () {
-            // fire popup to handle date range - add event
-
-            console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
-        },
-
-        addGridTitles: function () {
+        renderGridTitles: function () {
             var self = this;
 
             _.each(app.labels.week, function (day, i) {
@@ -153,6 +127,31 @@ var app = app || {};
             });
         },
 
+        renderDay: function (day, $grid) {
+            var view = new app.dayView({ model: day });
+
+            $grid.append(view.render().el);
+        },
+
+        renderAllDays: function (grid) {
+            var $grid = $(grid);
+
+            $grid.html('');
+            app.grid.each(function(day) { this.renderDay(day, $grid); }, this);
+        },
+
+        setRowsInMonth: function () {
+            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
+        },
+
+
+        // Date events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
+        actionDates: function () {
+            // fire popup to handle date range - add event
+
+            console.log('add cal entry: ' + new Date(this.dragDateStart).toDateString() + ' -> ' + new Date(this.dragDateEnd).toDateString());
+        },
 
         // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //

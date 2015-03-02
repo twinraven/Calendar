@@ -40,6 +40,25 @@ var app = app || {};
     };
 
     app.cal = {
+        newDate: function () { // using arguments, not params
+            var args;
+            var newDate;
+
+            // if no params are passed, set date as today (in UCT string)
+            if (arguments.length === 0) {
+                args = [Date.now()];
+            } else {
+                args =  _.toArray(arguments);
+            }
+            // add null to start of array, to make it
+            //format-friendly to the bind.apply statement below
+            args.unshift(null);
+
+            newDate = new (Date.bind.apply(Date, args));
+            newDate.setHours(0,0,0,0); // remove chance of GMT weirdness
+
+            return newDate;
+        },
         getDaysInMonth : function (date) {
             var d = this.getMonthYearFrom(date);
 

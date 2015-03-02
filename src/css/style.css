@@ -12,7 +12,9 @@ html, body {
     background: #fff;
     border-bottom: 1px solid #ccc;
     display: flex;
+    justify-content: flex-end;
     left: 0;
+    line-height: 14px;
     padding: 20px 0;
     position: fixed;
     top: 0;
@@ -56,12 +58,11 @@ ul {
 
 .grid {}
 
-.grid__mini {
-    border: 1px solid #ccc;
-    height: 200px;
+.grid__summary {
+    height: 25%;
 }
 
-.grid__max {
+.grid__full {
     height: 100%;
     position: absolute;
     left: 0;
@@ -83,7 +84,7 @@ ul {
     display: flex;
     float: left;
     list-style: none;
-    min-height: calc(100% / 6);
+    min-height: 15%;
     position: relative;
     text-align: center;
     align-items: stretch;
@@ -96,9 +97,13 @@ ul {
     user-select: none;
 }
 
-[data-cal-rows="4"] .day { min-height: calc(100% / 4); }
-[data-cal-rows="5"] .day { min-height: calc(100% / 5); }
-[data-cal-rows="6"] .day { min-height: calc(100% / 6); }
+.grid__full .day {
+    min-height: calc(100% / 6);
+}
+
+[data-cal-rows="4"] .grid__full .day { min-height: calc(100% / 4); }
+[data-cal-rows="5"] .grid__full .day { min-height: calc(100% / 5); }
+[data-cal-rows="6"] .grid__full .day { min-height: calc(100% / 6); }
 
 .day-inner {
     align-items: center;
@@ -109,16 +114,11 @@ ul {
     width: 100%;
 }
 
-.grid-title {
+.grid-labels {
     overflow: hidden;
 }
 
-.grid__mini .day-inner {
-    border: none;
-    margin: 0;
-}
-
-.grid__max .day:hover .day-inner {
+.grid__full .day:hover .day-inner {
     border: 1px solid #333;
     z-index: 10;
 }

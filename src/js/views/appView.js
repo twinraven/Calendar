@@ -16,15 +16,94 @@ var app = app || {};
         // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
         events: {
-            'click .prev': 'gotoPrevMonth',
-            'click .next': 'gotoNextMonth',
-            'click .home': 'gotoThisMonth',
+            'click .prev-all': 'gotoPrevMonthAll',
+            'click .next-all': 'gotoNextMonthAll',
+            'click .home-all': 'gotoThisMonthAll',
+            'click #grid-summary': 'gotoSummaryMonth',
+
+            'click .prev-summary': 'gotoPrevMonthSummary',
+            'click .next-summary': 'gotoNextMonthSummary',
 
             'mousedown': 'handleMouseDown',
             'mouseup': 'handleMouseUp',
             'mouseover .day': 'handleMouseOver',
             'mouseout .day': 'handleMouseOut'
         },
+
+        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        gotoNextMonthAll: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.gotoMonth({ 'type': 'next' });
+        },
+
+        gotoPrevMonthAll: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.gotoMonth({ 'type': 'previous' });
+        },
+
+        gotoThisMonthAll: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.gotoMonth({'newDate': new Date()});
+        },
+
+        gotoSummaryMonth: function () {
+            this.gotoMonth({ newDate: this.currentMonth });
+        },
+
+        gotoNextMonthSummary: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.gotoMonth({
+                'type': 'next',
+                'dest': 'summary'
+            });
+        },
+
+        gotoPrevMonthSummary: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.gotoMonth({
+                'type': 'previous',
+                'dest': 'summary'
+            });
+        },
+
+
+        gotoMonth: function (params) {
+            var date;
+
+            if (params.type) {
+                if (params.type === 'next') {
+                    date = app.cal.getNextMonth(this.currentMonth);
+
+                } else if (params.type === 'previous') {
+                    date = app.cal.getPrevMonth(this.currentMonth);
+                }
+            }
+
+            if (params.newDate) { date = params.newDate; }
+
+            this.setCurrentMonth(date);
+            this.addMonthDataToCollection();
+            this.markCurrentMonth();
+
+            if (params.dest && params.dest === 'summary') {
+                this.renderGridSummary();
+
+            } else {
+                this.render();
+            }
+        },
+
+        setCurrentMonth: function (newDate) {
+            this.currentMonth = new Date(newDate);
+        },
+
+        // Mouse event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleMouseDown: function (e) {
             var $el = $(e.target);
@@ -41,9 +120,6 @@ var app = app || {};
             if ($el.is('.day-inner')) {
                 this.isDragging = false;
                 this.actionDates();
-
-            } else {
-                this.clearDrag();
             }
         },
 
@@ -69,10 +145,10 @@ var app = app || {};
 
         handleScroll: function (e) {
             if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
-                this.gotoNextMonth();
+                this.gotoNextMonthAll();
 
             } else {
-                this.gotoPrevMonth();
+                this.gotoPrevMonthAll();
             }
         },
 
@@ -82,8 +158,11 @@ var app = app || {};
         initialize: function () {
             // cache selectors
             var self = this;
-            this.$title = this.$('.title');
-            this.$gridTitles = this.$('.grid-title');
+            this.$titleAll = this.$('.title-all');
+            this.$titleSummary = this.$('.title-summary');
+            this.$gridTitles = this.$('.grid-labels');
+            this.$gridSummary = this.$('#grid-summary');
+            this.$gridFull = this.$('#grid-full');
 
             // bind traversal events
             $('body').on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e); });
@@ -92,27 +171,32 @@ var app = app || {};
             this.setCurrentMonth(new Date());
 
             // rendering done here, as these don't change
-            this.renderTitle();
             this.renderGridTitles();
 
             this.addMonthDataToCollection();
             this.markCurrentMonth();
         },
 
-        // Rendering ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Rendering & data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
         render: function () {
-            this.renderAllDays('#grid-mini');
-            this.renderAllDays('#grid-max');
-
             // possibly remove? If using table/tr/td for layout, this isn't required
             this.setRowsInMonth();
+
+            this.renderMonthNameAll();
+
+            this.renderGridSummary();
+            this.renderGridFull();
 
             return this;
         },
 
-        renderTitle: function () {
-            this.$title.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
+        renderMonthNameAll: function () {
+            this.$titleAll.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
+        },
+
+        renderMonthNameSummary: function () {
+            this.$titleSummary.text(app.cal.getMonthName(this.currentMonth) + " " + app.cal.getYear(this.currentMonth));
         },
 
         renderGridTitles: function () {
@@ -127,21 +211,40 @@ var app = app || {};
             });
         },
 
-        renderDay: function (day, $grid) {
-            var view = new app.dayView({ model: day });
+        renderGridSummary: function() {
+            this.$gridSummary.html('');
 
-            $grid.append(view.render().el);
+            app.grid.each(function(day) {
+                var view = new app.daySummaryView({ model: day });
+                this.$gridSummary.append(view.render().el);
+            }, this);
+
+            this.renderMonthNameSummary();
         },
 
-        renderAllDays: function (grid) {
-            var $grid = $(grid);
+        renderGridFull: function() {
+            this.$gridFull.html('');
 
-            $grid.html('');
-            app.grid.each(function(day) { this.renderDay(day, $grid); }, this);
+            app.grid.each(function(day) {
+                var view = new app.dayFullView({ model: day });
+                this.$gridFull.append(view.render().el);
+            }, this);
         },
 
+        // flagged for removal? depends if switching to table layout
         setRowsInMonth: function () {
             this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.currentMonth));
+        },
+
+        addMonthDataToCollection: function () {
+            // load data
+            var data = app.cal.getNewGridData(this.currentMonth);
+
+            app.grid.reset();
+
+            data.map(function (d) {
+                app.grid.add(d);
+            });
         },
 
 
@@ -213,64 +316,6 @@ var app = app || {};
             this.tagHighlightDateRange(null, null);
 
             this.render();
-        },
-
-        // Traversing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        gotoNextMonth: function (e) {
-            if (e) { e.preventDefault(); }
-
-            this.gotoMonth('next');
-        },
-
-        gotoPrevMonth: function (e) {
-            if (e) { e.preventDefault(); }
-
-            this.gotoMonth('previous');
-        },
-
-        gotoThisMonth: function (e) {
-            if (e) { e.preventDefault(); }
-
-            this.gotoMonth(null, new Date());
-        },
-
-        gotoMonth: function (type, newDate) {
-            var date;
-
-            if (type) {
-                if (type === 'next') {
-                    date = app.cal.getNextMonth(this.currentMonth);
-
-                } else if (type === 'previous') {
-                    date = app.cal.getPrevMonth(this.currentMonth);
-                }
-            }
-
-            if (newDate) { date = newDate; }
-
-            this.setCurrentMonth(date);
-            this.addMonthDataToCollection();
-            this.markCurrentMonth();
-
-            this.render();
-        },
-
-        setCurrentMonth: function (newDate) {
-            this.currentMonth = new Date(newDate);
-        },
-
-        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        addMonthDataToCollection: function () {
-            // load data
-            var data = app.cal.getNewGridData(this.currentMonth);
-
-            app.grid.reset();
-
-            data.map(function (d) {
-                app.grid.add(d);
-            });
         }
     });
 })(jQuery);

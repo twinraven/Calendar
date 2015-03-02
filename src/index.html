@@ -8,40 +8,42 @@
 	<body>
 		<div class="container" id="app">
 			<nav class="nav">
-				<h1 class="title"></h1>
-				<a class="prev" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
-				<a class="next" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
-				<a class="home" href="#">today</a>
+				<h1 class="title-all"></h1>
+				<a class="prev-all" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
+				<a class="next-all" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
+				<a class="home-all" href="#">today</a>
 			</nav>
 
 			<aside class="sidebar">
-				<ul class="grid-title"></ul>
-				<ul id="grid-mini" class="grid grid__mini"></ul>
+				<h4 class="title-all title-summary"></h4>
+				<a class="prev-summary" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
+				<a class="next-summary" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
+
+				<ul class="grid-labels"></ul>
+				<ul id="grid-summary" class="grid grid__summary"></ul>
 			</aside>
 
 			<main class="content">
-				<ul class="grid-title"></ul>
+				<ul class="grid-labels"></ul>
 				<div class="grid-wrapper">
-					<ul id="grid-max" class="grid grid__max"></ul>
+					<ul id="grid-full" class="grid grid__full"></ul>
 				</div>
 			</main>
 		</div>
 
-		<script type="text/template" id="day-template">
+		<script type="text/template" id="day-full-template">
 			<div class="day-inner" data-ref="<%= id %>">
-				<h3 class="date" id="date-<%= id %>">
+				<h3 class="date" id="date-full-<%= id %>">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
 				<%= events %>
 			</div>
 		</script>
 
-		<script type="text/template" id="day-mini-template">
-			<div class="day-inner">
-				<h3 class="date" id="date-<%= id %>">
-					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
-				</h3>
-			</div>
+		<script type="text/template" id="day-summary-template">
+			<h3 class="date" id="date-summary-<%= id %>">
+				<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
+			</h3>
 		</script>
 
 		<script type="text/template" id="day-title-template">
@@ -58,7 +60,8 @@
 
 		<script src="js/models/day.js"></script>
 		<script src="js/collections/grid.js"></script>
-		<script src="js/views/dayView.js"></script>
+		<script src="js/views/dayFullView.js"></script>
+		<script src="js/views/daySummaryView.js"></script>
 		<script src="js/views/appView.js"></script>
 		<script src="js/routers/router.js"></script>
 		<script src="js/cal.js"></script>

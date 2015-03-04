@@ -177,6 +177,8 @@ var app = app || {};
             var nextMonthData = [];
             var output = [];
 
+
+            // refactor? - code duplication. Rework ~~~~~~~~~~~~~~~~~~~~~~~
             daysMissingAtFront = this.getMonthStartDayNum(date);
 
             if (daysMissingAtFront > 0) {
@@ -192,6 +194,7 @@ var app = app || {};
                 nextMonthData = this.getNewMonthData(next);
                 nextMonthData = nextMonthData.slice(0, daysMissingAtEnd); // just the day/s we need
             }
+            // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
             output = _.union(output, prevMonthData, thisMonthData, nextMonthData);
 

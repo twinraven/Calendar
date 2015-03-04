@@ -8,24 +8,22 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.dayFullView = Backbone.View.extend({
+    app.dayView = Backbone.View.extend({
+
         tagName: 'li',
         className: 'day',
-        attributes: function () {
-            return {
-                'aria-labelledby': 'date-full-' + this.model.get('id')
-            };
-        },
 
-        template: _.template($('#day-full-template').html()),
+        initialize: function (attrs) {
+            this.options = attrs;
 
-        initialize: function () {
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.remove);
         },
 
         render: function () {
             var m = this.model;
+
+            this.template = this.options.template;
 
             // Backbone LocalStorage is adding `id` attribute instantly after
             // creating a model.  This causes our TodoView to render twice. Once
@@ -59,7 +57,7 @@ var app = app || {};
             // add to the DOM
             this.$el.html(this.template(m.toJSON()));
 
-            return this;
+            return this.el;
         },
 
         /*addEvent: function() {

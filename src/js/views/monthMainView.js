@@ -8,25 +8,29 @@ var app = app || {};
     // ---------------
     // extending app.monthView
     app.monthMainView = app.monthView.extend({
+        //
         dayTemplate: _.template($('#day-main-template').html()),
 
         events: {
             'mousedown': 'handleMouseDown',
             'mouseup': 'handleMouseUp',
-            'mouseover .day': 'handleMouseOver',
-            'mouseout .day': 'handleMouseOut'
+            'mouseover .day': 'handleMouseOver'
         },
+
+
+        // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function () {
             var self = this;
 
-            // call the initialize method of parent class
+            // call the initialize method of parent class (as we want to add more init methods here)
             app.monthView.prototype.initialize.apply(this);
 
-            app.events.bind('clear:selection', function () { self.clearDrag(); });
+            app.events.bind('clear:selection', function () { self.clearDrag() });
         },
 
-        // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleMouseDown: function (e) {
             var $el = $(e.target);
@@ -59,11 +63,8 @@ var app = app || {};
             }
         },
 
-        handleMouseOut: function () {
-           //
-        },
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         tagHighlightDateRange: function (dateFrom, dateTo) {
             this.tagDateRange(dateFrom, dateTo, 'isHighlight');

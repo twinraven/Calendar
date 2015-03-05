@@ -7,21 +7,28 @@ var app = app || {};
     // The Application
     // ---------------
 
-    // Our overall **AppView** is the top-level piece of UI.
     app.monthView = Backbone.View.extend({
+
+        // templating and setup
         template: _.template($('#month-template').html()),
         titleTemplate: _.template($('#day-title-template').html()),
         dayTemplate: _.template($('#day-main-template').html()),
 
         collection: app.monthCollection,
 
+
+        // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         initialize: function () {
             var self = this;
 
             this.selfMonth = app.cal.newDate();
 
-            app.events.bind('change:month', function (date) { self.handleChangeMonth(self, date); });
+            app.events.bind('change:month', function (date) { self.handleChangeMonth(self, date) });
         },
+
+
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
             this.$el.html(this.template({}));
@@ -43,7 +50,7 @@ var app = app || {};
         renderDays: function() {
             var fragment = document.createDocumentFragment();
 
-            this.monthData.each(function eachMonthData(day) {
+            this.monthData.each(function (day) {
                 var view = new app.dayView({
                     model: day,
                     template: this.dayTemplate
@@ -58,16 +65,14 @@ var app = app || {};
         renderDayLabels: function () {
             var self = this;
 
-            _.each(app.labels.week, function eachLabelWeek(day, i) {
+            _.each(app.cal.labels.week, function (day, i) {
                 var data = {
-                    'label': app.labels.week[i],
-                    'initial': app.labels.week[i].slice(0, 1)
+                    'label': app.cal.labels.week[i],
+                    'initial': app.cal.labels.week[i].slice(0, 1)
                 };
                 self.$labels.append(self.titleTemplate(data));
             });
         },
-
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
             this.$month = this.$('.month');
@@ -79,14 +84,15 @@ var app = app || {};
             this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
         },
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleChangeMonth: function (self, date) {
             self._gotoMonth({ 'newDate': date });
         },
 
 
-        // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         tagDateRange: function (dateFrom, dateTo, attr) {
             this.monthData.each(function (day) {
@@ -113,12 +119,16 @@ var app = app || {};
         },
 
         markDaysFrom: function (dateFrom, total) {
-            var dateTo = app.cal.newDate(app.cal.getYear(dateFrom), app.cal.getMonthNum(dateFrom), app.cal.getDate(dateFrom) + total);
+            var dateTo = app.cal.newDate(
+                    app.cal.getYear(dateFrom),
+                    app.cal.getMonthNum(dateFrom),
+                    app.cal.getDate(dateFrom) + total);
 
             this.tagCurrentDateRange(dateFrom, dateTo);
         },
 
-        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         _gotoMonth: function (params) {
            var date;
@@ -142,6 +152,9 @@ var app = app || {};
         _setMonth: function (newDate) {
            this.selfMonth = newDate;
         },
+
+
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         addMonthDataToCollection: function (month) {
             var self = this;

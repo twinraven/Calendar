@@ -1,11 +1,19 @@
 /*global $ */
 /*jshint unused:false */
 var app = app || {};
-var ENTER_KEY = 13;
-var ESC_KEY = 27;
 
 $(function () {
 	'use strict';
+
+	app.const = {
+	    DAYS_IN_WEEK : 7,
+	    MONTHS_IN_YEAR : 12,
+	    ESC_KEY  : 27
+	};
+
+	app.config = {
+	    startDay : "mon"
+	};
 
 	// kick things off by creating the `App`
 	var calApp = new app.appView(); // self-rendering in initialize()

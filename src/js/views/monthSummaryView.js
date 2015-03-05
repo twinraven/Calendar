@@ -8,6 +8,7 @@ var app = app || {};
     // ---------------
     // extending app.monthView
     app.monthSummaryView = app.monthView.extend({
+        //
         template: _.template($('#month-summary-template').html()),
         dayTemplate: _.template($('#day-summary-template').html()),
 
@@ -15,6 +16,9 @@ var app = app || {};
             'click .prev-self': '_gotoPrevMonth',
             'click .next-self': '_gotoNextMonth',
         },
+
+
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
             // call the render method of parent class
@@ -28,32 +32,31 @@ var app = app || {};
             return this.el;
         },
 
-        // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
         renderMonthName: function (elem, data) {
             elem.text(app.cal.getMonthName(data) + " " + app.cal.getYear(data));
         },
 
-        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         _gotoNextMonth: function (e) {
-           if (e) { e.preventDefault(); }
+            if (e) { e.preventDefault(); }
 
-           this._gotoMonth({
+            this._gotoMonth({
                'type': 'next',
                'month': this.selfMonth,
                'dest': 'summary'
-           });
+            });
         },
 
         _gotoPrevMonth: function (e) {
-           if (e) { e.preventDefault(); }
+            if (e) { e.preventDefault(); }
 
-           this._gotoMonth({
+            this._gotoMonth({
                'type': 'previous',
                'month': this.selfMonth,
                'dest': 'summary'
-           });
+            });
         }
     });
 })(jQuery);

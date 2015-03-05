@@ -4,42 +4,34 @@ var app = app || {};
 (function ($) {
     'use strict';
 
-    app.const = {
-        DAYS_IN_WEEK : 7,
-        MONTHS_IN_YEAR : 12
-    };
-
-    app.config = {
-        startDay : "mon"
-    };
-
-    app.labels = {
-        week : [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"
-        ],
-        month: [
-            "January",
-            "Febuary",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-        ]
-    };
-
     app.cal = {
+        labels : {
+            week : [
+                "Monday",
+                "Tuesday",
+                "Wednesday",
+                "Thursday",
+                "Friday",
+                "Saturday",
+                "Sunday"
+            ],
+            month: [
+                "January",
+                "Febuary",
+                "March",
+                "April",
+                "May",
+                "June",
+                "July",
+                "August",
+                "September",
+                "October",
+                "November",
+                "December"
+            ]
+        },
+
+
         newDate: function () { // using arguments, not params
             var args;
             var newDate;
@@ -75,7 +67,7 @@ var app = app || {};
         },
 
         getMonthName : function (date) {
-            return app.labels.month[date.getMonth()];
+            return app.cal.labels.month[date.getMonth()];
         },
 
         getDate : function (date) {
@@ -83,14 +75,15 @@ var app = app || {};
         },
 
         getDayOfWeekName : function (num) {
-            return app.labels.week[num];
+            return app.cal.labels.week[num];
         },
 
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 
             if (app.config.startDay === "mon") {
-                num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK; // JS getDay() returns a sunday-0-indexed value
+                 // JS getDay() returns a sunday-0-indexed value
+                num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK;
             }
 
             return num;

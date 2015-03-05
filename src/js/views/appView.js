@@ -16,7 +16,10 @@ var app = app || {};
         events: {
             'click .prev-all': 'gotoPrevDateRange',
             'click .next-all': 'gotoNextDateRange',
-            'click .home-all': 'gotoToday'
+            'click .home-all': 'gotoToday',
+
+            'click .cal-mode-week': 'setViewModeWeek',
+            'click .cal-mode-month': 'setViewModeMonth'
         },
 
 
@@ -25,17 +28,14 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
-            //this.viewMode = app.const.WEEK;
-            this.viewMode = app.const.MONTH;
-
             this.cacheSelectors();
+
+            this.viewMode = app.const.MONTH;
+            this.setModeLinkActive(this.$('.cal-mode-month'));
 
             this.bindEvents();
 
             this.setCurrentDate(app.cal.newDate());
-
-            console.log(app.cal.getWeekStartDate(this.currentDate));
-            console.log(app.cal.getWeekEndDate(this.currentDate));
 
             this.initializeSubViews();
 
@@ -47,7 +47,8 @@ var app = app || {};
 
         cacheSelectors: function () {
             this.$body = $('body');
-            this.$title = $('.title-all');
+            this.$title = this.$('.title-all');
+            this.$modeLinks = this.$('.cal-mode');
         },
 
         bindEvents: function () {
@@ -67,8 +68,9 @@ var app = app || {};
                 dayTemplate: '#day-summary-template'
             });
 
-            //this.mainView = new app.weekView();
-            this.mainView = new app.monthMainView({
+            this.mainWeekView = new app.weekView();
+
+            this.mainMonthView = new app.monthMainView({
                 dayTemplate: '#day-main-template'
             });
         },
@@ -79,8 +81,7 @@ var app = app || {};
         render: function () {
             this.renderMonthName(this.$title, this.currentDate);
 
-            this.assign(this.summaryView, '#cal-summary');
-            this.assign(this.mainView, '#cal-main');
+            this.assignViews();
 
             return this.el;
         },
@@ -89,8 +90,55 @@ var app = app || {};
             view.setElement(this.$(selector)).render();
         },
 
+        assignViews: function () {
+            var mainView;
+
+            switch(this.viewMode) {
+                case app.const.WEEK:
+                    mainView = this.mainWeekView;
+                    break;
+
+                case app.const.MONTH:
+                    mainView = this.mainMonthView;
+                    break;
+            }
+
+            this.assign(this.summaryView, '#cal-summary');
+            this.assign(mainView, '#cal-main');
+        },
+
         renderMonthName: function (elem, data) {
             elem.text(app.cal.getMonthName(data) + " " + app.cal.getYear(data));
+        },
+
+        setViewMode: function (mode) {
+            this.viewMode = mode;
+
+            this.render();
+        },
+
+
+        // Setting view mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setViewModeWeek: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.setModeLinkActive($(e.currentTarget));
+
+            this.setViewMode(app.const.WEEK);
+        },
+
+        setViewModeMonth: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.setModeLinkActive($(e.currentTarget));
+
+            this.setViewMode(app.const.MONTH);
+        },
+
+        setModeLinkActive: function ($elem) {
+            this.$modeLinks.removeClass('cal-mode-active');
+            $elem.addClass('cal-mode-active');
         },
 
 

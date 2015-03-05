@@ -49,7 +49,7 @@ var app = app || {};
         gotoNextMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this._gotoMonth({
+            this.gotoMonth({
                'type': 'next',
                'month': this.selfMonth,
                'dest': 'summary'
@@ -59,7 +59,7 @@ var app = app || {};
         gotoPrevMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this._gotoMonth({
+            this.gotoMonth({
                'type': 'previous',
                'month': this.selfMonth,
                'dest': 'summary'

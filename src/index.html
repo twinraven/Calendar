@@ -25,6 +25,9 @@
 			</main>
 		</div>
 
+
+		<!-- Templates ~~~~~~~~~~~~~~~~~~~~~~~ -->
+
 		<script type="text/template" id="month-template">
 			<ul class="cal-labels"></ul>
 			<ul class="month"></ul>
@@ -42,12 +45,21 @@
 			<ul class="month"></ul>
 		</script>
 
+		<script type="text/template" id="week-template">
+			<ul class="cal-labels"></ul>
+			<ul class="week"></ul>
+		</script>
+
 		<script type="text/template" id="day-main-template">
 			<div class="day-inner" data-ref="<%= id %>">
 				<h3 class="date" id="date-main-<%= id %>">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
-				<%= events %>
+				<ul class="cal-events">
+				<% _.each( events, function( event ){ %>
+					<li><%= event.title %></li>
+				<% }); %>
+				</ul>
 			</div>
 		</script>
 
@@ -55,6 +67,18 @@
 			<h3 class="date" id="date-summary-<%= id %>" data-ref="<%= id %>">
 				<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 			</h3>
+		</script>
+
+		<script type="text/template" id="day-week-template">
+			<h3 class="date" id="date-summary-<%= id %>" data-ref="<%= id %>">
+				<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
+			</h3>
+
+			<ul class="cal-events">
+			<% _.each( events, function( event ){ %>
+				<li><%- event.title %></li>
+			<% }); %>
+			</ul>
 		</script>
 
 		<script type="text/template" id="day-title-template">
@@ -73,8 +97,9 @@
 
 		<script src="js/events/events.js"></script>
 		<script src="js/models/dayModel.js"></script>
-		<script src="js/collections/monthCollection.js"></script>
+		<script src="js/collections/dateCollection.js"></script>
 		<script src="js/views/dayView.js"></script>
+		<script src="js/views/weekView.js"></script>
 		<script src="js/views/monthView.js"></script>
 		<script src="js/views/monthMainView.js"></script>
 		<script src="js/views/monthSummaryView.js"></script>

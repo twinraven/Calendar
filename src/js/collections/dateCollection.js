@@ -9,7 +9,7 @@ var app = app || {};
 
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
-	app.monthCollection = Backbone.Collection.extend({
+	app.dateCollection = Backbone.Collection.extend({
 		url: '/',
 		// Reference to this collection's model.
 		model: app.day,

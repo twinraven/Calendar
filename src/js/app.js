@@ -8,7 +8,10 @@ $(function () {
 	app.const = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
-	    ESC_KEY : 27
+	    ESC_KEY : 27,
+	    WEEK : 'WEEK',
+	    MONTH : 'MONTH',
+	    MS_IN_DAY : 86400000
 	};
 
 	app.config = {

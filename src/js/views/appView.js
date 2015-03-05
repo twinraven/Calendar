@@ -14,9 +14,9 @@ var app = app || {};
         // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
         events: {
-            'click .prev-all': 'gotoPrevMonth',
-            'click .next-all': 'gotoNextMonth',
-            'click .home-all': 'gotoThisMonth'
+            'click .prev-all': 'gotoPrevDateRange',
+            'click .next-all': 'gotoNextDateRange',
+            'click .home-all': 'gotoToday'
         },
 
 
@@ -25,11 +25,16 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
+            this.viewMode = app.const.WEEK;
+
             this.cacheSelectors();
 
             this.bindEvents();
 
-            this.setMonth(app.cal.newDate());
+            this.setCurrentDate(app.cal.newDate());
+
+            console.log(app.cal.getWeekStartDate(this.currentDate));
+            console.log(app.cal.getWeekEndDate(this.currentDate));
 
             this.initializeSubViews();
 
@@ -48,8 +53,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            app.events.bind('add:event', this.addEvent);
-            app.events.bind('goto:date', function (date) { self.gotoDate(date) });
+            app.events.bind('add:event', function (event) { self.handleAddEvent(event) });
+            app.events.bind('goto:date', function (date) { self.handleGotoDate(date) });
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
@@ -60,16 +65,15 @@ var app = app || {};
             this.summaryView = new app.monthSummaryView({
                 dayTemplate: '#day-summary-template'
             });
-            this.mainView = new app.monthMainView({
-                dayTemplate: '#day-main-template'
-            });
+
+            this.mainView = new app.weekView();
         },
 
 
         // Rendering & data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.renderMonthName(this.$title, this.currentMonth);
+            this.renderMonthName(this.$title, this.currentDate);
 
             this.assign(this.summaryView, '#cal-summary');
             this.assign(this.mainView, '#cal-main');
@@ -88,51 +92,53 @@ var app = app || {};
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        gotoNextMonth: function (e) {
+        gotoNextDateRange: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.gotoMonth({
-                'type': 'next',
-                'month': this.currentMonth,
+            this.gotoDate({
+                'increment': 'next'
             });
         },
 
-        gotoPrevMonth: function (e) {
+        gotoPrevDateRange: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.gotoMonth({
-                'type': 'previous',
-                'month': this.currentMonth,
+            this.gotoDate({
+                'increment': 'previous'
             });
         },
 
-         gotoThisMonth: function (e) {
+         gotoToday: function (e) {
              if (e) { e.preventDefault(); }
 
-             this.gotoMonth({'newDate': app.cal.newDate()});
+             this.gotoDate({'newDate': app.cal.newDate()});
          },
 
-         gotoMonth: function (params) {
+         gotoDate: function (params) {
             var date;
 
-            if (params.type) {
-                if (params.type === 'next') {
-                    date = app.cal.getNextMonth(params.month);
+            if (params.increment) {
+                if (params.increment === 'next') {
+                    date = app.cal.getNextDateRange(this.currentDate, this.viewMode);
 
-                } else if (params.type === 'previous') {
-                    date = app.cal.getPrevMonth(params.month);
+                } else if (params.increment === 'previous') {
+                    date = app.cal.getPrevDateRange(this.currentDate, this.viewMode);
                 }
             }
 
-            if (params.newDate) { date = params.newDate; }
+            if (params.newDate) {
+                date = params.newDate;
+            }
 
-            this.setMonth(date);
+            this.setCurrentDate(date);
             this.render();
         },
 
-         setMonth: function (newDate) {
-             this.currentMonth = app.cal.newDate(newDate);
-             app.events.trigger('change:month', this.currentMonth);
+
+         setCurrentDate: function (newDate) {
+             this.currentDate = app.cal.newDate(newDate);
+
+             app.events.trigger('change:date', this.currentDate);
          },
 
         // key events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -148,21 +154,21 @@ var app = app || {};
 
         handleScroll: function (e) {
             if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
-                this.gotoNextMonth();
+                this.gotoNextDateRange();
 
             } else {
-                this.gotoPrevMonth();
+                this.gotoPrevDateRange();
             }
         },
 
 
         // custom app events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        gotoDate: function (date) {
-            this.gotoMonth({'newDate': date});
+        handleGotoDate: function (date) {
+            this.gotoDate({'newDate': date});
         },
 
-        addEvent: function (newEvent) {
+        handleAddEvent: function (newEvent) {
             console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');
             console.log('all day event: ' + (newEvent.fullday));
             console.log('~~~~~~~~~~~~~~~~');

@@ -14,7 +14,7 @@ var app = app || {};
         titleTemplate: _.template($('#day-title-template').html()),
         dayTemplate: _.template($('#day-main-template').html()),
 
-        collection: app.monthCollection,
+        collection: app.dateCollection,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -24,7 +24,7 @@ var app = app || {};
 
             this.selfMonth = app.cal.newDate();
 
-            app.events.bind('change:month', function (date) { self.handleChangeMonth(self, date) });
+            app.events.bind('change:date', function (date) { self.handleChangeMonth(self, date) });
         },
 
 
@@ -37,7 +37,7 @@ var app = app || {};
             this.renderDayLabels();
 
             // local (view) collection
-            this.monthData = new app.monthCollection();
+            this.monthData = new app.dateCollection();
             this.addMonthDataToCollection(this.selfMonth);
             this.markMonth(this.selfMonth);
             this.setRowsInMonth();
@@ -88,7 +88,7 @@ var app = app || {};
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleChangeMonth: function (self, date) {
-            self._gotoMonth({ 'newDate': date });
+            self.gotoMonth({ 'newDate': date });
         },
 
 
@@ -118,19 +118,10 @@ var app = app || {};
             this.tagCurrentDateRange(monthStart, monthEnd);
         },
 
-        markDaysFrom: function (dateFrom, total) {
-            var dateTo = app.cal.newDate(
-                    app.cal.getYear(dateFrom),
-                    app.cal.getMonthNum(dateFrom),
-                    app.cal.getDate(dateFrom) + total);
-
-            this.tagCurrentDateRange(dateFrom, dateTo);
-        },
-
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        _gotoMonth: function (params) {
+        gotoMonth: function (params) {
            var date;
 
            if (params.type) {
@@ -144,12 +135,12 @@ var app = app || {};
 
            if (params.newDate) { date = params.newDate; }
 
-           this._setMonth(date);
+           this.setMonth(date);
 
            this.render();
         },
 
-        _setMonth: function (newDate) {
+        setMonth: function (newDate) {
            this.selfMonth = newDate;
         },
 
@@ -160,7 +151,7 @@ var app = app || {};
             var self = this;
 
             // load data
-            var data = app.cal.getNewGridData(month);
+            var data = app.cal.getMonthGridData(month);
 
             this.monthData.reset();
 

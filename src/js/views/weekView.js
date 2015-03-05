@@ -83,21 +83,9 @@ var app = app || {};
         handleChangeWeek: function (self, date) {
             // normalise date so we're always dealing with the first day of the week
             var newDate = app.cal.getWeekStartDate(date);
-            console.log(newDate);
 
             self.gotoWeek({ 'newDate': newDate });
         },
-
-
-        // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-        /*markWeek: function (date) {
-            var weekStart = app.cal.getWeekStartDate(this.selfWeek);
-            var weekEnd = app.cal.getWeekEndDate(this.selfWeek);
-
-            this.tagCurrentDateRange(weekStart, weekEnd);
-        },*/
 
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

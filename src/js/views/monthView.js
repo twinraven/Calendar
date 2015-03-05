@@ -39,7 +39,7 @@ var app = app || {};
             // local (view) collection
             this.monthData = new app.dateCollection();
             this.addMonthDataToCollection(this.selfMonth);
-            this.markMonth(this.selfMonth);
+            this.markMonthAsCurrent(this.selfMonth);
             this.setRowsInMonth();
 
             this.renderDays();
@@ -94,7 +94,7 @@ var app = app || {};
 
         // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        tagDateRange: function (dateFrom, dateTo, attr) {
+        markDateRange: function (dateFrom, dateTo, attr) {
             this.monthData.each(function (day) {
                 var date = app.cal.newDate(day.get('date'));
                 var prop = {};
@@ -107,15 +107,19 @@ var app = app || {};
             });
         },
 
-        tagCurrentDateRange: function (dateFrom, dateTo) {
-            this.tagDateRange(dateFrom, dateTo, 'isCurrent');
+        markDateRangeAsHighlight: function (dateFrom, dateTo) {
+            this.markDateRange(dateFrom, dateTo, 'isHighlight');
         },
 
-        markMonth: function (date) {
+        markDateRangeAsCurrent: function (dateFrom, dateTo) {
+            this.markDateRange(dateFrom, dateTo, 'isCurrent');
+        },
+
+        markMonthAsCurrent: function (date) {
             var monthStart = app.cal.newDate(app.cal.getYear(date), app.cal.getMonthNum(date), 1);
             var monthEnd = app.cal.newDate(app.cal.getYear(date), app.cal.getMonthNum(date) + 1, 0);
 
-            this.tagCurrentDateRange(monthStart, monthEnd);
+            this.markDateRangeAsCurrent(monthStart, monthEnd);
         },
 
 

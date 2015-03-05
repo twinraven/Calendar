@@ -66,10 +66,6 @@ var app = app || {};
 
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        tagHighlightDateRange: function (dateFrom, dateTo) {
-            this.tagDateRange(dateFrom, dateTo, 'isHighlight');
-        },
-
         setDragStartDate: function ($el, date) {
             this.dragDateStart = app.cal.newDate(date);
 
@@ -80,18 +76,18 @@ var app = app || {};
             this.dragDateEnd = app.cal.newDate(date);
 
             if (this.dragDateStart < this.dragDateEnd) {
-                this.tagHighlightDateRange(this.dragDateStart, this.dragDateEnd);
+                this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
 
             } else {
                 // swap order if we're dragging backwards
-                this.tagHighlightDateRange(this.dragDateEnd, this.dragDateStart);
+                this.markDateRangeAsHighlight(this.dragDateEnd, this.dragDateStart);
             }
 
             this.renderDays();
         },
 
         clearDrag: function () {
-            this.tagHighlightDateRange(null, null);
+            this.markDateRangeAsHighlight(null, null);
 
             this.renderDays();
         }

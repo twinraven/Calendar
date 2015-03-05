@@ -29,11 +29,10 @@ var app = app || {};
             var self = this;
 
             this.cacheSelectors();
-
-            this.viewMode = app.const.MONTH;
-            this.setModeLinkActive(this.$('.cal-mode-month'));
-
             this.bindEvents();
+
+            app.state.viewMode = app.const.MONTH;
+            this.setModeLinkActive(this.$('.cal-mode-month'));
 
             this.setCurrentDate(app.cal.newDate());
 
@@ -93,11 +92,11 @@ var app = app || {};
         assignViews: function () {
             var mainView;
 
-            if (this.viewMode === app.const.WEEK) {
+            if (this.isViewModeWeek()) {
                 mainView = this.mainWeekView;
             }
 
-            if (this.viewMode === app.const.MONTH) {
+            if (this.isViewModeMonth()) {
                 mainView = this.mainMonthView;
             }
 
@@ -110,9 +109,17 @@ var app = app || {};
         },
 
         setViewMode: function (mode) {
-            this.viewMode = mode;
+            app.state.viewMode = mode;
 
             this.render();
+        },
+
+        isViewModeWeek: function () {
+            return app.state.viewMode === app.const.WEEK;
+        },
+
+        isViewModeMonth: function () {
+            return app.state.viewMode === app.const.MONTH;
         },
 
 
@@ -169,10 +176,10 @@ var app = app || {};
 
             if (params.increment) {
                 if (params.increment === 'next') {
-                    date = app.cal.getNextDateRange(this.currentDate, this.viewMode);
+                    date = app.cal.getNextDateRange(this.currentDate, app.state.viewMode);
 
                 } else if (params.increment === 'previous') {
-                    date = app.cal.getPrevDateRange(this.currentDate, this.viewMode);
+                    date = app.cal.getPrevDateRange(this.currentDate, app.state.viewMode);
                 }
             }
 
@@ -189,11 +196,11 @@ var app = app || {};
             var newDate;
 
             // normalise date so we're always dealing with the first day of the week
-            if (this.viewMode === app.const.WEEK) {
+            if (this.isViewModeWeek()) {
                 newDate = app.cal.getWeekStartDate(date);
             }
 
-            if (this.viewMode === app.const.MONTH) {
+            if (this.isViewModeMonth()) {
                 var d = app.cal.getObjectFromDate(date);
                 var newDate = app.cal.newDate(d.year, d.month, 1);
             }

@@ -88,11 +88,7 @@ var app = app || {};
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleChangeMonth: function (self, date) {
-            // normalise date so we're always dealing with the first day of the week
-            var d = app.cal.getObjectFromDate(date);
-            var newDate = app.cal.newDate(d.year, d.month, 1);
-
-            self.gotoMonth({ 'newDate': newDate });
+            self.gotoMonth({ 'newDate': date });
         },
 
 

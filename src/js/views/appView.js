@@ -93,14 +93,12 @@ var app = app || {};
         assignViews: function () {
             var mainView;
 
-            switch(this.viewMode) {
-                case app.const.WEEK:
-                    mainView = this.mainWeekView;
-                    break;
+            if (this.viewMode === app.const.WEEK) {
+                mainView = this.mainWeekView;
+            }
 
-                case app.const.MONTH:
-                    mainView = this.mainMonthView;
-                    break;
+            if (this.viewMode === app.const.MONTH) {
+                mainView = this.mainMonthView;
             }
 
             this.assign(this.summaryView, '#cal-summary');
@@ -187,10 +185,22 @@ var app = app || {};
         },
 
 
-         setCurrentDate: function (newDate) {
-             this.currentDate = app.cal.newDate(newDate);
+         setCurrentDate: function (date) {
+            var newDate;
 
-             app.events.trigger('change:date', this.currentDate);
+            // normalise date so we're always dealing with the first day of the week
+            if (this.viewMode === app.const.WEEK) {
+                newDate = app.cal.getWeekStartDate(date);
+            }
+
+            if (this.viewMode === app.const.MONTH) {
+                var d = app.cal.getObjectFromDate(date);
+                var newDate = app.cal.newDate(d.year, d.month, 1);
+            }
+
+            this.currentDate = newDate;
+
+            app.events.trigger('change:date', this.currentDate);
          },
 
         // key events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

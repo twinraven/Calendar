@@ -16,9 +16,7 @@ var app = app || {};
         events: {
             'click .prev-all': 'gotoPrevMonth',
             'click .next-all': 'gotoNextMonth',
-            'click .home-all': 'gotoThisMonth',
-
-            'click #cal-summary': 'gotoSummaryMonth'
+            'click .home-all': 'gotoThisMonth'
         },
 
 
@@ -49,8 +47,11 @@ var app = app || {};
         bindEvents: function () {
             var self = this;
 
+            // custom events
             app.events.bind('add:event', this.addEvent);
+            app.events.bind('goto:date', function (date) { self.gotoDate(date) });
 
+            // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
             this.$body.on('keydown', function (e) { self.handleKeyPress.call(self, e); });
         },
@@ -111,12 +112,6 @@ var app = app || {};
              this.gotoMonth({'newDate': app.cal.newDate()});
          },
 
-         gotoSummaryMonth: function (e) {
-             if (e) { e.preventDefault(); }
-
-             this.gotoMonth({'newDate': this.summaryView.selfMonth});
-         },
-
          gotoMonth: function (params) {
             var date;
 
@@ -162,6 +157,10 @@ var app = app || {};
 
 
         // custom app events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        gotoDate: function (date) {
+            this.gotoMonth({'newDate': date});
+        },
 
         addEvent: function (newEvent) {
             console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');

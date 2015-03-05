@@ -137,10 +137,19 @@ ul {
 }
 
 .day .date {
+    display: block;
     font-size: 14px;
     font-weight: normal;
-    left: 4px;
     margin: 0;
+}
+
+.cal-summary .date {
+    line-height: 22px;
+    width: 100%;
+}
+
+.cal-main .date {
+    left: 4px;
     pointer-events: none;
     position: absolute;
     top: 4px;

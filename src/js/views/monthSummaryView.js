@@ -13,8 +13,9 @@ var app = app || {};
         dayTemplate: _.template($('#day-summary-template').html()),
 
         events: {
-            'click .prev-self': '_gotoPrevMonth',
-            'click .next-self': '_gotoNextMonth',
+            'click .prev-self': 'gotoPrevMonth',
+            'click .next-self': 'gotoNextMonth',
+            'click .date': 'gotoDate'
         },
 
 
@@ -39,7 +40,13 @@ var app = app || {};
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        _gotoNextMonth: function (e) {
+        gotoDate: function (e) {
+            var date = $(e.currentTarget).data('ref');
+
+            app.events.trigger('goto:date', app.cal.newDate(date));
+        },
+
+        gotoNextMonth: function (e) {
             if (e) { e.preventDefault(); }
 
             this._gotoMonth({
@@ -49,7 +56,7 @@ var app = app || {};
             });
         },
 
-        _gotoPrevMonth: function (e) {
+        gotoPrevMonth: function (e) {
             if (e) { e.preventDefault(); }
 
             this._gotoMonth({

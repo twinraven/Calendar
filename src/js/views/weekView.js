@@ -81,7 +81,11 @@ var app = app || {};
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleChangeWeek: function (self, date) {
-            self.gotoWeek({ 'newDate': date });
+            // normalise date so we're always dealing with the first day of the week
+            var newDate = app.cal.getWeekStartDate(date);
+            console.log(newDate);
+
+            self.gotoWeek({ 'newDate': newDate });
         },
 
 

@@ -51,6 +51,8 @@ var app = app || {};
 
             return newDate;
         },
+
+
         getDaysInMonth : function (date) {
             var d = this.getObjectFromDate(date);
 
@@ -58,25 +60,32 @@ var app = app || {};
             return new Date(d.year, d.month + 1, 0).getDate();
         },
 
+
         getYear : function (date) {
             return date.getFullYear();
         },
+
 
         getMonthNum : function (date) {
             return date.getMonth();
         },
 
+
         getMonthName : function (date) {
             return app.cal.labels.month[date.getMonth()];
         },
+
 
         getDate : function (date) {
             return date.getDate();
         },
 
+
         getDayOfWeekName : function (num) {
             return app.cal.labels.week[num];
         },
+
+
 
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
@@ -88,6 +97,7 @@ var app = app || {};
 
             return num;
         },
+
 
         getOrdinalSuffix : function (num) {
             var dec = num % 10,
@@ -108,12 +118,14 @@ var app = app || {};
             return "th";
         },
 
+
         // returns a number 0-6 for day of week
         getMonthStartDayNum : function (date) {
             var d = this.getObjectFromDate(date);
 
             return this.getDayOfWeekNum(d.year, d.month, 1);
         },
+
 
         getWeekStartDate : function (date) {
             var d = this.getObjectFromDate(date);
@@ -122,12 +134,14 @@ var app = app || {};
             return this.newDate(d.year, d.month, d.day - dayNum);
         },
 
+
         getWeekEndDate : function (date) {
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
 
             return this.newDate(d.year, d.month, d.day + (app.const.DAYS_IN_WEEK - 1));
         },
+
 
         getObjectFromDate : function (date) {
             return {
@@ -137,15 +151,18 @@ var app = app || {};
             };
         },
 
+
         getRowsInMonth : function (date) {
             var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
 
             return (Math.ceil(daysInGrid / app.const.DAYS_IN_WEEK));
         },
 
+
         asTwoDigits : function (num) {
             return ('0' + num).slice(-2);
         },
+
 
         getPrevDateRange : function (date, mode) {
             if (mode == app.const.WEEK) {
@@ -157,6 +174,7 @@ var app = app || {};
             }
         },
 
+
         getNextDateRange : function (date, mode) {
             if (mode == app.const.WEEK) {
                 return this.getNextWeek(date);
@@ -167,11 +185,13 @@ var app = app || {};
             }
         },
 
+
         getNextWeek : function (date) {
             var d = this.getObjectFromDate(date);
 
             return new Date(d.year, d.month, d.day + 7);
         },
+
 
         getPrevWeek : function (date) {
             var d = this.getObjectFromDate(date);
@@ -179,11 +199,13 @@ var app = app || {};
             return new Date(d.year, d.month, d.day - 7);
         },
 
+
         getNextMonth : function (date) {
             var d = this.getObjectFromDate(date);
 
             return new Date(d.year, d.month + 1);
         },
+
 
         getPrevMonth : function (date) {
             var d = this.getObjectFromDate(date);
@@ -191,12 +213,14 @@ var app = app || {};
             return new Date(d.year, d.month - 1);
         },
 
+
         getDaysInRangeNum : function (dateFrom, dateTo) {
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
             return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.const.MS_IN_DAY) + 1; // magic!
         },
+
 
         getDateRangeData : function (dateFrom, dateTo) {
             var dateFromObj = this.getObjectFromDate(dateFrom);
@@ -211,6 +235,7 @@ var app = app || {};
             return data;
         },
 
+
         getMonthData : function (date) {
             var d = this.getObjectFromDate(date);
             var dateFrom = new Date(d.year, d.month, 1);
@@ -221,14 +246,15 @@ var app = app || {};
             return data;
         },
 
+
         getWeekData : function (date) {
             var weekStartDate = this.getWeekStartDate(date);
             var weekEndDate = this.getWeekEndDate(date);
-
             var data = this.getDateRangeData(weekStartDate, weekEndDate);
 
             return data;
         },
+
 
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getMonthGridData : function (date) {
@@ -267,21 +293,25 @@ var app = app || {};
             return output;
         },
 
+
         getNewDateId : function (year, month, day) {
             return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
         },
 
+
         getNewDayData : function (year, month, day) {
-            var date = new Date(year, month, day);
+            var newDate = new Date(year, month, day);
+            var d = this.getObjectFromDate(newDate);
+
             return {
-                id : this.getNewDateId(year, month + 1, day),
-                day : day.toString(),
-                month: month.toString(),
-                monthName: this.getMonthName(date),
-                year: year.toString(),
-                date: date.toDateString(),
-                suffix: this.getOrdinalSuffix(day),
-                weekday : this.getDayOfWeekName(this.getDayOfWeekNum(year, month, day))
+                id : this.getNewDateId(d.year, (d.month + 1), d.day),
+                day : d.day.toString(),
+                month: d.month.toString(),
+                monthName: this.getMonthName(newDate),
+                year: d.year.toString(),
+                date: newDate.toDateString(),
+                suffix: this.getOrdinalSuffix(d.day),
+                weekday : this.getDayOfWeekName(this.getDayOfWeekNum(d.year, d.month, d.day))
             };
         }
     };

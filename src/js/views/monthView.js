@@ -15,13 +15,12 @@ var app = app || {};
 
         collection: app.monthCollection,
 
-        initialize: function (attrs) {
+        initialize: function () {
             var self = this;
 
             this.selfMonth = app.cal.newDate();
 
             app.events.bind('change:month', function (date) { self.handleChangeMonth(self, date); });
-            app.events.bind('clear:selection', this.clearDrag);
         },
 
         render: function () {

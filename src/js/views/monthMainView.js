@@ -17,6 +17,15 @@ var app = app || {};
             'mouseout .day': 'handleMouseOut'
         },
 
+        initialize: function () {
+            var self = this;
+
+            // call the initialize method of parent class
+            app.monthView.prototype.initialize.apply(this);
+
+            app.events.bind('clear:selection', function () { self.clearDrag(); });
+        },
+
         // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleMouseDown: function (e) {

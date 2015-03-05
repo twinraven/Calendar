@@ -76,17 +76,13 @@ var app = app || {};
             app.events.trigger('change:month', this.currentMonth);
         },
 
-        clearSelection: function () {
-            app.events.trigger('clear:selection');
-        },
-
-
         // Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function () {
             var self = this;
 
             this.cacheSelectors();
+
             this.bindEvents();
 
             this.setMonth(app.cal.newDate());
@@ -146,7 +142,7 @@ var app = app || {};
 
             // escape key
             if (code === 27) {
-                this.clearSelection();
+                app.events.trigger('clear:selection');
             }
         },
 

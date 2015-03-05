@@ -25,7 +25,8 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
-            this.viewMode = app.const.WEEK;
+            //this.viewMode = app.const.WEEK;
+            this.viewMode = app.const.MONTH;
 
             this.cacheSelectors();
 
@@ -66,7 +67,10 @@ var app = app || {};
                 dayTemplate: '#day-summary-template'
             });
 
-            this.mainView = new app.weekView();
+            //this.mainView = new app.weekView();
+            this.mainView = new app.monthMainView({
+                dayTemplate: '#day-main-template'
+            });
         },
 
 

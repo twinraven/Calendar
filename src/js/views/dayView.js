@@ -66,7 +66,7 @@ var app = app || {};
 
         // Remove the item, destroy the model from *localStorage* and delete its view.
         close: function () {
-            this.model.destroy();
+            //this.model.destroy();
             this.remove();
         }
     });

@@ -54,6 +54,8 @@ var app = app || {};
                     template: this.dayTemplate
                 });
                 fragment.appendChild(view.render());
+
+                return view;
             }, this);
 
             this.$week.empty();
@@ -123,12 +125,13 @@ var app = app || {};
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         close: function() {
-            debugger;
             _.each(this.dayViews, function(day) {
-                day.close();
+                day.remove();
             });
 
-            this.remove();
+            this.undelegateEvents();
+            this.stopListening();
+            this.dayViews = null;
         }
     });
 })(jQuery);

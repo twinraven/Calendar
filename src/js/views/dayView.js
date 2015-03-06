@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _, ENTER_KEY */
+/* global Backbone, jQuery, _ */
 var app = app || {};
 
 (function ($) {

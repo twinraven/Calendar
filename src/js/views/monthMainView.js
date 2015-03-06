@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _, ENTER_KEY */
+/* global Backbone, jQuery, _ */
 var app = app || {};
 
 (function ($) {
@@ -23,7 +23,7 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
-            // call the initialize method of parent class (as we want to add more init methods here)
+            // call the initialize method of parent/super class (as we want to add more init methods)
             app.monthView.prototype.initialize.apply(this);
 
             app.events.bind('clear:selection', function () { self.clearDrag() });

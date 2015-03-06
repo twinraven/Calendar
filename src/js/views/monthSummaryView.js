@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _, ENTER_KEY */
+/* global Backbone, jQuery, _ */
 var app = app || {};
 
 (function ($) {
@@ -41,6 +41,8 @@ var app = app || {};
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         gotoDate: function (e) {
+            if (e) { e.preventDefault(); }
+
             var date = $(e.currentTarget).data('ref');
 
             app.events.trigger('goto:date', app.cal.newDate(date));

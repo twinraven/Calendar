@@ -24,7 +24,7 @@ var app = app || {};
 
             this.selfWeek = app.cal.newDate();
 
-            app.events.bind('change:date', function (date) { self.handleChangeWeek(self, date) });
+            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek(self, date) });
         },
 
 
@@ -48,7 +48,7 @@ var app = app || {};
         renderDays: function() {
             var fragment = document.createDocumentFragment();
 
-            this.weekData.each(function (day) {
+            this.dayViews = this.weekData.map(function (day) {
                 var view = new app.dayView({
                     model: day,
                     template: this.dayTemplate
@@ -91,17 +91,17 @@ var app = app || {};
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         gotoWeek: function (params) {
-           var date;
+            var date;
 
-           if (params.newDate) { date = params.newDate; }
+            if (params.newDate) { date = params.newDate; }
 
-           this.setWeek(date);
+            this.setWeek(date);
 
-           this.render();
+            this.render();
         },
 
         setWeek: function (newDate) {
-           this.selfWeek = newDate;
+            this.selfWeek = newDate;
         },
 
 
@@ -118,6 +118,17 @@ var app = app || {};
             data.map(function (d) {
                self.weekData.add(d);
             });
+        },
+
+        // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        close: function() {
+            debugger;
+            _.each(this.dayViews, function(day) {
+                day.close();
+            });
+
+            this.remove();
         }
     });
 })(jQuery);

@@ -6,3 +6,10 @@ week view:
 	- scrolling
 	- set up for dates
 	- add 'now' line in today
+
+
+
+LONG-TERM:
+
+- skip links
+- full accessibility: ARIA roles etc

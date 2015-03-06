@@ -24,8 +24,8 @@ var app = app || {};
 
             this.selfMonth = app.cal.newDate();
 
-            app.events.bind('change:date', function (date) { self.handleChangeMonth(self, date) });
-            app.events.bind('change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
+            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeMonth(self, date) });
+            this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
         },
 
 
@@ -51,15 +51,18 @@ var app = app || {};
         },
 
         renderDays: function() {
+            var self = this;
             var fragment = document.createDocumentFragment();
 
-            this.monthData.each(function (day) {
+            this.dayViews = this.monthData.map(function (day) {
                 var view = new app.dayView({
                     model: day,
-                    template: this.dayTemplate
+                    template: self.dayTemplate
                 });
                 fragment.appendChild(view.render());
-            }, this);
+
+                return view;
+            });
 
             this.$month.empty();
             this.$month.append(fragment);
@@ -195,6 +198,18 @@ var app = app || {};
             data.map(function (d) {
                self.monthData.add(d);
             });
+        },
+
+        // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        close: function() {
+            debugger;
+            _.each(this.dayViews, function(day) {
+                day.close();
+            });
+
+            this.remove();
         }
+
     });
 })(jQuery);

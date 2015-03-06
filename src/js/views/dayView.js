@@ -17,7 +17,7 @@ var app = app || {};
             this.options = attrs;
 
             this.listenTo(this.model, 'change', this.render);
-            this.listenTo(this.model, 'destroy', this.remove);
+            this.listenTo(this.model, 'destroy', this.close);
         },
 
         render: function () {
@@ -65,8 +65,9 @@ var app = app || {};
         },*/
 
         // Remove the item, destroy the model from *localStorage* and delete its view.
-        clear: function () {
+        close: function () {
             this.model.destroy();
+            this.remove();
         }
     });
 })(jQuery);

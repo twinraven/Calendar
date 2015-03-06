@@ -31,12 +31,15 @@ var app = app || {};
             this.cacheSelectors();
             this.bindEvents();
 
-            app.state.viewMode = app.const.MONTH;
-            this.setModeLinkActive(this.$('.cal-mode-month'));
+            // load state & dates from local storage (inc. viewMode)
+
+            this.setModeLinkActive(this.$('.cal-mode-week'));
 
             this.setCurrentDate(app.cal.newDate());
 
             this.initializeSubViews();
+
+            //app.router.navigate(app.state.viewMode, {trigger: true});
 
             this.render();
         },
@@ -64,16 +67,10 @@ var app = app || {};
 
         initializeSubViews: function () {
             // summary -- sidebar mini-calendar
+            // always initialize this, as it is permanent. View used in main panel is changeable,
+            // so this is handled in assignViews (called from .render())
             this.summaryView = new app.monthSummaryView({
                 dayTemplate: '#day-summary-template'
-            });
-
-            // main panel, week view
-            this.mainWeekView = new app.weekView();
-
-            // main panel, month view
-            this.mainMonthView = new app.monthMainView({
-                dayTemplate: '#day-main-template'
             });
         },
 
@@ -100,18 +97,22 @@ var app = app || {};
         },
 
         assignViews: function () {
-            var mainView;
+            if (this.mainView) {
+                this.mainView.close();
+            }
 
             if (this.isViewModeWeek()) {
-                mainView = this.mainWeekView;
+                this.mainView = new app.weekView();
             }
 
             if (this.isViewModeMonth()) {
-                mainView = this.mainMonthView;
+                this.mainView = new app.monthMainView(({
+                    dayTemplate: '#day-main-template'
+                }));
             }
 
             this.assign(this.summaryView, '#cal-summary');
-            this.assign(mainView, '#cal-main');
+            this.assign(this.mainView, '#cal-main');
         },
 
         assign: function (view, selector) {
@@ -274,11 +275,13 @@ var app = app || {};
         },
 
         handleScroll: function (e) {
-            if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
-                this.gotoNextDateRange();
+            if (this.isViewModeMonth()) {
+                if (e.originalEvent.detail > 0 || e.originalEvent.wheelDelta < 0) {
+                    this.gotoNextDateRange();
 
-            } else {
-                this.gotoPrevDateRange();
+                } else {
+                    this.gotoPrevDateRange();
+                }
             }
         },
 

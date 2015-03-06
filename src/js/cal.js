@@ -137,7 +137,7 @@ var app = app || {};
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 
-            if (app.config.startDay === "mon") {
+            if (app.state.startDay === "mon") {
                  // JS getDay() returns a sunday-0-indexed value
                 num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK;
             }

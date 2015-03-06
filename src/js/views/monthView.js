@@ -41,6 +41,10 @@ var app = app || {};
 
             this.setRowsInMonth();
 
+            if (this.markedDates) {
+                this.markDateRangeAsCurrent(this.markedDates.from, this.markedDates.to);
+            }
+
             this.renderDays();
 
             return this.el;
@@ -93,6 +97,8 @@ var app = app || {};
         handleMarkDateRange: function (self, dates) {
             self.markDateRangeAsCurrent(dates.from, dates.to);
 
+            this.setStoredMarkedDates(dates);
+
             this.renderDays();
         },
 
@@ -134,6 +140,14 @@ var app = app || {};
             var weekEnd = app.cal.getWeekEndDate(date);
 
             this.markDateRangeAsCurrent(weekStart, weekEnd);
+        },
+
+        setStoredMarkedDates: function (dates) {
+            this.markedDates = dates;
+        },
+
+        getStoredMarkedDates: function () {
+            return this.markedDates;
         },
 
 

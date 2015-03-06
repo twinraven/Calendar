@@ -1,11 +1,2 @@
 TODO:
 
-X user control over view mode
-
-- fix day numbering bug in week view
-- displaying correct date range in summary view
-- select whole days in week view
-- move generic methods into separate mixin/class?
-		- render date labels
-		- drag/select
-- save view mode to local storage/cookie

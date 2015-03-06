@@ -86,7 +86,6 @@ var app = app || {};
         },
 
 
-
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 

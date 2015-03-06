@@ -171,6 +171,18 @@ var app = app || {};
             return app.state.viewMode === app.const.MONTH;
         },
 
+        isCurrentMonthNow: function (date) {
+            var d = date || this.currentDate;
+
+            var today = app.cal.getObjectFromDate(app.cal.newDate());
+            var current = app.cal.getObjectFromDate(d);
+
+            var todayMonth = app.cal.newDate(today.year, today.month, 1);
+            var currentMonth = app.cal.newDate(current.year, current.month, 1);
+
+            return todayMonth.getTime() === currentMonth.getTime();
+        },
+
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -217,23 +229,31 @@ var app = app || {};
         },
 
 
-         setCurrentDate: function (date) {
-            var newDate;
+        setCurrentDate: function (date) {
+            var newDate = app.cal.newDate();
 
             // normalise date so we're always dealing with the first day of the week
             if (this.isViewModeWeek()) {
                 newDate = app.cal.getWeekStartDate(date);
             }
 
-            if (this.isViewModeMonth()) {
+            // set the currentDate to the first of the month,
+            // if we are in month view mode & we're not in the current month
+            // (if the latter, we always want to highlight the current week)
+            if (this.isViewModeMonth() && !this.isCurrentMonthNow(date)) {
                 var d = app.cal.getObjectFromDate(date);
                 var newDate = app.cal.newDate(d.year, d.month, 1);
             }
 
             this.currentDate = newDate;
 
+            this.updateAllCalendars();
+        },
+
+        updateAllCalendars: function () {
             app.events.trigger('change:date', this.currentDate);
-         },
+        },
+
 
         // key events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _, ENTER_KEY */
+/* global Backbone, jQuery, _ */
 var app = app || {};
 
 (function ($) {
@@ -31,6 +31,7 @@ var app = app || {};
             ]
         },
 
+        // Basic date methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         newDate: function () { // using arguments, not params
             var args;
@@ -81,20 +82,26 @@ var app = app || {};
         },
 
 
-        getDayOfWeekName : function (num) {
-            return app.cal.labels.week[num];
+        // Get a particular property of a date ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        getObjectFromDate : function (date) {
+            return {
+                year: date.getFullYear(),
+                month: date.getMonth(),
+                day: date.getDate()
+            };
         },
 
 
-        getDayOfWeekNum : function (year, month, day) {
-            var num = new Date(year, month, day).getDay();
+        getRowsInMonth : function (date) {
+            var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
 
-            if (app.config.startDay === "mon") {
-                 // JS getDay() returns a sunday-0-indexed value
-                num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK;
-            }
+            return (Math.ceil(daysInGrid / app.const.DAYS_IN_WEEK));
+        },
 
-            return num;
+
+         getNewDateId : function (year, month, day) {
+            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
         },
 
 
@@ -117,6 +124,26 @@ var app = app || {};
             return "th";
         },
 
+
+        asTwoDigits : function (num) {
+            return ('0' + num).slice(-2);
+        },
+
+        getDayOfWeekName : function (num) {
+            return app.cal.labels.week[num];
+        },
+
+
+        getDayOfWeekNum : function (year, month, day) {
+            var num = new Date(year, month, day).getDay();
+
+            if (app.config.startDay === "mon") {
+                 // JS getDay() returns a sunday-0-indexed value
+                num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK;
+            }
+
+            return num;
+        },
 
         // returns a number 0-6 for day of week
         getMonthStartDayNum : function (date) {
@@ -142,25 +169,7 @@ var app = app || {};
         },
 
 
-        getObjectFromDate : function (date) {
-            return {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate()
-            };
-        },
-
-
-        getRowsInMonth : function (date) {
-            var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
-
-            return (Math.ceil(daysInGrid / app.const.DAYS_IN_WEEK));
-        },
-
-
-        asTwoDigits : function (num) {
-            return ('0' + num).slice(-2);
-        },
+        // Date traversal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
         getPrevDateRange : function (date, mode) {
@@ -211,6 +220,8 @@ var app = app || {};
 
             return new Date(d.year, d.month - 1);
         },
+
+        // Return array-based date collections ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
         getDaysInRangeNum : function (dateFrom, dateTo) {
@@ -291,12 +302,6 @@ var app = app || {};
 
             return output;
         },
-
-
-        getNewDateId : function (year, month, day) {
-            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
-        },
-
 
         getNewDayData : function (year, month, day) {
             var newDate = new Date(year, month, day);

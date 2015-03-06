@@ -1,2 +1,8 @@
 TODO:
 
+week view:
+	- split into 30-min segments
+	- left-side (time) labels
+	- scrolling
+	- set up for dates
+	- add 'now' line in today

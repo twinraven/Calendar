@@ -12,7 +12,10 @@ var app = app || {};
         defaults: {
             isCurrent: false,
             isHighlight: false,
-            events: []
+            events: {
+                day: [],
+                timed: []
+            }
         }
 
         /*addEvent: function(data) {

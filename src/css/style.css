@@ -156,6 +156,7 @@ ul {
 }
 
 .day .date {
+    cursor: pointer;
     display: block;
     font-size: 14px;
     font-weight: normal;

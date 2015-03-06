@@ -25,6 +25,7 @@ var app = app || {};
             this.selfMonth = app.cal.newDate();
 
             app.events.bind('change:date', function (date) { self.handleChangeMonth(self, date) });
+            app.events.bind('change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
         },
 
 
@@ -36,10 +37,8 @@ var app = app || {};
             this.cacheSelectors();
             this.renderDayLabels();
 
-            // local (view) collection
-            this.monthData = new app.dateCollection();
-            this.addMonthDataToCollection(this.selfMonth);
-            this.markMonthAsCurrent(this.selfMonth);
+            this.setMonthData();
+
             this.setRowsInMonth();
 
             this.renderDays();
@@ -91,6 +90,12 @@ var app = app || {};
             self.gotoMonth({ 'newDate': date });
         },
 
+        handleMarkDateRange: function (self, dates) {
+            self.markDateRangeAsCurrent(dates.from, dates.to);
+
+            this.renderDays();
+        },
+
 
         // Marking/highlighting dates ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -116,10 +121,19 @@ var app = app || {};
         },
 
         markMonthAsCurrent: function (date) {
-            var monthStart = app.cal.newDate(app.cal.getYear(date), app.cal.getMonthNum(date), 1);
-            var monthEnd = app.cal.newDate(app.cal.getYear(date), app.cal.getMonthNum(date) + 1, 0);
+            var d = app.cal.getObjectFromDate(date);
+
+            var monthStart = app.cal.newDate(d.year, d.month, 1);
+            var monthEnd = app.cal.newDate(d.year, (d.month + 1), 0);
 
             this.markDateRangeAsCurrent(monthStart, monthEnd);
+        },
+
+        markWeekAsCurrent: function (date) {
+            var weekStart = app.cal.getWeekStartDate(date);
+            var weekEnd = app.cal.getWeekEndDate(date);
+
+            this.markDateRangeAsCurrent(weekStart, weekEnd);
         },
 
 
@@ -150,6 +164,11 @@ var app = app || {};
 
 
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setMonthData: function () {
+            this.monthData = new app.dateCollection();
+            this.addMonthDataToCollection(this.selfMonth);
+        },
 
         addMonthDataToCollection: function (month) {
             var self = this;

@@ -218,7 +218,7 @@ var app = app || {};
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
-            return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.const.MS_IN_DAY) + 1; // magic!
+            return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.const.MS_IN_DAY) + 1;
         },
 
 

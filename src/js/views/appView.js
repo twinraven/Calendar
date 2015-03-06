@@ -82,6 +82,8 @@ var app = app || {};
 
             this.assignViews();
 
+            this.markDates();
+
             return this.el;
         },
 
@@ -108,22 +110,37 @@ var app = app || {};
             elem.text(app.cal.getMonthName(data) + " " + app.cal.getYear(data));
         },
 
+
+        // Marking dates in calendars ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        markDates: function () {
+            var d = app.cal.getObjectFromDate(this.currentDate);
+
+            if (this.isViewModeWeek()) {
+                app.events.trigger('change:mark', {
+                    'from': app.cal.getWeekStartDate(this.currentDate),
+                    'to': app.cal.getWeekEndDate(this.currentDate)
+                });
+            }
+
+            if (this.isViewModeMonth()) {
+                app.events.trigger('change:mark', {
+                    'from': app.cal.newDate(d.year, d.month, 1),
+                    'to': app.cal.newDate(d.year, d.month, app.cal.getDaysInMonth(this.currentDate))
+                });
+            }
+        },
+
+
+        // View mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         setViewMode: function (mode) {
             app.state.viewMode = mode;
 
+            this.setCurrentDate(this.currentDate);
+
             this.render();
         },
-
-        isViewModeWeek: function () {
-            return app.state.viewMode === app.const.WEEK;
-        },
-
-        isViewModeMonth: function () {
-            return app.state.viewMode === app.const.MONTH;
-        },
-
-
-        // Setting view mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
@@ -144,6 +161,14 @@ var app = app || {};
         setModeLinkActive: function ($elem) {
             this.$modeLinks.removeClass('cal-mode-active');
             $elem.addClass('cal-mode-active');
+        },
+
+        isViewModeWeek: function () {
+            return app.state.viewMode === app.const.WEEK;
+        },
+
+        isViewModeMonth: function () {
+            return app.state.viewMode === app.const.MONTH;
         },
 
 

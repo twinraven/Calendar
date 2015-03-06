@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _, ESC_KEY */
+/* global Backbone, jQuery, _ */
 var app = app || {};
 
 (function ($) {
@@ -42,7 +42,7 @@ var app = app || {};
         },
 
 
-        // Init methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Init methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
             this.$body = $('body');
@@ -63,12 +63,15 @@ var app = app || {};
         },
 
         initializeSubViews: function () {
+            // summary -- sidebar mini-calendar
             this.summaryView = new app.monthSummaryView({
                 dayTemplate: '#day-summary-template'
             });
 
+            // main panel, week view
             this.mainWeekView = new app.weekView();
 
+            // main panel, month view
             this.mainMonthView = new app.monthMainView({
                 dayTemplate: '#day-main-template'
             });
@@ -78,7 +81,7 @@ var app = app || {};
         // Rendering & data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.renderMonthName(this.$title, this.currentDate);
+            this.renderMonthName();
 
             this.assignViews();
 
@@ -87,8 +90,13 @@ var app = app || {};
             return this.el;
         },
 
-        assign: function (view, selector) {
-            view.setElement(this.$(selector)).render();
+
+        // Rendering methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        renderMonthName: function () {
+            var d = this.currentDate;
+
+            this.$title.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
         },
 
         assignViews: function () {
@@ -106,16 +114,14 @@ var app = app || {};
             this.assign(mainView, '#cal-main');
         },
 
-        renderMonthName: function (elem, data) {
-            elem.text(app.cal.getMonthName(data) + " " + app.cal.getYear(data));
+        assign: function (view, selector) {
+            view.setElement(this.$(selector)).render();
         },
-
-
-        // Marking dates in calendars ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         markDates: function () {
             var d = app.cal.getObjectFromDate(this.currentDate);
 
+            // if viewing a week, send the first and last day of the current week
             if (this.isViewModeWeek()) {
                 app.events.trigger('change:mark', {
                     'from': app.cal.getWeekStartDate(this.currentDate),
@@ -123,6 +129,7 @@ var app = app || {};
                 });
             }
 
+            // if viewing a month, send the first and last day of the current month
             if (this.isViewModeMonth()) {
                 app.events.trigger('change:mark', {
                     'from': app.cal.newDate(d.year, d.month, 1),
@@ -276,7 +283,7 @@ var app = app || {};
         },
 
 
-        // custom app events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // custom app events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleGotoDate: function (date) {
             this.gotoDate({'newDate': date});

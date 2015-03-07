@@ -18,6 +18,6 @@ $(function () {
 	// mutable app-wide properties
 	app.state = {
 	    startDay : "mon",
-		viewMode: app.const.WEEK
+		viewMode: app.const.MONTH
 	};
 });

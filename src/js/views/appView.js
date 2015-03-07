@@ -233,7 +233,7 @@ var app = app || {};
             }
 
             this.setCurrentDate(date);
-            this.render();
+            this.markDates();
         },
 
 

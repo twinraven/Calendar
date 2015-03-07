@@ -183,6 +183,8 @@ var app = app || {};
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setMonthData: function () {
+            if (this.monthData) { this.monthData.reset(); }
+
             this.monthData = new app.dateCollection();
             this.addMonthDataToCollection(this.selfMonth);
         },
@@ -192,8 +194,6 @@ var app = app || {};
 
             // load data
             var data = app.cal.getMonthGridData(month);
-
-            this.monthData.reset();
 
             data.map(function (d) {
                self.monthData.add(d);

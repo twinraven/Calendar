@@ -127,6 +127,7 @@ var app = app || {};
 
         // date traversal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        // used to a fuller extend by child prototypes - monthSummaryView / monthMainView
         gotoMonth: function (params) {
             var date = app.cal.newDate();
 

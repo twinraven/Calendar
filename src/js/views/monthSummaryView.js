@@ -22,19 +22,18 @@ var app = app || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            // call the render method of parent class
+            // call the render method of super class, before running our extension code
             app.monthView.prototype.render.apply(this);
 
-            this.$title = this.$('.cal-title');
-            this.$controls = this.$('.cal-controls');
-
-            this.renderMonthName(this.$title, this.selfMonth);
+            this.renderMonthName(this.$('.cal-title'));
 
             return this.el;
         },
 
-        renderMonthName: function (elem, data) {
-            elem.text(app.cal.getMonthName(data) + " " + app.cal.getYear(data));
+        renderMonthName: function ($elem) {
+            var d = this.selfMonth;
+
+            $elem.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
         },
 
 

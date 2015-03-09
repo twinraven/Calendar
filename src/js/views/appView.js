@@ -34,7 +34,7 @@ var app = app || {};
             // load state & dates from local storage (inc. viewMode)
             //
 
-            this.highlightActiveViewModeLink(this.$('.cal-mode-week'));
+            this.highlightActiveViewModeLink();
 
             this.setActiveDate(app.cal.newDate());
 
@@ -50,6 +50,8 @@ var app = app || {};
             this.$body = $('body');
             this.$title = this.$('.title-all');
             this.$modeLinks = this.$('.cal-mode');
+            this.$modeLinkMonth = this.$('.cal-mode-month');
+            this.$modeLinkWeek = this.$('.cal-mode-week');
         },
 
         bindEvents: function () {
@@ -168,8 +170,18 @@ var app = app || {};
             this.setViewMode(app.const.MONTH);
         },
 
-        highlightActiveViewModeLink: function ($elem) {
+        highlightActiveViewModeLink: function () {
+            var $elem;
+
             this.$modeLinks.removeClass('cal-mode-active');
+
+            if (this.isViewModeWeek()) {
+                $elem = this.$modeLinkWeek;
+            }
+            if (this.isViewModeMonth()) {
+                $elem = this.$modeLinkMonth;
+            }
+
             $elem.addClass('cal-mode-active');
         },
 

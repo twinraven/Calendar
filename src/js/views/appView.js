@@ -29,10 +29,8 @@ var app = app || {};
             var self = this;
 
             this.cacheSelectors();
-            this.bindEvents();
 
-            // load state & dates from local storage (inc. viewMode)
-            //
+            this.bindEvents();
 
             this.highlightActiveViewModeLink();
 
@@ -79,7 +77,7 @@ var app = app || {};
         // Rendering & data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.renderMonthName();
+            this.updateMonthTitle();
 
             this.assignViews();
 
@@ -91,7 +89,7 @@ var app = app || {};
 
         // Rendering methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        renderMonthName: function () {
+        updateMonthTitle: function () {
             var d = this.activeDate;
 
             this.$title.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
@@ -105,12 +103,15 @@ var app = app || {};
             }
 
             if (this.isViewModeWeek()) {
-                this.mainView = new app.weekView();
+                this.mainView = new app.weekView({
+                    date: this.activeDate
+                });
             }
 
             if (this.isViewModeMonth()) {
                 this.mainView = new app.monthMainView(({
-                    dayTemplate: '#day-main-template'
+                    dayTemplate: '#day-main-template',
+                    date: this.activeDate
                 }));
             }
 
@@ -157,17 +158,17 @@ var app = app || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.highlightActiveViewModeLink($(e.currentTarget));
-
             this.setViewMode(app.const.WEEK);
+
+            this.highlightActiveViewModeLink($(e.currentTarget));
         },
 
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.highlightActiveViewModeLink($(e.currentTarget));
-
             this.setViewMode(app.const.MONTH);
+
+            this.highlightActiveViewModeLink($(e.currentTarget));
         },
 
         highlightActiveViewModeLink: function () {
@@ -273,6 +274,8 @@ var app = app || {};
             this.activeDate = newDate;
 
             this.updateAllCalendars();
+
+            this.updateMonthTitle();
         },
 
         updateAllCalendars: function () {

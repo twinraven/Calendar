@@ -20,11 +20,11 @@ var app = app || {};
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function () {
+        initialize: function (params) {
             var self = this;
 
             // call the initialize method of parent/super class (as we want to add more init methods)
-            app.monthView.prototype.initialize.apply(this);
+            app.monthView.prototype.initialize.apply(this, [params]);
 
             app.events.bind('clear:selection', function () { self.clearDrag() });
         },

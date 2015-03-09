@@ -38,6 +38,7 @@ var app = app || {};
 
             var today = new Date().toDateString();
 
+
             // highlight today
             if (m.get('date') === today) {
                 this.$el.addClass('is-today');
@@ -57,7 +58,24 @@ var app = app || {};
             // add to the DOM
             this.$el.html(this.template(m.toJSON()));
 
+            if (m.get('date') === today) {
+                this.setTimeLinePosition();
+            }
+
             return this.el;
+        },
+
+        setTimeLinePosition: function () {
+            var $time = this.$('.now');
+            var today = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+            var d = app.cal.getObjectFromDate(today);
+            var dayStart = app.cal.newDate(d.year, d.month, d.day);
+            var msSinceDayStart = today.getTime() - dayStart.getTime();
+            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+
+            if ($time.length) {
+                $time.removeClass('is-hidden').css('top', percentComplete + '%');
+            }
         },
 
         /*addEvent: function() {

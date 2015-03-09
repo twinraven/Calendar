@@ -1,15 +1,14 @@
 TODO:
 
 week view:
-	- split into 30-min segments
-	- left-side (time) labels
-	- scrolling
 	- set up for dates
-	- add 'now' line in today
+	- time selection
 
 
 
 LONG-TERM:
 
+- google calendar api integration:
+	- key fields: start.date / start.dateTime, end.date / end.dateTime, summary, recurrence, reminders / reminders.overrides
 - skip links
 - full accessibility: ARIA roles etc

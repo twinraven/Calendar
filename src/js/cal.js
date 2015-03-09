@@ -168,6 +168,21 @@ var app = app || {};
             return this.newDate(d.year, d.month, d.day + (app.const.DAYS_IN_WEEK - 1));
         },
 
+        getTimeAs12HourFormat : function (num) {
+            var suffix = 'am';
+
+            if (num === 0) {
+                num = 12;
+
+            } else if (num > 12) {
+                num = num - 12;
+                suffix = 'pm';
+            }
+
+            //return this.asTwoDigits(num) + suffix;
+            return num + suffix;
+        },
+
 
         // Date traversal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

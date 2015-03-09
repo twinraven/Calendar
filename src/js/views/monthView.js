@@ -19,11 +19,11 @@ var app = app || {};
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function () {
+        initialize: function (params) {
             var self = this;
 
             // keep track of own date, irrespective of app-wide state
-            this.selfMonth = app.cal.newDate();
+            this.selfMonth = (params && params.date) || app.cal.newDate();
 
             this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange(self, date) });
             this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
@@ -37,11 +37,12 @@ var app = app || {};
             this.$el.html(this.template({}));
 
             this.cacheSelectors();
+
             this.renderWeekDayLabels();
 
             this.setMonthData();
 
-            this.calcRowsInMonth();
+            this.setRowsInMonth();
 
             // upon render, if we have already got marked dates cached, re-render these now.
             // this handles date traversals in summary view
@@ -55,7 +56,7 @@ var app = app || {};
         },
 
         cacheSelectors: function () {
-            this.$month = this.$('.month');
+            this.$month = this.$('.month-days');
             this.$labels = this.$('.cal-labels');
         },
 
@@ -72,7 +73,7 @@ var app = app || {};
         },
 
         // flagged for removal? depends if switching to table layout
-        calcRowsInMonth: function () {
+        setRowsInMonth: function () {
             this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
         },
 

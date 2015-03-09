@@ -11,7 +11,7 @@ var app = app || {};
 
         // templating and setup
         template: _.template($('#week-template').html()), // for containing elem & markup
-        titleTemplate: _.template($('#day-title-template').html()), // for mon/tue/wed labels
+        titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
         dayTemplate: _.template($('#day-week-template').html()), // for each day of week
 
         collection: app.dateCollection,
@@ -19,11 +19,11 @@ var app = app || {};
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function () {
+        initialize: function (params) {
             var self = this;
 
             // keep track of own date, irrespective of app-wide state
-            this.selfWeek = app.cal.newDate();
+            this.selfWeek = (params && params.date) || app.cal.newDate();
 
             this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek(self, date) });
         },
@@ -35,6 +35,7 @@ var app = app || {};
             this.$el.html(this.template({}));
 
             this.cacheSelectors();
+
             this.renderDayLabels();
 
             this.setWeekData();
@@ -45,16 +46,21 @@ var app = app || {};
         },
 
         cacheSelectors: function () {
-            this.$week = this.$('.week');
+            this.$week = this.$('.week-days');
             this.$labels = this.$('.cal-labels');
         },
 
         renderDayLabels: function () {
             var self = this;
+            var d = app.cal.getObjectFromDate(self.selfWeek);
 
             _.each(app.cal.labels.week, function (day, i) {
+                var newDate = app.cal.newDate(d.year, d.month, d.day + i);
+                var newDateObj = app.cal.getObjectFromDate(newDate);
+
                 var data = {
-                    'label': app.cal.labels.week[i],
+                    'date': newDateObj.day + '/' + newDateObj.month,
+                    'label': app.cal.labels.week[i].slice(0, 3),
                     'initial': app.cal.labels.week[i].slice(0, 1)
                 };
                 self.$labels.append(self.titleTemplate(data));

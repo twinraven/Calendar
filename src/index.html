@@ -54,7 +54,7 @@
 
 
 		<script type="text/template" id="day-main-template">
-			<div class="day-inner" data-ref="<%= id %>">
+			<div class="day-inner" data-date="<%= id %>">
 				<h3 class="date" id="date-main-<%= id %>">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
@@ -88,7 +88,7 @@
 
 				<div class="cal-events cal-events--fullday">
 				<% //_.each( events.day, function( event ){ %>
-					<div class="cal-event cal-event--fullday" data-ref="<%= event.id %>">
+					<div class="cal-event cal-event--fullday" data-date="<%= event.id %>">
 						<p class="cal-event-title"><%- event.title %></p>
 					</div>
 				<% //}); %>
@@ -113,11 +113,11 @@
 
 			<ul class="cal-events-grid">
 			<% for(var x=0, y=app.const.HRS_IN_DAY; x<y; x++) { %>
-				<li>
-					<a href="#" class="half-hour" draggable="false">Add time</a>
+				<li class="hour-0-30">
+					<a href="#" class="half-hour" draggable="false" data-id="<%= x*2 %>" data-date="<%= id %>" data-hour="<%= x %>" data-min="0">Add time</a>
 					</li>
-				<li class="half">
-					<a href="#" class="half-hour" draggable="false">Add time</a>
+				<li class="hour-30-60">
+					<a href="#" class="half-hour" draggable="false" data-id="<%= x*2+1 %>" data-date="<%= id %>" data-hour="<%= x %>" data-min="30">Add time</a>
 					</li>
 			<% } %>
 			</ul>

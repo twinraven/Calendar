@@ -37,7 +37,7 @@ var app = app || {};
 
             if ($el.is('.day-inner')) {
                this.isDragging = true;
-               this.setDragStartDate($el, $el.data('ref'));
+               this.setDragDateStart($el, $el.data('date'));
             }
         },
 
@@ -59,20 +59,20 @@ var app = app || {};
             var $el = $(e.target);
 
             if (this.isDragging) {
-               this.setDragEndDate($el, $el.data('ref'));
+               this.setDragDateEnd($el, $el.data('date'));
             }
         },
 
 
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        setDragStartDate: function ($el, date) {
+        setDragDateStart: function ($el, date) {
             this.dragDateStart = app.cal.newDate(date);
 
-            this.setDragEndDate($el, date);
+            this.setDragDateEnd($el, date);
         },
 
-        setDragEndDate: function ($el, date) {
+        setDragDateEnd: function ($el, date) {
             this.dragDateEnd = app.cal.newDate(date);
 
             if (this.dragDateStart < this.dragDateEnd) {

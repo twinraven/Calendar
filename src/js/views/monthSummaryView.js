@@ -42,7 +42,7 @@ var app = app || {};
         gotoDate: function (e) {
             if (e) { e.preventDefault(); }
 
-            var date = $(e.currentTarget).data('ref');
+            var date = $(e.currentTarget).data('date');
 
             app.events.trigger('goto:date', app.cal.newDate(date));
         },

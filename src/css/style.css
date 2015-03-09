@@ -161,8 +161,8 @@ ul {
 }
 
 .day-time-labels li {
-    height: 21px;
-    line-height: 21px;
+    height: 20px;
+    line-height: 20px;
 }
 
 .cal-events-grid li {
@@ -191,7 +191,11 @@ ul {
     background: rgba(255,255,0,0.3);
 }
 
-.cal-events-grid li.half .half-hour {
+.half-hour.is-highlight {
+    border-top-color: yellow;
+}
+
+.cal-events-grid .hour-30-60 .half-hour {
     border-top-style: dotted;
 }
 

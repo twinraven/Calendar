@@ -16,12 +16,6 @@ var app = app || {};
 
         collection: app.dateCollection,
 
-        events: {
-            'mousedown': 'handleMouseDown',
-            'mouseover .half-hour': 'handleMouseOver',
-            'mouseup': 'handleMouseUp'
-        },
-
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -83,8 +77,6 @@ var app = app || {};
 
             this.$week.empty();
             this.$week.append(fragment);
-
-            this.$times = this.$('.half-hour'); // MOVE THIS
         },
 
         cacheSelectors: function () {
@@ -123,88 +115,6 @@ var app = app || {};
             self.selfWeek = newDate;
 
             self.render();
-        },
-
-        handleMouseDown: function (e) {
-            var $el = $(e.target);
-
-            if ($el.is('.half-hour')) {
-                var data = $el.data();
-
-                this.isDragging = true;
-                this.setDragStart($el, data.date, data.hour, data.min, data.id);
-            }
-        },
-
-        handleMouseOver: function (e) {
-            var $el = $(e.target);
-
-            if (this.isDragging) {
-                var data = $el.data();
-
-                this.setDragEnd($el, data.date, data.hour, data.min, data.id);
-            }
-        },
-
-        handleMouseUp: function (e) {
-            var $el = $(e.target);
-
-            if ($el.is('.half-hour')) {
-                this.isDragging = false;
-
-                app.events.trigger('add:event', {
-                    'from': this.dragDateTimeStart,
-                    'to': this.dragDateTimeEnd,
-                    'fullday': false
-                });
-            }
-        },
-
-
-        // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        setDragStart: function ($el, date, hour, min, id) {
-            var date = app.cal.newDate(date);
-            var d = app.cal.getObjectFromDate(date);
-
-            this.dragElemStart = id;
-
-            this.dragDateTimeStart = app.cal.newDate(d.year, d.month, d.day);
-            this.dragDateTimeStart.setHours(hour, min, 0, 0);
-
-            this.setDragEnd($el, date, hour, min, id);
-        },
-
-        setDragEnd: function ($el, date, hour, min, id) {
-            var date = app.cal.newDate(date);
-            var d = app.cal.getObjectFromDate(date);
-
-            this.dragElemEnd = id;
-
-            this.dragDateTimeEnd = app.cal.newDate(d.year, d.month, d.day);
-            this.dragDateTimeEnd.setHours(hour, min, 0, 0);
-
-            if (this.dragElemStart <= this.dragElemEnd) {
-                this.markTimeRangeAsHighlight(this.dragElemStart, this.dragElemEnd);
-
-            } else {
-                // swap order if we're dragging backwards
-                this.markTimeRangeAsHighlight(this.dragElemEnd, this.dragElemStart);
-            }
-
-            //this.renderDays();
-        },
-
-        clearDrag: function () {
-            this.markTimeRangeAsHighlight(null, null);
-
-            //this.renderDays();
-        },
-
-        markTimeRangeAsHighlight: function (elemFrom, elemTo) {
-            //ebugger;
-            this.$times.removeClass('is-highlight');
-            this.$times.slice(elemFrom, elemTo).addClass('is-highlight');
         },
 
 

@@ -186,13 +186,12 @@ ul {
     user-select: none;
 }
 
-.half-hour:hover,
-.half-hour:focus {
+.half-hour:hover {
     background: rgba(255,255,0,0.3);
 }
 
 .half-hour.is-highlight {
-    border-top-color: yellow;
+    border-top-style: dotted;
 }
 
 .cal-events-grid .hour-30-60 .half-hour {
@@ -247,10 +246,12 @@ ul {
 
 .cal-main .day:hover .day-inner {
     background: rgba(255,255,0,0.3);
+    border-width: 1px 0 0 1px;
     z-index: 10;
 }
 
 .day--title {
+    font-size: 12px;
     padding: 0 5px;
 }
 
@@ -295,7 +296,7 @@ ul {
 }
 
 .is-not-range {
-    background: #ddf;
+    background: #eee;
     color: #888;
     font-weight: normal;
 }
@@ -328,6 +329,19 @@ ul {
     border-top: 2px solid red;
     height: 0;
     left: 0;
+    pointer-events: none;
     position: absolute;
     width: 100%;
+}
+
+.new-event {
+    background: yellow;
+    height: 0;
+    font-size: 12px;
+    left: 0;
+    line-height: 20px;
+    overflow: hidden;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
 }

@@ -13,16 +13,28 @@ var app = app || {};
         tagName: 'li',
         className: 'day',
 
+        events: {
+            'mousedown': 'handleMouseDown',
+            'mouseover .half-hour': 'handleMouseOver',
+            'mouseup': 'handleMouseUp'
+        },
+
+        // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         initialize: function (attrs) {
+            var self = this;
+
             this.options = attrs;
 
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.close);
+
+            this.listenTo(app.events, 'clear:selection', function () { self.clearDrag() });
         },
 
-        render: function () {
-            var m = this.model;
+        // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        render: function () {
             this.template = this.options.template;
 
             // Backbone LocalStorage is adding `id` attribute instantly after
@@ -32,15 +44,29 @@ var app = app || {};
             // `ind` change.  It's known Backbone LocalStorage bug, therefore
             // we've to create a workaround.
             // https://github.com/tastejs/todomvc/issues/469
-            if (m.changed.id !== undefined) {
+            if (this.model.changed.id !== undefined) {
                 return;
             }
 
-            var today = new Date().toDateString();
+            this.setState();
 
+            // add to the DOM
+            this.$el.html(this.template(this.model.toJSON()));
+
+            this.cacheSelectors();
+
+            this.setTimeLinePosition();
+            // this.startTimeLineTicker();
+
+            return this.el;
+        },
+
+        setState: function () {
+            var m = this.model;
+            this.today = app.cal.newDate().toDateString();
 
             // highlight today
-            if (m.get('date') === today) {
+            if (m.get('date') === this.today) {
                 this.$el.addClass('is-today');
             }
 
@@ -54,37 +80,119 @@ var app = app || {};
             if (m.get('isHighlight') == true) {
                 this.$el.addClass('is-highlight');
             }
+        },
 
-            // add to the DOM
-            this.$el.html(this.template(m.toJSON()));
-
-            if (m.get('date') === today) {
-                this.setTimeLinePosition();
-            }
-
-            return this.el;
+        cacheSelectors: function () {
+            this.$newEvent = this.$('.new-event');
+            this.$times = this.$('.half-hour');
         },
 
         setTimeLinePosition: function () {
-            var $time = this.$('.now');
-            var today = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
-            var d = app.cal.getObjectFromDate(today);
-            var dayStart = app.cal.newDate(d.year, d.month, d.day);
-            var msSinceDayStart = today.getTime() - dayStart.getTime();
-            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+            if (this.model.get('date') === this.today) {
 
-            if ($time.length) {
-                $time.removeClass('is-hidden').css('top', percentComplete + '%');
+                var $time = this.$('.now');
+                var today = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+                var d = app.cal.getObjectFromDate(today);
+                var dayStart = app.cal.newDate(d.year, d.month, d.day);
+                var msSinceDayStart = today.getTime() - dayStart.getTime();
+                var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+
+                if ($time.length) {
+                    $time.removeClass('is-hidden').css('top', percentComplete + '%');
+                }
             }
         },
 
-        /*addEvent: function() {
-            this.model.addEvent( {'id': this.model.id} );
-        },*/
+
+        // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        handleMouseDown: function (e) {
+            var $el = $(e.target);
+
+            app.events.trigger('clear:selection');
+
+            if ($el.is('.half-hour')) {
+                var data = $el.data();
+
+                this.isDragging = true;
+                this.setDragStart($el, data.date, data.hour, data.min, data.id);
+            }
+        },
+
+        handleMouseOver: function (e) {
+            var $el = $(e.target);
+
+            if (this.isDragging) {
+                var data = $el.data();
+
+                this.setDragEnd($el, data.date, data.hour, data.min, data.id);
+            }
+        },
+
+        handleMouseUp: function (e) {
+            var $el = $(e.target);
+
+            if ($el.is('.half-hour')) {
+                this.isDragging = false;
+
+                var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
+
+                var start = invert ? this.dragDateTimeEnd : this.dragDateTimeStart;
+                var end = invert ? this.dragDateTimeStart : this.dragDateTimeEnd;
+
+                app.events.trigger('add:event', {
+                    'from': start,
+                    'to': end,
+                    'fullday': false
+                });
+            }
+        },
+
+
+        // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setDragStart: function ($el, date, hour, min, id) {
+            this.dragIdStart = id;
+
+            this.dragDateTimeStart = app.cal.newDate(date);
+            this.dragDateTimeStart.setHours(hour, min, 0, 0);
+
+            this.setDragEnd($el, date, hour, min, id);
+        },
+
+        setDragEnd: function ($el, date, hour, min, id) {
+            this.dragIdEnd = id;
+
+            this.dragDateTimeEnd = app.cal.newDate(date);
+            this.dragDateTimeEnd.setHours(hour, min, 0, 0);
+
+            if (this.dragIdStart <= this.dragIdEnd) {
+                this.markTimeRangeAsHighlight(this.dragIdStart, this.dragIdEnd);
+
+            } else {
+                // swap order if we're dragging backwards
+                this.markTimeRangeAsHighlight(this.dragIdEnd, this.dragIdStart);
+            }
+        },
+
+        clearDrag: function () {
+            this.markTimeRangeAsHighlight(null, null);
+        },
+
+        markTimeRangeAsHighlight: function (elemFrom, elemTo) {
+            this.$times.removeClass('is-highlight');
+
+            if (elemFrom && elemTo) {
+                this.$times.slice(elemFrom, elemTo + 1).addClass('is-highlight');
+            }
+        },
+
+
+        // Kill switch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         // Remove the item, destroy the model from *localStorage* and delete its view.
         close: function () {
-            //this.model.destroy();
+            // this.stopTimeLineTicker();
             this.remove();
         }
     });

@@ -56,8 +56,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            app.events.bind('add:event', function (event) { self.handleAddEvent(event) });
-            app.events.bind('goto:date', function (date) { self.handleDateChange(date) });
+            this.listenTo(app.events, 'add:event', function (event) { self.handleAddEvent(event) });
+            this.listenTo(app.events, 'goto:date', function (date) { self.handleDateChange(date) });
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });

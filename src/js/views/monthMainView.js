@@ -26,7 +26,7 @@ var app = app || {};
             // call the initialize method of parent/super class (as we want to add more init methods)
             app.monthView.prototype.initialize.apply(this, [params]);
 
-            app.events.bind('clear:selection', function () { self.clearDrag() });
+            this.listenTo(app.events, 'clear:selection', function () { self.clearDrag() });
         },
 
 

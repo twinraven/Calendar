@@ -10,9 +10,9 @@ var app = app || {};
     app.monthView = Backbone.View.extend({
 
         // templating and setup
-        template: _.template($('#month-template').html()),
-        titleTemplate: _.template($('#day-title-template').html()),
-        dayTemplate: _.template($('#day-main-template').html()),
+        template: _.template($('#month-template').html()), // for containing elem & markup
+        titleTemplate: _.template($('#day-title-template').html()), // for containing elem & markup
+        dayTemplate: _.template($('#day-main-template').html()), // for each day of month
 
         collection: app.dateCollection,
 
@@ -22,9 +22,10 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
+            // keep track of own date, irrespective of app-wide state
             this.selfMonth = app.cal.newDate();
 
-            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeMonth(self, date) });
+            this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange(self, date) });
             this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
         },
 
@@ -32,17 +33,20 @@ var app = app || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
+            // needed?
             this.$el.html(this.template({}));
 
             this.cacheSelectors();
-            this.renderDayLabels();
+            this.renderWeekDayLabels();
 
             this.setMonthData();
 
-            this.setRowsInMonth();
+            this.calcRowsInMonth();
 
+            // upon render, if we have already got marked dates cached, re-render these now.
+            // this handles date traversals in summary view
             if (this.markedDates) {
-                this.markDateRangeAsCurrent(this.markedDates.from, this.markedDates.to);
+                this.markDateRangeAsActive(this.markedDates.from, this.markedDates.to);
             }
 
             this.renderDays();
@@ -50,10 +54,34 @@ var app = app || {};
             return this.el;
         },
 
+        cacheSelectors: function () {
+            this.$month = this.$('.month');
+            this.$labels = this.$('.cal-labels');
+        },
+
+        renderWeekDayLabels: function () {
+            var self = this;
+
+            _.each(app.cal.labels.week, function (day, i) {
+                var data = {
+                    'label': app.cal.labels.week[i],
+                    'initial': app.cal.labels.week[i].slice(0, 1)
+                };
+                self.$labels.append(self.titleTemplate(data));
+            });
+        },
+
+        // flagged for removal? depends if switching to table layout
+        calcRowsInMonth: function () {
+            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
+        },
+
         renderDays: function() {
             var self = this;
+            // using documentFragment to minimise DOM contact
             var fragment = document.createDocumentFragment();
 
+            // keep a cache of all sub-views created, so we can unbind them properly later
             this.dayViews = this.monthData.map(function (day) {
                 var view = new app.dayView({
                     model: day,
@@ -66,43 +94,6 @@ var app = app || {};
 
             this.$month.empty();
             this.$month.append(fragment);
-        },
-
-        renderDayLabels: function () {
-            var self = this;
-
-            _.each(app.cal.labels.week, function (day, i) {
-                var data = {
-                    'label': app.cal.labels.week[i],
-                    'initial': app.cal.labels.week[i].slice(0, 1)
-                };
-                self.$labels.append(self.titleTemplate(data));
-            });
-        },
-
-        cacheSelectors: function () {
-            this.$month = this.$('.month');
-            this.$labels = this.$('.cal-labels');
-        },
-
-        // flagged for removal? depends if switching to table layout
-        setRowsInMonth: function () {
-            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
-        },
-
-
-        // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        handleChangeMonth: function (self, date) {
-            self.gotoMonth({ 'newDate': date });
-        },
-
-        handleMarkDateRange: function (self, dates) {
-            self.markDateRangeAsCurrent(dates.from, dates.to);
-
-            this.setStoredMarkedDates(dates);
-
-            this.renderDays();
         },
 
 
@@ -125,58 +116,34 @@ var app = app || {};
             this.markDateRange(dateFrom, dateTo, 'isHighlight');
         },
 
-        markDateRangeAsCurrent: function (dateFrom, dateTo) {
-            this.markDateRange(dateFrom, dateTo, 'isCurrent');
+        markDateRangeAsActive: function (dateFrom, dateTo) {
+            this.markDateRange(dateFrom, dateTo, 'isActive');
         },
 
-        markMonthAsCurrent: function (date) {
-            var d = app.cal.getObjectFromDate(date);
-
-            var monthStart = app.cal.newDate(d.year, d.month, 1);
-            var monthEnd = app.cal.newDate(d.year, (d.month + 1), 0);
-
-            this.markDateRangeAsCurrent(monthStart, monthEnd);
-        },
-
-        markWeekAsCurrent: function (date) {
-            var weekStart = app.cal.getWeekStartDate(date);
-            var weekEnd = app.cal.getWeekEndDate(date);
-
-            this.markDateRangeAsCurrent(weekStart, weekEnd);
-        },
-
-        setStoredMarkedDates: function (dates) {
+        storeMarkedDates: function (dates) {
             this.markedDates = dates;
         },
 
-        getStoredMarkedDates: function () {
-            return this.markedDates;
-        },
 
-
-        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // date traversal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         gotoMonth: function (params) {
-           var date;
+            var date = app.cal.newDate();
 
-           if (params.type) {
+            if (params.type) {
                if (params.type === 'next') {
                    date = app.cal.getNextMonth(params.month);
 
                } else if (params.type === 'previous') {
                    date = app.cal.getPrevMonth(params.month);
                }
-           }
+            }
 
-           if (params.newDate) { date = params.newDate; }
+            if (params.newDate) { date = params.newDate; }
 
-           this.setMonth(date);
+            this.selfMonth = date;
 
-           this.render();
-        },
-
-        setMonth: function (newDate) {
-           this.selfMonth = newDate;
+            this.render();
         },
 
 
@@ -200,13 +167,31 @@ var app = app || {};
             });
         },
 
+
+        // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        handleDateChange: function (self, date) {
+            self.gotoMonth({ 'newDate': date });
+        },
+
+        handleMarkDateRange: function (self, dates) {
+            self.markDateRangeAsActive(dates.from, dates.to);
+
+            this.storeMarkedDates(dates);
+
+            this.renderDays();
+        },
+
+
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         close: function() {
+            // remove all child/sub views completely
             _.each(this.dayViews, function(day) {
                 day.remove();
             });
 
+            // unbind all listeners from memory
             this.undelegateEvents();
             this.stopListening();
             this.dayViews = null;

@@ -10,7 +10,7 @@ var app = app || {};
     app.day = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
-            isCurrent: false,
+            isActive: false,
             isHighlight: false,
             events: {
                 day: [],

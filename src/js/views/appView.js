@@ -32,14 +32,13 @@ var app = app || {};
             this.bindEvents();
 
             // load state & dates from local storage (inc. viewMode)
+            //
 
-            this.setModeLinkActive(this.$('.cal-mode-week'));
+            this.highlightActiveViewModeLink(this.$('.cal-mode-week'));
 
-            this.setCurrentDate(app.cal.newDate());
+            this.setActiveDate(app.cal.newDate());
 
             this.initializeSubViews();
-
-            //app.router.navigate(app.state.viewMode, {trigger: true});
 
             this.render();
         },
@@ -58,7 +57,7 @@ var app = app || {};
 
             // custom events
             app.events.bind('add:event', function (event) { self.handleAddEvent(event) });
-            app.events.bind('goto:date', function (date) { self.handleGotoDate(date) });
+            app.events.bind('goto:date', function (date) { self.handleDateChange(date) });
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
@@ -91,12 +90,14 @@ var app = app || {};
         // Rendering methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderMonthName: function () {
-            var d = this.currentDate;
+            var d = this.activeDate;
 
             this.$title.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
         },
 
         assignViews: function () {
+            // it a view has already been assigned, call its custom 'close' method now
+            // to safely & thoroughly unbind/remove all listeners & elements
             if (this.mainView) {
                 this.mainView.close();
             }
@@ -116,25 +117,26 @@ var app = app || {};
         },
 
         assign: function (view, selector) {
+            // using .setElement as it minimises DOM thrashing when re-rendering existing elements
             view.setElement(this.$(selector)).render();
         },
 
         markDates: function () {
-            var d = app.cal.getObjectFromDate(this.currentDate);
+            var d = app.cal.getObjectFromDate(this.activeDate);
 
-            // if viewing a week, send the first and last day of the current week
+            // if viewing a week, highlight from the first to the last day of the current week
             if (this.isViewModeWeek()) {
                 app.events.trigger('change:mark', {
-                    'from': app.cal.getWeekStartDate(this.currentDate),
-                    'to': app.cal.getWeekEndDate(this.currentDate)
+                    'from': app.cal.getWeekStartDate(this.activeDate),
+                    'to': app.cal.getWeekEndDate(this.activeDate)
                 });
             }
 
-            // if viewing a month, send the first and last day of the current month
+            // if viewing a month, highlight from the first to the last day of the current month
             if (this.isViewModeMonth()) {
                 app.events.trigger('change:mark', {
                     'from': app.cal.newDate(d.year, d.month, 1),
-                    'to': app.cal.newDate(d.year, d.month, app.cal.getDaysInMonth(this.currentDate))
+                    'to': app.cal.newDate(d.year, d.month, app.cal.getDaysInMonth(this.activeDate))
                 });
             }
         },
@@ -145,7 +147,7 @@ var app = app || {};
         setViewMode: function (mode) {
             app.state.viewMode = mode;
 
-            this.setCurrentDate(this.currentDate);
+            this.setActiveDate(this.activeDate);
 
             this.render();
         },
@@ -153,7 +155,7 @@ var app = app || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setModeLinkActive($(e.currentTarget));
+            this.highlightActiveViewModeLink($(e.currentTarget));
 
             this.setViewMode(app.const.WEEK);
         },
@@ -161,12 +163,12 @@ var app = app || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setModeLinkActive($(e.currentTarget));
+            this.highlightActiveViewModeLink($(e.currentTarget));
 
             this.setViewMode(app.const.MONTH);
         },
 
-        setModeLinkActive: function ($elem) {
+        highlightActiveViewModeLink: function ($elem) {
             this.$modeLinks.removeClass('cal-mode-active');
             $elem.addClass('cal-mode-active');
         },
@@ -179,16 +181,16 @@ var app = app || {};
             return app.state.viewMode === app.const.MONTH;
         },
 
-        isCurrentMonthNow: function (date) {
-            var d = date || this.currentDate;
+        isCurrentMonthActive: function (date) {
+            var d = date || this.activeDate;
 
-            var today = app.cal.getObjectFromDate(app.cal.newDate());
-            var current = app.cal.getObjectFromDate(d);
+            var now = app.cal.getObjectFromDate(app.cal.newDate());
+            var active = app.cal.getObjectFromDate(d);
 
-            var todayMonth = app.cal.newDate(today.year, today.month, 1);
-            var currentMonth = app.cal.newDate(current.year, current.month, 1);
+            var nowMonth = app.cal.newDate(now.year, now.month, 1);
+            var activeMonth = app.cal.newDate(active.year, active.month, 1);
 
-            return todayMonth.getTime() === currentMonth.getTime();
+            return nowMonth.getTime() === activeMonth.getTime();
         },
 
 
@@ -206,14 +208,16 @@ var app = app || {};
             if (e) { e.preventDefault(); }
 
             this.gotoDate({
-                'increment': 'previous'
+                'increment': 'prev'
             });
         },
 
          gotoToday: function (e) {
-             if (e) { e.preventDefault(); }
+            if (e) { e.preventDefault(); }
 
-             this.gotoDate({'newDate': app.cal.newDate()});
+            this.gotoDate({
+                'newDate': app.cal.newDate()
+            });
          },
 
          gotoDate: function (params) {
@@ -221,49 +225,52 @@ var app = app || {};
 
             if (params.increment) {
                 if (params.increment === 'next') {
-                    date = app.cal.getNextDateRange(this.currentDate, app.state.viewMode);
+                    date = app.cal.getNextDateRange(this.activeDate, app.state.viewMode);
 
-                } else if (params.increment === 'previous') {
-                    date = app.cal.getPrevDateRange(this.currentDate, app.state.viewMode);
+                } else if (params.increment === 'prev') {
+                    date = app.cal.getPrevDateRange(this.activeDate, app.state.viewMode);
                 }
-            }
 
-            if (params.newDate) {
+            } else if (params.newDate) {
                 date = params.newDate;
             }
 
-            this.setCurrentDate(date);
+            this.setActiveDate(date);
             this.markDates();
         },
 
 
-        setCurrentDate: function (date) {
+        setActiveDate: function (date) {
+            var d;
             var newDate = app.cal.newDate();
 
-            // normalise date so we're always dealing with the first day of the week
             if (this.isViewModeWeek()) {
+                // normalise date so we're always dealing with the first day of the week
                 newDate = app.cal.getWeekStartDate(date);
             }
 
-            // set the currentDate to the first of the month,
-            // if we are in month view mode & we're not in the current month
-            // (if the latter, we always want to highlight the current week)
-            if (this.isViewModeMonth() && !this.isCurrentMonthNow(date)) {
-                var d = app.cal.getObjectFromDate(date);
-                var newDate = app.cal.newDate(d.year, d.month, 1);
+            // set the currentDate to the first of the month, only if
+            // we are in month view mode & we're not in the current month
+            // (if the latter, we want to keep today as the active date, so if
+            // we switch to week mode, it highlights the correct week)
+            if (this.isViewModeMonth() && !this.isCurrentMonthActive(date)) {
+                d = app.cal.getObjectFromDate(date);
+                newDate = app.cal.newDate(d.year, d.month, 1);
             }
 
-            this.currentDate = newDate;
+            this.activeDate = newDate;
 
             this.updateAllCalendars();
         },
 
         updateAllCalendars: function () {
-            app.events.trigger('change:date', this.currentDate);
+            // this event is listened to in the week and month views, so by
+            // triggering this, we prompt the calendar views to update themselves
+            app.events.trigger('change:date', this.activeDate);
         },
 
 
-        // key events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // user events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleKeyPress: function (e) {
             var code = e.keyCode || e.which;
@@ -286,13 +293,14 @@ var app = app || {};
         },
 
 
-        // custom app events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // custom app events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleGotoDate: function (date) {
+        handleDateChange: function (date) {
             this.gotoDate({'newDate': date});
         },
 
         handleAddEvent: function (newEvent) {
+            // to be flesh out, when I get to events!
             console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');
             console.log('all day event: ' + (newEvent.fullday));
             console.log('~~~~~~~~~~~~~~~~');

@@ -46,7 +46,7 @@ var app = app || {};
             }
 
             // highlight if this day is currently in our active range
-            if (m.get('isCurrent') == true) {
+            if (m.get('isActive') == true) {
                 this.$el.addClass('is-range');
             } else {
                 this.$el.addClass('is-not-range');

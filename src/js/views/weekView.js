@@ -10,9 +10,9 @@ var app = app || {};
     app.weekView = Backbone.View.extend({
 
         // templating and setup
-        template: _.template($('#week-template').html()),
-        titleTemplate: _.template($('#day-title-template').html()),
-        dayTemplate: _.template($('#day-week-template').html()),
+        template: _.template($('#week-template').html()), // for containing elem & markup
+        titleTemplate: _.template($('#day-title-template').html()), // for mon/tue/wed labels
+        dayTemplate: _.template($('#day-week-template').html()), // for each day of week
 
         collection: app.dateCollection,
 
@@ -22,6 +22,7 @@ var app = app || {};
         initialize: function () {
             var self = this;
 
+            // keep track of own date, irrespective of app-wide state
             this.selfWeek = app.cal.newDate();
 
             this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek(self, date) });
@@ -36,13 +37,28 @@ var app = app || {};
             this.cacheSelectors();
             this.renderDayLabels();
 
-            // local (view) collection
-            this.weekData = new app.dateCollection();
-            this.addWeekDataToCollection(this.selfWeek);
+            this.setWeekData();
 
             this.renderDays();
 
             return this.el;
+        },
+
+        cacheSelectors: function () {
+            this.$week = this.$('.week');
+            this.$labels = this.$('.cal-labels');
+        },
+
+        renderDayLabels: function () {
+            var self = this;
+
+            _.each(app.cal.labels.week, function (day, i) {
+                var data = {
+                    'label': app.cal.labels.week[i],
+                    'initial': app.cal.labels.week[i].slice(0, 1)
+                };
+                self.$labels.append(self.titleTemplate(data));
+            });
         },
 
         renderDays: function() {
@@ -62,21 +78,25 @@ var app = app || {};
             this.$week.append(fragment);
         },
 
-        renderDayLabels: function () {
-            var self = this;
 
-            _.each(app.cal.labels.week, function (day, i) {
-                var data = {
-                    'label': app.cal.labels.week[i],
-                    'initial': app.cal.labels.week[i].slice(0, 1)
-                };
-                self.$labels.append(self.titleTemplate(data));
-            });
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setWeekData: function () {
+            if (this.weekData) { this.weekData.reset(); }
+
+            this.weekData = new app.dateCollection();
+            this.addWeekDataToCollection(this.selfWeek);
         },
 
-        cacheSelectors: function () {
-            this.$week = this.$('.week');
-            this.$labels = this.$('.cal-labels');
+        addWeekDataToCollection: function (week) {
+            var self = this;
+
+            // load data
+            var data = app.cal.getWeekData(week);
+
+            data.map(function (d) {
+               self.weekData.add(d);
+            });
         },
 
 
@@ -86,41 +106,11 @@ var app = app || {};
             // normalise date so we're always dealing with the first day of the week
             var newDate = app.cal.getWeekStartDate(date);
 
-            self.gotoWeek({ 'newDate': newDate });
+            self.selfWeek = newDate;
+
+            self.render();
         },
 
-
-        // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        gotoWeek: function (params) {
-            var date;
-
-            if (params.newDate) { date = params.newDate; }
-
-            this.setWeek(date);
-
-            this.render();
-        },
-
-        setWeek: function (newDate) {
-            this.selfWeek = newDate;
-        },
-
-
-        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        addWeekDataToCollection: function (week) {
-            var self = this;
-
-            // load data
-            var data = app.cal.getWeekData(week);
-
-            this.weekData.reset();
-
-            data.map(function (d) {
-               self.weekData.add(d);
-            });
-        },
 
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

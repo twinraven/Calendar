@@ -15,6 +15,7 @@ $(function () {
 	    WEEK : 'WEEK',
 	    MONTH : 'MONTH',
 	    MS_IN_DAY : 86400000,
+	    MS_IN_MINUTE : 60000,
 	    MINS_IN_DAY: 1440,
 	    HRS_IN_DAY: 24
 	};

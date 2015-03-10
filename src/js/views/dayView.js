@@ -41,8 +41,7 @@ var app = app || {};
 
             this.setState();
 
-            // add to the DOM
-            this.$el.html(this.template(this.model.toJSON()));
+            this.addElem();
 
             return this.el;
         },
@@ -66,6 +65,10 @@ var app = app || {};
             if (m.get('isHighlight') == true) {
                 this.$el.addClass('is-highlight');
             }
+        },
+
+        addElem: function() {
+            this.$el.html(this.template(this.model.toJSON()));
         },
 
 

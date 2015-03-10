@@ -112,7 +112,6 @@ ul {
     float: left;
     list-style: none;
     min-height: 14%;
-    overflow: hidden;
     position: relative;
     text-align: center;
     align-items: stretch;
@@ -342,12 +341,13 @@ ul {
 .new-event {
     box-sizing: border-box;
     background: yellow;
+    box-shadow: 0 0 14px rgba(0,0,0,0.17);
     height: 0;
     font-size: 12px;
     left: 1px;
     line-height: 20px;
     overflow: hidden;
     position: absolute;
-    width: 100%;
+    width: 99%;
     z-index: 10;
 }

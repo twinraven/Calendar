@@ -36,17 +36,23 @@ var app = app || {};
 
             this.cacheSelectors();
 
-            this.setTimeLinePosition();
-            // this.startTimeLineTicker();
-            // this.focusCurrentTime();
-            //
             this.setTimeData();
 
             this.renderTime();
 
+
+            if (this.isToday()) {
+                this.setTimeLinePosition();
+                this.startTimeLineTicker();
+            }
+
             this.$times = this.$('.time-link');
 
             return this.el;
+        },
+
+        isToday: function () {
+            return (this.model.get('date') === this.today);
         },
 
         cacheSelectors: function () {
@@ -55,19 +61,42 @@ var app = app || {};
         },
 
         setTimeLinePosition: function () {
-            if (this.model.get('date') === this.today) {
+            var $time = this.$('.now');
+            var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+            var d = app.cal.getObjectFromDate(now);
+            var dayStart = app.cal.newDate(d.year, d.month, d.day);
+            var msSinceDayStart = now.getTime() - dayStart.getTime();
+            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
 
-                var $time = this.$('.now');
-                var today = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
-                var d = app.cal.getObjectFromDate(today);
-                var dayStart = app.cal.newDate(d.year, d.month, d.day);
-                var msSinceDayStart = today.getTime() - dayStart.getTime();
-                var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
-
-                if ($time.length) {
-                    $time.removeClass('is-hidden').css('top', percentComplete + '%');
-                }
+            if ($time.length) {
+                $time.removeClass('is-hidden').css('top', percentComplete + '%');
             }
+        },
+
+        // work out how much time until the current minute ends. Once it does, start a
+        // once-a-minute timer to update the current time line
+        startTimeLineTicker: function () {
+            var self = this;
+            var newDate = new Date();
+            var now = app.cal.getObjectFromDate(newDate);
+            var endOfCurrentMinute = new Date(now.year, now.month, now.day, now.hour, now.minute + 1);
+            var diff = endOfCurrentMinute.getTime() - newDate.getTime();
+
+            this.tickerTimeout = this.tickerInterval = null;
+
+            // timeout to the end of the minute
+            this.tickerTimeout = setTimeout(function () {
+                // interval for every minute
+                self.tickerInterval = setInterval(function() {
+                    self.setTimeLinePosition();
+
+                }, app.const.MS_IN_MINUTE);
+            }, diff);
+        },
+
+        stopTimeLineTicker: function () {
+            clearTimeout(this.tickerTimeout);
+            clearInterval(this.tickerInterval);
         },
 
         renderTime: function () {
@@ -234,6 +263,7 @@ var app = app || {};
                 time.remove();
             });
 
+            this.stopTimeLineTicker();
             this.undelegateEvents();
             this.stopListening();
             this.timeViews = null;

@@ -41,6 +41,8 @@ var app = app || {};
 
             this.renderDays();
 
+            this.scrollTimeIntoView();
+
             return this.el;
         },
 
@@ -57,6 +59,7 @@ var app = app || {};
                     'label': app.cal.labels.week[i].slice(0, 3),
                     'initial': app.cal.labels.week[i].slice(0, 1)
                 };
+
                 self.$labels.append(self.titleTemplate(data));
             });
         },
@@ -80,6 +83,15 @@ var app = app || {};
         cacheSelectors: function () {
             this.$week = this.$('.week-days');
             this.$labels = this.$('.cal-labels');
+            this.$grid = this.$('.cal-grid');
+        },
+
+        scrollTimeIntoView: function () {
+            var now = new Date();
+
+            if (now.getHours() >= 12) {
+                this.$grid.scrollTop(500);
+            }
         },
 
 

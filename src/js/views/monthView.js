@@ -47,11 +47,7 @@ var app = app || {};
 
             this.setRowsInMonth();
 
-            // upon render, if we have already got marked dates cached, re-render these now.
-            // this handles date traversals in summary view
-            if (this.markedDates) {
-                this.markDateRangeAsActive(this.markedDates.from, this.markedDates.to);
-            }
+            this.markPredefinedDates();
 
             this.renderDays();
 
@@ -78,6 +74,14 @@ var app = app || {};
         // flagged for removal? depends if switching to table layout
         setRowsInMonth: function () {
             this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
+        },
+
+        markPredefinedDates: function () {
+            // upon render, if we have already got marked dates cached, re-render these now.
+            // this handles date traversals in summary view
+            if (this.markedDates) {
+                this.markDateRangeAsActive(this.markedDates.from, this.markedDates.to);
+            }
         },
 
         renderDays: function() {

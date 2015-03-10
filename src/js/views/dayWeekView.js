@@ -12,9 +12,11 @@ var app = app || {};
         template: _.template($('#day-week-template').html()),
 
         events: {
-            'mousedown': 'handleMouseDown',
-            'mouseover .half-hour': 'handleMouseOver',
-            'mouseup': 'handleMouseUp'
+            'mousedown .time-link': 'handleMouseDown',
+            'mouseover .time-link': 'handleMouseOver',
+            'mouseup': 'handleMouseUp',
+            'click .new-event': 'handleNewEventClick',
+            'mouseup .new-event': 'handleCreateNewEvent'
         },
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -32,37 +34,24 @@ var app = app || {};
         render: function () {
             app.dayView.prototype.render.apply(this);
 
+            this.cacheSelectors();
+
             this.setTimeLinePosition();
             // this.startTimeLineTicker();
             // this.focusCurrentTime();
+            //
+            this.setTimeData();
+
+            this.renderTime();
+
+            this.$times = this.$('.time-link');
 
             return this.el;
         },
 
-        setState: function () {
-            var m = this.model;
-            this.today = app.cal.newDate().toDateString();
-
-            // highlight today
-            if (m.get('date') === this.today) {
-                this.$el.addClass('is-today');
-            }
-
-            // highlight if this day is currently in our active range
-            if (m.get('isActive') == true) {
-                this.$el.addClass('is-range');
-            } else {
-                this.$el.addClass('is-not-range');
-            }
-
-            if (m.get('isHighlight') == true) {
-                this.$el.addClass('is-highlight');
-            }
-        },
-
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
-            this.$times = this.$('.half-hour');
+            this.$day = this.$('.cal-events-grid');
         },
 
         setTimeLinePosition: function () {
@@ -81,6 +70,43 @@ var app = app || {};
             }
         },
 
+        renderTime: function () {
+            var fragment = document.createDocumentFragment();
+
+            this.timeViews = this.timeData.map(function (time) {
+                var view = new app.timeView({
+                    model: time
+                });
+                fragment.appendChild(view.render());
+
+                return view;
+            }, this);
+
+            this.$day.empty();
+            this.$day.append(fragment);
+        },
+
+
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setTimeData: function () {
+            if (this.timeData) { this.timeData.reset(); }
+
+            this.timeData = new app.timeCollection();
+            this.addTimeDataToCollection();
+        },
+
+        addTimeDataToCollection: function (day) {
+            var self = this;
+
+            // load data
+            var data = app.cal.getTimeData(this.day);
+
+            data.map(function (d) {
+               self.timeData.add(d);
+            });
+        },
+
 
         // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -89,68 +115,94 @@ var app = app || {};
 
             app.events.trigger('clear:selection');
 
-            if ($el.is('.half-hour')) {
-                var data = $el.data();
-
-                this.isDragging = true;
-                this.setDragStart($el, data.date, data.hour, data.min, data.id);
+            if ($el.is('.time-link')) {
+                app.isDragging = true;
+                this.setDragStart($el, $el.attr('id'), $el.data('pos'));
             }
         },
 
         handleMouseOver: function (e) {
             var $el = $(e.target);
+            var data;
 
-            if (this.isDragging) {
-                var data = $el.data();
+            if (app.isDragging) {
+                this.setDragEnd($el, $el.attr('id'), $el.data('pos'));
 
-                this.setDragEnd($el, data.date, data.hour, data.min, data.id);
+                data = this.getStartEndData();
+                this.markTimeRangeAsHighlight(data.startId, data.endId);
             }
         },
 
         handleMouseUp: function (e) {
             var $el = $(e.target);
+            var data;
 
-            if ($el.is('.half-hour')) {
-                this.isDragging = false;
+            app.isDragging = false;
 
-                var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
+            if ($el.is('.time-link')) {
+                data = this.getStartEndData();
 
-                var start = invert ? this.dragDateTimeEnd : this.dragDateTimeStart;
-                var end = invert ? this.dragDateTimeStart : this.dragDateTimeEnd;
-
-                app.events.trigger('add:event', {
-                    'from': start,
-                    'to': end,
-                    'fullday': false
-                });
+                this.markTimeRangeAsHighlight(data.startId, data.endId);
             }
+        },
+
+        handleCreateNewEvent: function () {
+            var data = this.getStartEndData();
+            var endTimeCorrected = this.getTime30MinsLater(data.endTime);
+
+            this.markTimeRangeAsHighlight(data.startId, data.endId);
+
+            app.events.trigger('add:event', {
+                'from': data.startTime,
+                'to': endTimeCorrected,
+                'fullday': false
+            });
+        },
+
+        handleNewEventClick: function (e) {
+            if (e) { e.preventDefault(); }
+
+            this.markTimeRangeAsHighlight(null, null);
+        },
+
+        getStartEndData: function () {
+            var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
+
+            if (invert) {
+                return {
+                    startTime: this.dragDateTimeEnd,
+                    endTime: this.dragDateTimeStart,
+                    startId: this.dragIdEnd,
+                    endId: this.dragIdStart
+                };
+
+            } else {
+                return {
+                    startTime: this.dragDateTimeStart,
+                    endTime: this.dragDateTimeEnd,
+                    startId: this.dragIdStart,
+                    endId: this.dragIdEnd
+                }
+            }
+        },
+
+        getTime30MinsLater: function (time) {
+
         },
 
 
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        setDragStart: function ($el, date, hour, min, id) {
-            this.dragIdStart = id;
+        setDragStart: function ($el, date, pos) {
+            this.dragIdStart = pos;
+            this.dragDateTimeStart = new Date(date);
 
-            this.dragDateTimeStart = app.cal.newDate(date);
-            this.dragDateTimeStart.setHours(hour, min, 0, 0);
-
-            this.setDragEnd($el, date, hour, min, id);
+            this.setDragEnd($el, date, pos);
         },
 
-        setDragEnd: function ($el, date, hour, min, id) {
-            this.dragIdEnd = id;
-
-            this.dragDateTimeEnd = app.cal.newDate(date);
-            this.dragDateTimeEnd.setHours(hour, min, 0, 0);
-
-            if (this.dragIdStart <= this.dragIdEnd) {
-                this.markTimeRangeAsHighlight(this.dragIdStart, this.dragIdEnd);
-
-            } else {
-                // swap order if we're dragging backwards
-                this.markTimeRangeAsHighlight(this.dragIdEnd, this.dragIdStart);
-            }
+        setDragEnd: function ($el, date, pos) {
+            this.dragIdEnd = pos;
+            this.dragDateTimeEnd = new Date(date);
         },
 
         clearDrag: function () {
@@ -158,11 +210,33 @@ var app = app || {};
         },
 
         markTimeRangeAsHighlight: function (elemFrom, elemTo) {
-            this.$times.removeClass('is-highlight');
-
             if (elemFrom && elemTo) {
-                this.$times.slice(elemFrom, elemTo + 1).addClass('is-highlight');
+                var $topElem = this.$times.eq(elemFrom).parent();
+                var top = $topElem.position().top + 1;
+                var $bottomElem = this.$times.eq(elemTo).parent();
+                var height = $bottomElem.position().top + $bottomElem.height() - top;
+
+                this.$newEvent.css({
+                    'display': 'block',
+                    'top': top,
+                    'height': height,
+                });
+
+            } else {
+                this.$newEvent.css('display', 'none');
             }
+        },
+
+        // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        close: function() {
+            _.each(this.timeViews, function(time) {
+                time.remove();
+            });
+
+            this.undelegateEvents();
+            this.stopListening();
+            this.timeViews = null;
         }
     });
 })(jQuery);

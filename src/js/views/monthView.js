@@ -157,14 +157,14 @@ var app = app || {};
             if (this.monthData) { this.monthData.reset(); }
 
             this.monthData = new app.dateCollection();
-            this.addMonthDataToCollection(this.selfMonth);
+            this.addMonthDataToCollection();
         },
 
-        addMonthDataToCollection: function (month) {
+        addMonthDataToCollection: function () {
             var self = this;
 
             // load data
-            var data = app.cal.getMonthGridData(month);
+            var data = app.cal.getMonthGridData(this.selfMonth);
 
             data.map(function (d) {
                self.monthData.add(d);

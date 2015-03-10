@@ -89,14 +89,14 @@ var app = app || {};
             if (this.weekData) { this.weekData.reset(); }
 
             this.weekData = new app.dateCollection();
-            this.addWeekDataToCollection(this.selfWeek);
+            this.addWeekDataToCollection();
         },
 
-        addWeekDataToCollection: function (week) {
+        addWeekDataToCollection: function () {
             var self = this;
 
             // load data
-            var data = app.cal.getWeekData(week);
+            var data = app.cal.getWeekData(this.selfWeek);
 
             data.map(function (d) {
                self.weekData.add(d);

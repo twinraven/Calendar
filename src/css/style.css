@@ -95,7 +95,6 @@ ul {
 }
 
 .month-days {
-    border-top: 1px solid #ccc;
     display: block;
     height: 100%;
     left: 0;
@@ -113,6 +112,7 @@ ul {
     float: left;
     list-style: none;
     min-height: 14%;
+    overflow: hidden;
     position: relative;
     text-align: center;
     align-items: stretch;
@@ -171,30 +171,36 @@ ul {
     width: 100%;
 }
 
-.half-hour {
+.time {
+    box-sizing: border-box;
     border-top: 1px solid #ccc;
     border-left: 1px solid #ccc;
     display: block;
     height: 20px;
     overflow: hidden;
-    text-indent: -999px;
+    position: relative;
+}
 
-    -webkit-user-select: none;  /* Chrome all / Safari all */
-    -moz-user-select: none;     /* Firefox all */
-    -ms-user-select: none;      /* IE 10+ */
+.time:hover {
+    background: rgba(255,255,0,0.3);
+}
+
+.time-link {
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     -o-user-select: none;
     user-select: none;
 }
 
-.half-hour:hover {
-    background: rgba(255,255,0,0.3);
-}
-
-.half-hour.is-highlight {
-    border-top-style: dotted;
-}
-
-.cal-events-grid .hour-30-60 .half-hour {
+.time:nth-child(even) {
     border-top-style: dotted;
 }
 
@@ -230,7 +236,6 @@ ul {
     left: 0;
     position: absolute;
     top: 0;
-    margin: -1px 0 0 -1px;
     width: 100%;
 }
 
@@ -335,10 +340,11 @@ ul {
 }
 
 .new-event {
+    box-sizing: border-box;
     background: yellow;
     height: 0;
     font-size: 12px;
-    left: 0;
+    left: 1px;
     line-height: 20px;
     overflow: hidden;
     position: absolute;

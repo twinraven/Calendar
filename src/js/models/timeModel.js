@@ -11,8 +11,7 @@ var app = app || {};
         // Default attributes for the model
         defaults: {
             hour: 0,
-            min: 0,
-            date: new Date()
+            minute: 0
         }
     });
 })();

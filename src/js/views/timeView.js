@@ -8,11 +8,11 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.dayView = Backbone.View.extend({
-        template: _.template($('#day-main-template').html()),
+    app.timeView = Backbone.View.extend({
+        template: _.template($('#time-template').html()),
 
         tagName: 'li',
-        className: 'day',
+        className: 'time',
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -39,33 +39,10 @@ var app = app || {};
                 return;
             }
 
-            this.setState();
-
             // add to the DOM
             this.$el.html(this.template(this.model.toJSON()));
 
             return this.el;
-        },
-
-        setState: function () {
-            var m = this.model;
-            this.today = app.cal.newDate().toDateString();
-
-            // highlight today
-            if (m.get('date') === this.today) {
-                this.$el.addClass('is-today');
-            }
-
-            // highlight if this day is currently in our active range
-            if (m.get('isActive') == true) {
-                this.$el.addClass('is-range');
-            } else {
-                this.$el.addClass('is-not-range');
-            }
-
-            if (m.get('isHighlight') == true) {
-                this.$el.addClass('is-highlight');
-            }
         },
 
 

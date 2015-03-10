@@ -86,9 +86,11 @@ var app = app || {};
 
         getObjectFromDate : function (date) {
             return {
-                year: date.getFullYear(),
-                month: date.getMonth(),
-                day: date.getDate()
+                year:   date.getFullYear(),
+                month:  date.getMonth(),
+                day:    date.getDate(),
+                hour:  date.getHours(),
+                minute:   date.getMinutes()
             };
         },
 
@@ -100,8 +102,20 @@ var app = app || {};
         },
 
 
-         getNewDateId : function (year, month, day) {
-            return "" + year + '-' + this.asTwoDigits(month) + '-' + this.asTwoDigits(day);
+         getNewDateId : function (year, month, day, hour, minute) {
+            hour = hour && hour.toString() || 0;
+            minute = minute && minute.toString() || 0;
+
+            return "" + year +
+                    '-' +
+                    this.asTwoDigits(month) +
+                    '-' +
+                    this.asTwoDigits(day) +
+                    'T' +
+                    this.asTwoDigits(hour) +
+                    ':' +
+                    this.asTwoDigits(minute) +
+                    ':00';
         },
 
 
@@ -280,6 +294,19 @@ var app = app || {};
             return data;
         },
 
+        getTimeData : function (date) {
+            var d = this.getObjectFromDate(date);
+            var x, y;
+            var data = [];
+
+            for (x = 0, y = app.const.HRS_IN_DAY; x < y; x++) {
+                data.push(this.getNewTimeData(d.year, d.month, d.day, x, 0, (x * 2)));
+                data.push(this.getNewTimeData(d.year, d.month, d.day, x, 30, (x * 2 + 1)));
+            }
+
+            return data;
+        },
+
 
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getMonthGridData : function (date) {
@@ -331,6 +358,19 @@ var app = app || {};
                 date: newDate.toDateString(),
                 suffix: this.getOrdinalSuffix(d.day),
                 weekday : this.getDayOfWeekName(this.getDayOfWeekNum(d.year, d.month, d.day))
+            };
+        },
+
+        getNewTimeData : function (year, month, day, hour, minute, position) {
+            var newDate = new Date(year, month, day, hour, minute);
+            var d = this.getObjectFromDate(newDate);
+
+            return {
+                position: position, // simple incrementing number
+                id: this.getNewDateId(d.year, (d.month + 1), d.day, d.hour, d.minute),
+                date: newDate.toDateString(),
+                hour: d.hour.toString(),
+                minute: d.minute.toString()
             };
         }
     };

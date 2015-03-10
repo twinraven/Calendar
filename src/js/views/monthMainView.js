@@ -11,6 +11,8 @@ var app = app || {};
         //
         dayTemplate: _.template($('#day-main-template').html()),
 
+        customDayView: app.dayView,
+
         events: {
             'mousedown': 'handleMouseDown',
             'mouseup': 'handleMouseUp',
@@ -36,7 +38,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-               this.isDragging = true;
+               app.isDragging = true;
                this.setDragDateStart($el, $el.data('date'));
             }
         },
@@ -45,9 +47,9 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-            this.isDragging = false;
+                app.isDragging = false;
 
-            app.events.trigger('add:event', {
+                app.events.trigger('add:event', {
                     'from': this.dragDateStart,
                     'to': this.dragDateEnd,
                     'fullday': true
@@ -58,7 +60,7 @@ var app = app || {};
         handleMouseOver: function (e) {
             var $el = $(e.target);
 
-            if (this.isDragging) {
+            if (app.isDragging) {
                this.setDragDateEnd($el, $el.data('date'));
             }
         },

@@ -100,7 +100,7 @@
 				<% for(var x=0, y=app.const.HRS_IN_DAY; x<y; x++) { %>
 					<li><%- app.cal.getTimeAs12HourFormat(x) %></li>
 					<li></li>
-				<% } %>customDayView: app.dayView,
+				<% } %>
 				</ul>
 
 				<ul class="week-days"></ul>
@@ -122,9 +122,7 @@
 		</script>
 
 		<script type="text/template" id="time-template">
-			<li class="half-hour">
-				<a href="#" class="half-hour" draggable="false" data-id="<%= id %>">Add time</a>
-			</li>
+			<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
 		</script>
 
 
@@ -146,11 +144,14 @@
 		<script src="js/cal.js"></script>
 		<script src="js/events/events.js"></script>
 		<script src="js/models/dayModel.js"></script>
+		<script src="js/models/timeModel.js"></script>
 		<script src="js/collections/dateCollection.js"></script>
+		<script src="js/collections/timeCollection.js"></script>
 
-		<script src="js/views/dayView.js"></script>
-		<script src="js/views/weekView.js"></script>
 		<script src="js/views/monthView.js"></script>
+		<script src="js/views/weekView.js"></script>
+		<script src="js/views/dayView.js"></script>
+		<script src="js/views/timeView.js"></script>
 
 		<script src="js/views/dayWeekView.js"></script>
 		<script src="js/views/daySummaryView.js"></script>

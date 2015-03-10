@@ -197,6 +197,15 @@ var app = app || {};
             return num + suffix;
         },
 
+        isCurrentWeek : function (date) {
+            var d = this.newDate(date);
+            var weekStartDate = this.getWeekStartDate(d);
+            var now = this.newDate();
+            var currentWeekStartDate = this.getWeekStartDate(now);
+
+            return (weekStartDate.getTime() === currentWeekStartDate.getTime());
+        },
+
 
         // Date traversal ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

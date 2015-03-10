@@ -89,7 +89,7 @@ var app = app || {};
         scrollTimeIntoView: function () {
             var now = new Date();
 
-            if (now.getHours() >= 12) {
+            if (now.getHours() >= 12 && app.cal.isCurrentWeek(this.selfWeek)) {
                 this.$grid.scrollTop(500);
             }
         },

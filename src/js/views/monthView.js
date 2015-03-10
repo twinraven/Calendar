@@ -12,7 +12,9 @@ var app = app || {};
         // templating and setup
         template: _.template($('#month-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-title-template').html()), // for containing elem & markup
-        dayTemplate: _.template($('#day-main-template').html()), // for each day of month
+
+        // allows for sub-class overriding
+        customDayView: app.dayView,
 
         collection: app.dateCollection,
 
@@ -22,7 +24,8 @@ var app = app || {};
         initialize: function (params) {
             var self = this;
 
-            // keep track of own date, irrespective of app-wide state
+
+            // keep track of own date, irrespective of app-wide state - but init with external val
             this.selfMonth = (params && params.date) || app.cal.newDate();
 
             this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange(self, date) });
@@ -84,9 +87,8 @@ var app = app || {};
 
             // keep a cache of all sub-views created, so we can unbind them properly later
             this.dayViews = this.monthData.map(function (day) {
-                var view = new app.dayView({
-                    model: day,
-                    template: self.dayTemplate
+                var view = new self.customDayView({
+                    model: day
                 });
                 fragment.appendChild(view.render());
 

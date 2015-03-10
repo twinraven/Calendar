@@ -12,7 +12,6 @@ var app = app || {};
         // templating and setup
         template: _.template($('#week-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
-        dayTemplate: _.template($('#day-week-template').html()), // for each day of week
 
         collection: app.dateCollection,
 
@@ -66,9 +65,8 @@ var app = app || {};
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.weekData.map(function (day) {
-                var view = new app.dayView({
-                    model: day,
-                    template: this.dayTemplate
+                var view = new app.dayWeekView({
+                    model: day
                 });
                 fragment.appendChild(view.render());
 

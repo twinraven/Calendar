@@ -7,15 +7,12 @@ var app = app || {};
     // Model
     // ----------
 
-    app.day = Backbone.Model.extend({
+    app.time = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
-            isActive: false,
-            isHighlight: false,
-            events: {
-                day: [],
-                timed: []
-            }
+            hour: 0,
+            min: 0,
+            date: new Date()
         }
     });
 })();

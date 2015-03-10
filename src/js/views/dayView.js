@@ -9,34 +9,25 @@ var app = app || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     app.dayView = Backbone.View.extend({
+        template: _.template($('#day-main-template').html()),
 
         tagName: 'li',
         className: 'day',
 
-        events: {
-            'mousedown': 'handleMouseDown',
-            'mouseover .half-hour': 'handleMouseOver',
-            'mouseup': 'handleMouseUp'
-        },
-
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function (attrs) {
-            var self = this;
+        initialize: function (params) {
+            this.options = params;
 
-            this.options = attrs;
+            this.day = (params && params.date) || app.cal.newDate();
 
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.close);
-
-            this.listenTo(app.events, 'clear:selection', function () { self.clearDrag() });
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.template = this.options.template;
-
             // Backbone LocalStorage is adding `id` attribute instantly after
             // creating a model.  This causes our TodoView to render twice. Once
             // after creating a model and once on `id` change.  We want to
@@ -55,8 +46,9 @@ var app = app || {};
 
             this.cacheSelectors();
 
-            this.setTimeLinePosition();
-            // this.startTimeLineTicker();
+            this.setTimeData();
+
+            this.renderTime();
 
             return this.el;
         },
@@ -85,106 +77,55 @@ var app = app || {};
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
             this.$times = this.$('.half-hour');
+            this.$day = this.$('.cal-events-grid');
         },
 
-        setTimeLinePosition: function () {
-            if (this.model.get('date') === this.today) {
+        renderTime: function () {
+            var fragment = document.createDocumentFragment();
 
-                var $time = this.$('.now');
-                var today = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
-                var d = app.cal.getObjectFromDate(today);
-                var dayStart = app.cal.newDate(d.year, d.month, d.day);
-                var msSinceDayStart = today.getTime() - dayStart.getTime();
-                var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
-
-                if ($time.length) {
-                    $time.removeClass('is-hidden').css('top', percentComplete + '%');
-                }
-            }
-        },
-
-
-        // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        handleMouseDown: function (e) {
-            var $el = $(e.target);
-
-            app.events.trigger('clear:selection');
-
-            if ($el.is('.half-hour')) {
-                var data = $el.data();
-
-                this.isDragging = true;
-                this.setDragStart($el, data.date, data.hour, data.min, data.id);
-            }
-        },
-
-        handleMouseOver: function (e) {
-            var $el = $(e.target);
-
-            if (this.isDragging) {
-                var data = $el.data();
-
-                this.setDragEnd($el, data.date, data.hour, data.min, data.id);
-            }
-        },
-
-        handleMouseUp: function (e) {
-            var $el = $(e.target);
-
-            if ($el.is('.half-hour')) {
-                this.isDragging = false;
-
-                var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
-
-                var start = invert ? this.dragDateTimeEnd : this.dragDateTimeStart;
-                var end = invert ? this.dragDateTimeStart : this.dragDateTimeEnd;
-
-                app.events.trigger('add:event', {
-                    'from': start,
-                    'to': end,
-                    'fullday': false
+            this.timeViews = this.timeData.map(function (day) {
+                var view = new app.timeView({
+                    model: day
                 });
+                fragment.appendChild(view.render());
+
+                return view;
+            }, this);
+
+            this.$day.empty();
+            this.$day.append(fragment);
+        },
+
+
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setTimeData: function () {
+            if (this.timeData) { this.timeData.reset(); }
+
+            this.timeData = new app.timeCollection();
+            this.addTimeDataToCollection();
+        },
+
+        addTimeDataToCollection: function (day) {
+            var self = this;
+
+            // load data
+            var data = this.getTimeData();
+
+            data.map(function (d) {
+               self.timeData.add(d);
+            });
+        },
+
+        getTimeData: function () {
+            var x, y;
+            var data = [];
+
+            for (x = 0, y = app.const.HRS_IN_DAY; x < y; x++) {
+
             }
-        },
 
-
-        // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        setDragStart: function ($el, date, hour, min, id) {
-            this.dragIdStart = id;
-
-            this.dragDateTimeStart = app.cal.newDate(date);
-            this.dragDateTimeStart.setHours(hour, min, 0, 0);
-
-            this.setDragEnd($el, date, hour, min, id);
-        },
-
-        setDragEnd: function ($el, date, hour, min, id) {
-            this.dragIdEnd = id;
-
-            this.dragDateTimeEnd = app.cal.newDate(date);
-            this.dragDateTimeEnd.setHours(hour, min, 0, 0);
-
-            if (this.dragIdStart <= this.dragIdEnd) {
-                this.markTimeRangeAsHighlight(this.dragIdStart, this.dragIdEnd);
-
-            } else {
-                // swap order if we're dragging backwards
-                this.markTimeRangeAsHighlight(this.dragIdEnd, this.dragIdStart);
-            }
-        },
-
-        clearDrag: function () {
-            this.markTimeRangeAsHighlight(null, null);
-        },
-
-        markTimeRangeAsHighlight: function (elemFrom, elemTo) {
-            this.$times.removeClass('is-highlight');
-
-            if (elemFrom && elemTo) {
-                this.$times.slice(elemFrom, elemTo + 1).addClass('is-highlight');
-            }
+            return data;
         },
 
 

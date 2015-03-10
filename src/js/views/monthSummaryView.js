@@ -8,9 +8,9 @@ var app = app || {};
     // ---------------
     // extending app.monthView
     app.monthSummaryView = app.monthView.extend({
-        //
         template: _.template($('#month-summary-template').html()),
-        dayTemplate: _.template($('#day-summary-template').html()),
+
+        customDayView: app.daySummaryView,
 
         events: {
             'click .prev-self': 'gotoPrevMonth',

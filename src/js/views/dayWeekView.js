@@ -81,10 +81,16 @@ var app = app || {};
             return (this.model.get('date') === this.today);
         },
 
-        // HANDLE NEXT DAY / ETC
         setTimeLinePosition: function () {
             var $time = this.$('.now');
             var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+
+            // if we've walked into tomorrow (by staying on the page long enough),
+            // fire the event to update the date to today
+            if (now.getDate() !== new Date(this.today).getDate()) {
+                app.events.trigger('change:date', now);
+            }
+
             var d = app.cal.getObjectFromDate(now);
             var dayStart = app.cal.newDate(d.year, d.month, d.day);
             var msSinceDayStart = now.getTime() - dayStart.getTime();

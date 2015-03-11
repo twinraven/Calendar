@@ -12,6 +12,7 @@ var app = app || {};
         // templating and setup
         template: _.template($('#week-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
+        hourTemplate: _.template($('#hour-template').html()),
 
         collection: app.dateCollection,
 
@@ -37,6 +38,8 @@ var app = app || {};
 
             this.renderDayLabels();
 
+            this.renderTimeLabels();
+
             this.setWeekData();
 
             this.renderDays();
@@ -44,6 +47,13 @@ var app = app || {};
             this.scrollTimeIntoView();
 
             return this.el;
+        },
+
+        cacheSelectors: function () {
+            this.$week = this.$('.week-days');
+            this.$labels = this.$('.cal-labels');
+            this.$grid = this.$('.cal-grid');
+            this.$timeLabels = this.$('.day-time-labels');
         },
 
         renderDayLabels: function () {
@@ -64,7 +74,27 @@ var app = app || {};
             });
         },
 
-        renderDays: function() {
+        renderTimeLabels: function () {
+            var x = 0;
+            var data = {};
+
+            while (x < app.const.HRS_IN_DAY) {
+                data = { 'hour': app.cal.getTimeAs12HourFormat(x) };
+
+                this.$timeLabels.append(this.hourTemplate(data));
+
+                x++;
+            }
+        },
+
+        setWeekData: function () {
+            if (this.weekData) { this.weekData.reset(); }
+
+            this.weekData = new app.dateCollection();
+            this.addWeekDataToCollection();
+        },
+
+        renderDays: function () {
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.weekData.map(function (day) {
@@ -80,12 +110,6 @@ var app = app || {};
             this.$week.append(fragment);
         },
 
-        cacheSelectors: function () {
-            this.$week = this.$('.week-days');
-            this.$labels = this.$('.cal-labels');
-            this.$grid = this.$('.cal-grid');
-        },
-
         scrollTimeIntoView: function () {
             var now = new Date();
 
@@ -96,13 +120,6 @@ var app = app || {};
 
 
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        setWeekData: function () {
-            if (this.weekData) { this.weekData.reset(); }
-
-            this.weekData = new app.dateCollection();
-            this.addWeekDataToCollection();
-        },
 
         addWeekDataToCollection: function () {
             var self = this;
@@ -130,8 +147,8 @@ var app = app || {};
 
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        close: function() {
-            _.each(this.dayViews, function(day) {
+        close: function () {
+            _.each(this.dayViews, function (day) {
                 day.remove();
             });
 

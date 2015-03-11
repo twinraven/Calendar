@@ -19,7 +19,8 @@ var app = app || {};
         initialize: function (params) {
             this.options = params;
 
-            this.day = (params && params.date) || app.cal.newDate();
+            this.day = (params && params.model && params.model.id) || app.cal.newDate();
+            this.day = new Date(this.day);
 
             this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.close);
@@ -67,7 +68,7 @@ var app = app || {};
             }
         },
 
-        addElem: function() {
+        addElem: function () {
             this.$el.html(this.template(this.model.toJSON()));
         },
 

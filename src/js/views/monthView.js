@@ -84,7 +84,7 @@ var app = app || {};
             }
         },
 
-        renderDays: function() {
+        renderDays: function () {
             var self = this;
             // using documentFragment to minimise DOM contact
             var fragment = document.createDocumentFragment();
@@ -193,9 +193,9 @@ var app = app || {};
 
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        close: function() {
+        close: function () {
             // remove all child/sub views completely
-            _.each(this.dayViews, function(day) {
+            _.each(this.dayViews, function (day) {
                 day.remove();
             });
 

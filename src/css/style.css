@@ -336,6 +336,7 @@ ul {
     pointer-events: none;
     position: absolute;
     width: 100%;
+    z-index: 10;
 }
 
 .new-event {
@@ -347,7 +348,8 @@ ul {
     left: 1px;
     line-height: 20px;
     overflow: hidden;
+    pointer-events: none;
     position: absolute;
     width: 99%;
-    z-index: 10;
+    z-index: 15;
 }

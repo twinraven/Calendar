@@ -11,15 +11,15 @@ var app = app || {};
 			"MONTH" : "monthCalendar",
 			"WEEK" : "weekCalendar"
 		},
-		monthCalendar : function() {
+		monthCalendar : function () {
 			this.loadView(new app.monthMainView(({
 		        dayTemplate: '#day-main-template'
 		    })));
 		},
-		weekCalendar : function() {
+		weekCalendar : function () {
 			this.loadView(new app.weekView());
 		},
-		loadView : function(view) {
+		loadView : function (view) {
 			this.view && (this.view.close ? this.view.close() : this.view.remove());
 			this.view = view;
 

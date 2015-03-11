@@ -14,9 +14,7 @@ var app = app || {};
         events: {
             'mousedown .time-link': 'handleMouseDown',
             'mouseover .time-link': 'handleMouseOver',
-            'mouseup': 'handleMouseUp',
-            'click .new-event': 'handleNewEventClick',
-            'mouseup .new-event': 'handleCreateNewEvent'
+            'mouseup': 'handleMouseUp'
         },
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -40,7 +38,6 @@ var app = app || {};
 
             this.renderTime();
 
-
             if (this.isToday()) {
                 this.setTimeLinePosition();
                 this.startTimeLineTicker();
@@ -51,15 +48,39 @@ var app = app || {};
             return this.el;
         },
 
-        isToday: function () {
-            return (this.model.get('date') === this.today);
-        },
-
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
             this.$day = this.$('.cal-events-grid');
         },
 
+        setTimeData: function () {
+            if (this.timeData) { this.timeData.reset(); }
+
+            this.timeData = new app.timeCollection();
+            this.addTimeDataToCollection();
+        },
+
+        renderTime: function () {
+            var fragment = document.createDocumentFragment();
+
+            this.timeViews = this.timeData.map(function (time) {
+                var view = new app.timeView({
+                    model: time
+                });
+                fragment.appendChild(view.render());
+
+                return view;
+            }, this);
+
+            this.$day.empty();
+            this.$day.append(fragment);
+        },
+
+        isToday: function () {
+            return (this.model.get('date') === this.today);
+        },
+
+        // HANDLE NEXT DAY / ETC
         setTimeLinePosition: function () {
             var $time = this.$('.now');
             var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
@@ -87,7 +108,7 @@ var app = app || {};
             // timeout to the end of the minute
             this.tickerTimeout = setTimeout(function () {
                 // interval for every minute
-                self.tickerInterval = setInterval(function() {
+                self.tickerInterval = setInterval(function () {
                     self.setTimeLinePosition();
 
                 }, app.const.MS_IN_MINUTE);
@@ -99,31 +120,8 @@ var app = app || {};
             clearInterval(this.tickerInterval);
         },
 
-        renderTime: function () {
-            var fragment = document.createDocumentFragment();
-
-            this.timeViews = this.timeData.map(function (time) {
-                var view = new app.timeView({
-                    model: time
-                });
-                fragment.appendChild(view.render());
-
-                return view;
-            }, this);
-
-            this.$day.empty();
-            this.$day.append(fragment);
-        },
-
 
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        setTimeData: function () {
-            if (this.timeData) { this.timeData.reset(); }
-
-            this.timeData = new app.timeCollection();
-            this.addTimeDataToCollection();
-        },
 
         addTimeDataToCollection: function (day) {
             var self = this;
@@ -169,54 +167,8 @@ var app = app || {};
             app.isDragging = false;
 
             if ($el.is('.time-link')) {
-                data = this.getStartEndData();
-
-                this.markTimeRangeAsHighlight(data.startId, data.endId);
+                this.createNewEvent();
             }
-        },
-
-        handleCreateNewEvent: function () {
-            var data = this.getStartEndData();
-            var endTimeCorrected = this.getTime30MinsLater(data.endTime);
-
-            this.markTimeRangeAsHighlight(data.startId, data.endId);
-
-            app.events.trigger('add:event', {
-                'from': data.startTime,
-                'to': endTimeCorrected,
-                'fullday': false
-            });
-        },
-
-        handleNewEventClick: function (e) {
-            if (e) { e.preventDefault(); }
-
-            this.markTimeRangeAsHighlight(null, null);
-        },
-
-        getStartEndData: function () {
-            var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
-
-            if (invert) {
-                return {
-                    startTime: this.dragDateTimeEnd,
-                    endTime: this.dragDateTimeStart,
-                    startId: this.dragIdEnd,
-                    endId: this.dragIdStart
-                };
-
-            } else {
-                return {
-                    startTime: this.dragDateTimeStart,
-                    endTime: this.dragDateTimeEnd,
-                    startId: this.dragIdStart,
-                    endId: this.dragIdEnd
-                }
-            }
-        },
-
-        getTime30MinsLater: function (time) {
-
         },
 
 
@@ -240,9 +192,11 @@ var app = app || {};
 
         markTimeRangeAsHighlight: function (elemFrom, elemTo) {
             if (elemFrom && elemTo) {
+
                 var $topElem = this.$times.eq(elemFrom).parent();
-                var top = $topElem.position().top + 1;
                 var $bottomElem = this.$times.eq(elemTo).parent();
+
+                var top = $topElem.position().top + 1;
                 var height = $bottomElem.position().top + $bottomElem.height() - top;
 
                 this.$newEvent.css({
@@ -256,10 +210,48 @@ var app = app || {};
             }
         },
 
+        createNewEvent: function () {
+            var data = this.getStartEndData();
+            var endTimeCorrected = this.getTime30MinsLater(data.endTime);
+
+            this.markTimeRangeAsHighlight(data.startId, data.endId);
+
+            app.events.trigger('add:event', {
+                'from': data.startTime,
+                'to': endTimeCorrected,
+                'fullday': false
+            });
+        },
+
+        getStartEndData: function () {
+            var invert = this.dragDateTimeStart > this.dragDateTimeEnd;
+
+            if (invert) {
+                return {
+                    startTime: this.dragDateTimeEnd,
+                    endTime: this.dragDateTimeStart,
+                    startId: this.dragIdEnd,
+                    endId: this.dragIdStart
+                };
+
+            } else {
+                return {
+                    startTime: this.dragDateTimeStart,
+                    endTime: this.dragDateTimeEnd,
+                    startId: this.dragIdStart,
+                    endId: this.dragIdEnd
+                };
+            }
+        },
+
+        getTime30MinsLater: function (time) {
+            return time;
+        },
+
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        close: function() {
-            _.each(this.timeViews, function(time) {
+        close: function () {
+            _.each(this.timeViews, function (time) {
                 time.remove();
             });
 

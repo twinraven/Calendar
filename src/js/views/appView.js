@@ -19,7 +19,9 @@ var app = app || {};
             'click .home-all': 'gotoToday',
 
             'click .cal-mode-week': 'setViewModeWeek',
-            'click .cal-mode-month': 'setViewModeMonth'
+            'click .cal-mode-month': 'setViewModeMonth',
+
+            'mouseup': 'handleMouseUp'
         },
 
 
@@ -56,8 +58,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            this.listenTo(app.events, 'add:event', function (event) { self.handleAddEvent(event) });
-            this.listenTo(app.events, 'goto:date', function (date) { self.handleDateChange(date) });
+            this.listenTo(app.events, 'add:event', function (event) { self.handleAddEvent.call(self, event) });
+            this.listenTo(app.events, 'goto:date', function (date) { self.handleDateChange.call(self, date) });
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
@@ -305,6 +307,12 @@ var app = app || {};
                     this.gotoPrevDateRange();
                 }
             }
+        },
+
+        handleMouseUp: function (e) {
+            if (e) { e.preventDefault(); }
+
+            app.events.trigger('mouse:up');
         },
 
 

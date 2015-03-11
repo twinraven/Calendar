@@ -28,8 +28,8 @@ var app = app || {};
             // keep track of own date, irrespective of app-wide state - but init with external val
             this.selfMonth = (params && params.date) || app.cal.newDate();
 
-            this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange(self, date) });
-            this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange(self, dates) });
+            this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange.call(self, date) });
+            this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange.call(self, dates) });
         },
 
 
@@ -178,12 +178,12 @@ var app = app || {};
 
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleDateChange: function (self, date) {
-            self.gotoMonth({ 'newDate': date });
+        handleDateChange: function (date) {
+            this.gotoMonth({ 'newDate': date });
         },
 
-        handleMarkDateRange: function (self, dates) {
-            self.markDateRangeAsActive(dates.from, dates.to);
+        handleMarkDateRange: function (dates) {
+            this.markDateRangeAsActive(dates.from, dates.to);
 
             this.storeMarkedDates(dates);
 

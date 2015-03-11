@@ -197,6 +197,20 @@ var app = app || {};
             return num + suffix;
         },
 
+        getTimeMinsLater : function (mins, time) {
+            var d = this.getObjectFromDate(time);
+            var later = new Date(d.year, d.month, d.day, d.hour, d.minute + mins);
+
+            return later;
+        },
+
+        getDateTomorrow : function (date) {
+            var d = this.getObjectFromDate(date);
+            var tomorrow = this.newDate(d.year, d.month, d.day + 1);
+
+            return tomorrow;
+        },
+
         isCurrentWeek : function (date) {
             var d = this.newDate(date);
             var weekStartDate = this.getWeekStartDate(d);
@@ -204,6 +218,14 @@ var app = app || {};
             var currentWeekStartDate = this.getWeekStartDate(now);
 
             return (weekStartDate.getTime() === currentWeekStartDate.getTime());
+        },
+
+        isFullDay : function (timeFrom, timeTo) {
+            var from = timeFrom.getTime();
+            var to = timeTo.getTime();
+            var diff = to - from;
+
+            return diff === app.const.MS_IN_DAY;
         },
 
 

@@ -23,7 +23,7 @@ $(function () {
 	// mutable app-wide properties
 	app.state = {
 	    startDay : "mon",
-		viewMode: app.const.WEEK
+		viewMode: app.const.MONTH
 	};
 
 	// kick things off by creating the `App` ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

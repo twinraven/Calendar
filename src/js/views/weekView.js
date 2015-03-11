@@ -25,7 +25,7 @@ var app = app || {};
             // keep track of own date, irrespective of app-wide state
             this.selfWeek = (params && params.date) || app.cal.newDate();
 
-            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek(self, date) });
+            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek.call(self, date) });
         },
 
 
@@ -135,13 +135,13 @@ var app = app || {};
 
         // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleChangeWeek: function (self, date) {
+        handleChangeWeek: function (date) {
             // normalise date so we're always dealing with the first day of the week
             var newDate = app.cal.getWeekStartDate(date);
 
-            self.selfWeek = newDate;
+            this.selfWeek = newDate;
 
-            self.render();
+            this.render();
         },
 
 

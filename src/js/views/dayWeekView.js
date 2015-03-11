@@ -24,7 +24,8 @@ var app = app || {};
 
             app.dayView.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'clear:selection', function () { self.clearDrag() });
+            this.listenTo(app.events, 'clear:selection', this.clearDrag);
+            this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true) });
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,7 +147,7 @@ var app = app || {};
             app.events.trigger('clear:selection');
 
             if ($el.is('.time-link')) {
-                app.isDragging = true;
+                this.isDragging = true;
                 this.setDragStart($el, $el.attr('id'), $el.data('pos'));
             }
         },
@@ -155,7 +156,7 @@ var app = app || {};
             var $el = $(e.target);
             var data;
 
-            if (app.isDragging) {
+            if (this.isDragging) {
                 this.setDragEnd($el, $el.attr('id'), $el.data('pos'));
 
                 data = this.getStartEndData();
@@ -163,14 +164,16 @@ var app = app || {};
             }
         },
 
-        handleMouseUp: function (e) {
-            var $el = $(e.target);
+        handleMouseUp: function (e, externalEvent) {
+            var $el = e ? $(e.target) : null;
             var data;
 
-            app.isDragging = false;
+            if (this.isDragging) {
+                this.isDragging = false;
 
-            if ($el.is('.time-link')) {
-                this.createNewEvent();
+                if (($el && $el.is('.time-link')) || externalEvent) {
+                    this.createNewEvent();
+                }
             }
         },
 
@@ -194,7 +197,7 @@ var app = app || {};
         },
 
         markTimeRangeAsHighlight: function (elemFrom, elemTo) {
-            if (elemFrom && elemTo) {
+            if (elemFrom || elemTo) {
 
                 var $topElem = this.$times.eq(elemFrom).parent();
                 var $bottomElem = this.$times.eq(elemTo).parent();
@@ -216,14 +219,14 @@ var app = app || {};
 
         createNewEvent: function () {
             var data = this.getStartEndData();
-            var endTimeCorrected = this.getTime30MinsLater(data.endTime);
+            var endTimeCorrected = app.cal.getTimeMinsLater(30, data.endTime);
 
             this.markTimeRangeAsHighlight(data.startId, data.endId);
 
             app.events.trigger('add:event', {
                 'from': data.startTime,
                 'to': endTimeCorrected,
-                'fullday': false
+                'fullday': app.cal.isFullDay(data.startTime, endTimeCorrected)
             });
         },
 
@@ -248,9 +251,6 @@ var app = app || {};
             }
         },
 
-        getTime30MinsLater: function (time) {
-            return time;
-        },
 
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

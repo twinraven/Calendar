@@ -102,19 +102,19 @@ var app = app || {};
         },
 
 
-         getNewDateId : function (year, month, day, hour, minute) {
-            hour = hour && hour.toString() || 0;
-            minute = minute && minute.toString() || 0;
+         getNewDateId : function (date) {
+            var d = new Date(date);
 
-            return "" + year +
+            return "" +
+                    d.getFullYear() +
                     '-' +
-                    this.asTwoDigits(month) +
+                    this.asTwoDigits(d.getMonth() + 1) +
                     '-' +
-                    this.asTwoDigits(day) +
+                    this.asTwoDigits(d.getDate()) +
                     'T' +
-                    this.asTwoDigits(hour) +
+                    this.asTwoDigits(d.getHours()) +
                     ':' +
-                    this.asTwoDigits(minute) +
+                    this.asTwoDigits(d.getMinutes()) +
                     ':00';
         },
 
@@ -359,7 +359,7 @@ var app = app || {};
             var d = this.getObjectFromDate(newDate);
 
             return {
-                id : this.getNewDateId(d.year, (d.month + 1), d.day),
+                id : this.getNewDateId(newDate),
                 day : d.day.toString(),
                 month: d.month.toString(),
                 monthName: this.getMonthName(newDate),
@@ -376,7 +376,7 @@ var app = app || {};
 
             return {
                 position: position, // simple incrementing number
-                id: this.getNewDateId(d.year, (d.month + 1), d.day, d.hour, d.minute),
+                id: this.getNewDateId(newDate),
                 date: newDate.toDateString(),
                 hour: d.hour.toString(),
                 minute: d.minute.toString()

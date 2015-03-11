@@ -89,6 +89,9 @@ var app = app || {};
             var msSinceDayStart = now.getTime() - dayStart.getTime();
             var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
 
+            $time.attr('datetime', app.cal.getNewDateId(now));
+            $time.text(now.toString());
+
             if ($time.length) {
                 $time.removeClass('is-hidden').css('top', percentComplete + '%');
             }
@@ -199,14 +202,15 @@ var app = app || {};
                 var top = $topElem.position().top + 1;
                 var height = $bottomElem.position().top + $bottomElem.height() - top;
 
-                this.$newEvent.css({
-                    'display': 'block',
-                    'top': top,
-                    'height': height,
-                });
+                this.$newEvent
+                    .removeClass('is-hidden')
+                    .css({
+                        'top': top,
+                        'height': height,
+                    });
 
             } else {
-                this.$newEvent.css('display', 'none');
+                this.$newEvent.addClass('is-hidden');
             }
         },
 

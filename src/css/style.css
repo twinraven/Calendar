@@ -333,8 +333,10 @@ ul {
     border-top: 2px solid red;
     height: 0;
     left: 0;
+    overflow: hidden;
     pointer-events: none;
     position: absolute;
+    text-indent: -9999px;
     width: 100%;
     z-index: 10;
 }

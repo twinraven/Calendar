@@ -1,0 +1,29 @@
+/**
+ * Header ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+.nav {
+    background: #fff;
+    border-bottom: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-end;
+    left: 0;
+    line-height: 14px;
+    padding: 20px 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+.nav * {
+    margin: 0 20px;
+}
+
+.cal-mode-last {
+    margin-right: auto;
+}
+
+.cal-mode-active {
+    font-weight: bold;
+}

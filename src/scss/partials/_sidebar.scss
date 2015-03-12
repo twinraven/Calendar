@@ -1,0 +1,27 @@
+/**
+ * Sidebar ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+.sidebar {
+    box-sizing: border-box;
+    border-right: 1px solid #ccc;
+    height: 100%;
+    max-width: 260px;
+    min-width: 200px;
+    width: 20%;
+}
+
+.cal-summary {
+    height: 25%;
+}
+
+.cal-controls {
+    margin: 0 0 10px;
+}
+
+.cal-title {
+    flex: 1;
+    font-size: 16px;
+    margin: 7px 0 10px;
+    line-height: 20px;
+}

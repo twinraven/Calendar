@@ -1,0 +1,283 @@
+/**
+ * Calendars ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+.cal-main {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+}
+
+.month-days {
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.month-days--summary {
+    position: static;
+}
+
+.day {
+    box-sizing: border-box;
+    float: left;
+    list-style: none;
+    min-height: 14%;
+    position: relative;
+    text-align: center;
+    align-items: stretch;
+    width: 14.2857%;
+
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+    -o-user-select: none;
+    user-select: none;
+}
+
+.cal-grid {
+    display: flex;
+    flex: 1;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+    width: 100%;
+}
+
+.cal-grid--month {
+    overflow: hidden;
+}
+
+.cal-events {
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.day-time-labels {
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    font-size: 12px;
+    font-weight: bold;
+    list-style: none;
+    left: 0;
+    padding: 0 5px;
+    position: absolute;
+    text-align: right;
+    top: 0;
+    width: 3rem;
+}
+
+.day-time-labels li {
+    height: 20px;
+    line-height: 20px;
+}
+
+.cal-events-grid li {
+    display: block;
+    height: 20px;
+    width: 100%;
+}
+
+.time {
+    box-sizing: border-box;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+    display: block;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+}
+
+.time:hover {
+    background: rgba(255,255,0,0.3);
+}
+
+.time-link {
+    display: block;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -o-user-select: none;
+    user-select: none;
+}
+
+.time:nth-child(even) {
+    border-top-style: dotted;
+}
+
+.week-days {
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 800px;
+    left: 3rem;
+    margin-left: -3rem;
+    padding-left: 3rem;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.week-days .day {
+    background: #fff;
+    height: 100%;
+}
+
+.cal-main .day {
+    line-height: 1.1;
+    min-height: calc(100% / 6);
+}
+
+.day--title {
+    margin: 0.5rem 0;
+}
+
+[data-cal-rows="4"].cal-main .day { min-height: calc(100% / 4); }
+[data-cal-rows="5"].cal-main .day { min-height: calc(100% / 5); }
+[data-cal-rows="6"].cal-main .day { min-height: calc(100% / 6); }
+
+.day-inner {
+    border: 1px solid #ccc;
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+
+.cal-labels {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    z-index: 1000;
+}
+
+.cal-labels--week {
+    padding-left: 3rem;
+    padding-right: 18px;
+}
+
+.cal-main .day:hover .day-inner {
+    background: rgba(255,255,0,0.3);
+    border-width: 1px 0 0 1px;
+    z-index: 10;
+}
+
+.day--title {
+    font-size: 12px;
+    padding: 0 5px;
+}
+
+.day .date {
+    cursor: pointer;
+    display: block;
+    font-size: 14px;
+    font-weight: normal;
+    line-height: 1;
+    margin: 0;
+}
+
+.cal-summary .date {
+    line-height: 22px;
+    width: 100%;
+}
+
+.cal-main .date {
+    left: 4px;
+    pointer-events: none;
+    position: absolute;
+    top: 4px;
+}
+
+.day__initial {
+    display: none;
+}
+
+.sidebar .day__initial {
+    display: block;
+}
+.sidebar .day__name {
+    display: none;
+}
+
+.is-range {
+    background: #fff;
+}
+
+.is-range .date {
+    font-weight: bold;
+}
+
+.is-not-range {
+    background: #eee;
+    color: #888;
+    font-weight: normal;
+}
+
+.is-today {
+    background: #bbb !important;
+}
+
+.week-days .is-today {
+    background: #eee !important;
+}
+
+.is-highlight {
+    background: yellow !important;
+}
+
+.visuallyhidden {
+    position: absolute;
+     overflow: hidden;
+     clip: rect(0 0 0 0);
+     height: 1px; width: 1px;
+     margin: -1px; padding: 0; border: 0;
+}
+
+.is-hidden {
+    display: none;
+}
+
+.now {
+    border-top: 2px solid red;
+    height: 0;
+    left: 0;
+    margin-top: -1px;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    text-indent: -9999px;
+    width: 100%;
+    z-index: 10;
+}
+
+.new-event {
+    box-sizing: border-box;
+    background: yellow;
+    box-shadow: 0 0 14px rgba(0,0,0,0.17);
+    height: 0;
+    font-size: 12px;
+    left: 1px;
+    line-height: 20px;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    width: 99%;
+    z-index: 15;
+}

@@ -99,7 +99,7 @@ var app = app || {};
             $time.text(now.toString());
 
             if ($time.length) {
-                $time.removeClass('is-hidden').css('top', percentComplete + '%');
+                $time.removeClass('is-hidden').css('top', percentDayComplete + '%');
             }
         },
 

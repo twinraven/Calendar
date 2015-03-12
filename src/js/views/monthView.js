@@ -193,6 +193,7 @@ var app = app || {};
 
         handleClockTick: function () {
             if (!app.state.isDragging && !app.state.hasSelection) {
+                var now = new Date();
 
                 if (!app.cal.isDateToday(this.selfMonth)) {
                     app.events.trigger('change:date', now);

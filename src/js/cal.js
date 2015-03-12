@@ -7,27 +7,27 @@ var app = app || {};
     app.cal = {
         labels : {
             week : [
-                "Monday",
-                "Tuesday",
-                "Wednesday",
-                "Thursday",
-                "Friday",
-                "Saturday",
-                "Sunday"
+                'Monday',
+                'Tuesday',
+                'Wednesday',
+                'Thursday',
+                'Friday',
+                'Saturday',
+                'Sunday'
             ],
             month: [
-                "January",
-                "Febuary",
-                "March",
-                "April",
-                "May",
-                "June",
-                "July",
-                "August",
-                "September",
-                "October",
-                "November",
-                "December"
+                'January',
+                'Febuary',
+                'March',
+                'April',
+                'May',
+                'June',
+                'July',
+                'August',
+                'September',
+                'October',
+                'November',
+                'December'
             ]
         },
 
@@ -47,7 +47,7 @@ var app = app || {};
             //format-friendly to the bind.apply statement below
             args.unshift(null);
 
-            newDate = new (Date.bind.apply(Date, args));
+            newDate = new (Date.bind.apply(Date, args))();
             newDate.setHours(0,0,0,0); // remove chance of GMT weirdness
 
             return newDate;
@@ -98,14 +98,14 @@ var app = app || {};
         getRowsInMonth : function (date) {
             var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
 
-            return (Math.ceil(daysInGrid / app.const.DAYS_IN_WEEK));
+            return (Math.ceil(daysInGrid / app.constants.DAYS_IN_WEEK));
         },
 
 
-         getNewDateId : function (date) {
+        getNewDateId : function (date) {
             var d = new Date(date);
 
-            return "" +
+            return '' +
                     d.getFullYear() +
                     '-' +
                     this.asTwoDigits(d.getMonth() + 1) +
@@ -123,19 +123,19 @@ var app = app || {};
             var dec = num % 10,
                 cent = num % 100;
 
-            if (dec == 1 && cent != 11) {
-                return "st";
+            if (dec === 1 && cent !== 11) {
+                return 'st';
             }
 
-            if (dec == 2 && cent != 12) {
-                return "nd";
+            if (dec === 2 && cent !== 12) {
+                return 'nd';
             }
 
-            if (dec == 3 && cent != 13) {
-                return "rd";
+            if (dec === 3 && cent !== 13) {
+                return 'rd';
             }
 
-            return "th";
+            return 'th';
         },
 
 
@@ -151,9 +151,9 @@ var app = app || {};
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 
-            if (app.state.startDay === "mon") {
+            if (app.state.startDay === 'mon') {
                  // JS getDay() returns a sunday-0-indexed value
-                num = (num + (app.const.DAYS_IN_WEEK - 1)) % app.const.DAYS_IN_WEEK;
+                num = (num + (app.constants.DAYS_IN_WEEK - 1)) % app.constants.DAYS_IN_WEEK;
             }
 
             return num;
@@ -179,7 +179,7 @@ var app = app || {};
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
 
-            return this.newDate(d.year, d.month, d.day + (app.const.DAYS_IN_WEEK - 1));
+            return this.newDate(d.year, d.month, d.day + (app.constants.DAYS_IN_WEEK - 1));
         },
 
         getTimeAs12HourFormat : function (num) {
@@ -201,7 +201,7 @@ var app = app || {};
             var d = app.cal.getObjectFromDate(date);
             var dayStart = app.cal.newDate(d.year, d.month, d.day);
             var msSinceDayStart = date.getTime() - dayStart.getTime();
-            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+            var percentComplete = (msSinceDayStart / app.constants.MS_IN_DAY) * 100;
 
             return percentComplete;
         },
@@ -243,7 +243,7 @@ var app = app || {};
             var to = timeTo.getTime();
             var diff = to - from;
 
-            return diff === app.const.MS_IN_DAY;
+            return diff === app.constants.MS_IN_DAY;
         },
 
 
@@ -251,22 +251,22 @@ var app = app || {};
 
 
         getPrevDateRange : function (date, mode) {
-            if (mode == app.const.WEEK) {
+            if (mode === app.constants.WEEK) {
                 return this.getPrevWeek(date);
             }
 
-            if (mode == app.const.MONTH) {
+            if (mode === app.constants.MONTH) {
                 return this.getPrevMonth(date);
             }
         },
 
 
         getNextDateRange : function (date, mode) {
-            if (mode == app.const.WEEK) {
+            if (mode === app.constants.WEEK) {
                 return this.getNextWeek(date);
             }
 
-            if (mode == app.const.MONTH) {
+            if (mode === app.constants.MONTH) {
                 return this.getNextMonth(date);
             }
         },
@@ -306,7 +306,7 @@ var app = app || {};
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
-            return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.const.MS_IN_DAY) + 1;
+            return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.constants.MS_IN_DAY) + 1;
         },
 
 
@@ -348,7 +348,7 @@ var app = app || {};
             var x, y;
             var data = [];
 
-            for (x = 0, y = app.const.HRS_IN_DAY; x < y; x++) {
+            for (x = 0, y = app.constants.HRS_IN_DAY; x < y; x++) {
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 0, (x * 2)));
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 30, (x * 2 + 1)));
             }
@@ -360,7 +360,7 @@ var app = app || {};
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getMonthGridData : function (date) {
             var thisMonthData = this.getMonthData(date);
-            var totalBlocksInGrid = this.getRowsInMonth(date) * app.const.DAYS_IN_WEEK;
+            var totalBlocksInGrid = this.getRowsInMonth(date) * app.constants.DAYS_IN_WEEK;
 
             var daysMissingAtFront = 0;
             var daysMissingAtEnd = 0;

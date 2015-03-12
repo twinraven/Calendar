@@ -33,9 +33,9 @@ var app = app || {};
 
             this.bindEvents();
 
-            this.highlightActiveViewModeLink();
-
             this.setActiveDate(app.cal.newDate());
+
+            this.highlightActiveViewModeLink();
 
             this.initializeSubViews();
 
@@ -63,7 +63,7 @@ var app = app || {};
             this.listenTo(app.events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
-            this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
+            this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e); });
             this.$body.on('keydown', function (e) { self.handleKeyPress.call(self, e); });
         },
 
@@ -95,7 +95,7 @@ var app = app || {};
         updateMonthTitle: function () {
             var d = this.activeDate;
 
-            this.$title.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
+            this.$title.text(app.cal.getMonthName(d) + ' ' + app.cal.getYear(d));
         },
 
         assignViews: function () {
@@ -161,7 +161,7 @@ var app = app || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.const.WEEK);
+            this.setViewMode(app.constants.WEEK);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -169,7 +169,7 @@ var app = app || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.const.MONTH);
+            this.setViewMode(app.constants.MONTH);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -190,11 +190,11 @@ var app = app || {};
         },
 
         isViewModeWeek: function () {
-            return app.state.viewMode === app.const.WEEK;
+            return app.state.viewMode === app.constants.WEEK;
         },
 
         isViewModeMonth: function () {
-            return app.state.viewMode === app.const.MONTH;
+            return app.state.viewMode === app.constants.MONTH;
         },
 
         isCurrentMonthActive: function (date) {
@@ -231,7 +231,7 @@ var app = app || {};
                 self.minuteInterval = setInterval(function () {
                     app.events.trigger('clock:tick');
 
-                }, 10000); //app.const.MS_IN_MINUTE
+                }, 10000); //app.constants.MS_IN_MINUTE
             }, diff);
         },
 
@@ -259,15 +259,15 @@ var app = app || {};
             });
         },
 
-         gotoToday: function (e) {
+        gotoToday: function (e) {
             if (e) { e.preventDefault(); }
 
             this.gotoDate({
                 'newDate': app.cal.newDate()
             });
-         },
+        },
 
-         gotoDate: function (params) {
+        gotoDate: function (params) {
             var date;
 
             if (params.increment) {
@@ -325,7 +325,7 @@ var app = app || {};
             var code = e.keyCode || e.which;
 
             // escape key
-            if (code === app.const.ESC_KEY) {
+            if (code === app.constants.ESC_KEY) {
                 app.events.trigger('clear:selection');
             }
         },

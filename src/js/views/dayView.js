@@ -61,14 +61,14 @@ var app = app || {};
             }
 
             // highlight if this day is currently in our active range
-            if (m.get('isActive') == true) {
+            if (m.get('isActive') === true) {
                 classes.push('is-range');
 
             } else {
                 classes.push('is-not-range');
             }
 
-            if (m.get('isHighlight') == true) {
+            if (m.get('isHighlight') === true) {
                 classes.push('is-highlight');
             }
 

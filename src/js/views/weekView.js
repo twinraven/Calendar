@@ -79,7 +79,7 @@ var app = app || {};
             var x = 0;
             var data = {};
 
-            while (x < app.const.HRS_IN_DAY) {
+            while (x < app.constants.HRS_IN_DAY) {
                 data = { 'hour': app.cal.getTimeAs12HourFormat(x) };
 
                 this.$timeLabels.append(this.hourTemplate(data));
@@ -129,7 +129,7 @@ var app = app || {};
             var data = app.cal.getWeekData(this.selfWeek);
 
             data.map(function (d) {
-               self.weekData.add(d);
+                self.weekData.add(d);
             });
         },
 

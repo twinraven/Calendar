@@ -8,7 +8,7 @@ $(function () {
 	// Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// immutable app-wide properties
-	app.const = {
+	app.constants = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
 	    ESC_KEY : 27,
@@ -22,8 +22,8 @@ $(function () {
 
 	// mutable app-wide properties
 	app.state = {
-	    startDay : "mon",
-		viewMode: app.const.MONTH
+	    startDay : 'mon',
+		viewMode: app.constants.MONTH
 	};
 
 	// kick things off by creating the `App` ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -37,8 +37,8 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-               app.state.isDragging = true;
-               this.setDragDateStart($el, $el.data('date'));
+                app.state.isDragging = true;
+                this.setDragDateStart($el, $el.data('date'));
             }
         },
 
@@ -63,7 +63,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if (app.state.isDragging) {
-               this.setDragDateEnd($el, $el.data('date'));
+                this.setDragDateEnd($el, $el.data('date'));
             }
         },
 

@@ -24,7 +24,7 @@ var app = app || {};
 
             app.dayView.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true) });
+            this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true); });
             this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
             this.listenTo(app.events, 'clock:tick', this.handleClockTick);
         },
@@ -113,7 +113,7 @@ var app = app || {};
             var data = app.cal.getTimeData(this.day);
 
             data.map(function (d) {
-               self.timeData.add(d);
+                self.timeData.add(d);
             });
         },
 
@@ -198,7 +198,7 @@ var app = app || {};
                     .removeClass('is-hidden')
                     .css({
                         'top': top,
-                        'height': height,
+                        'height': height
                     });
 
             } else {

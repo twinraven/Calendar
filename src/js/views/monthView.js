@@ -140,12 +140,12 @@ var app = app || {};
             var date = app.cal.newDate();
 
             if (params.type) {
-               if (params.type === 'next') {
-                   date = app.cal.getNextMonth(params.month);
+                if (params.type === 'next') {
+                    date = app.cal.getNextMonth(params.month);
 
-               } else if (params.type === 'previous') {
-                   date = app.cal.getPrevMonth(params.month);
-               }
+                } else if (params.type === 'previous') {
+                    date = app.cal.getPrevMonth(params.month);
+                }
             }
 
             if (params.newDate) { date = params.newDate; }
@@ -172,7 +172,7 @@ var app = app || {};
             var data = app.cal.getMonthGridData(this.selfMonth);
 
             data.map(function (d) {
-               self.monthData.add(d);
+                self.monthData.add(d);
             });
         },
 

@@ -35,7 +35,7 @@ var app = app || {};
         renderMonthName: function ($elem) {
             var d = this.selfMonth;
 
-            $elem.text(app.cal.getMonthName(d) + " " + app.cal.getYear(d));
+            $elem.text(app.cal.getMonthName(d) + ' ' + app.cal.getYear(d));
         },
 
 
@@ -53,9 +53,9 @@ var app = app || {};
             if (e) { e.preventDefault(); }
 
             this.gotoMonth({
-               'type': 'next',
-               'month': this.selfMonth,
-               'dest': 'summary'
+                'type': 'next',
+                'month': this.selfMonth,
+                'dest': 'summary'
             });
         },
 
@@ -63,9 +63,9 @@ var app = app || {};
             if (e) { e.preventDefault(); }
 
             this.gotoMonth({
-               'type': 'previous',
-               'month': this.selfMonth,
-               'dest': 'summary'
+                'type': 'previous',
+                'month': this.selfMonth,
+                'dest': 'summary'
             });
         }
     });

@@ -52,23 +52,27 @@ var app = app || {};
 
         setState: function () {
             var m = this.model;
+            var classes = [];
             this.today = app.cal.newDate().toDateString();
 
             // highlight today
             if (m.get('date') === this.today) {
-                this.$el.addClass('is-today');
+                classes.push('is-today');
             }
 
             // highlight if this day is currently in our active range
             if (m.get('isActive') == true) {
-                this.$el.addClass('is-range');
+                classes.push('is-range');
+
             } else {
-                this.$el.addClass('is-not-range');
+                classes.push('is-not-range');
             }
 
             if (m.get('isHighlight') == true) {
-                this.$el.addClass('is-highlight');
+                classes.push('is-highlight');
             }
+
+            this.$el.addClass(classes.join(' '));
         },
 
         addElem: function () {

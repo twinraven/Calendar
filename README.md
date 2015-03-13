@@ -9,18 +9,21 @@ Build a full-featured, responsive calendar application in Backbone.js, storing d
 ### Features so far
 
 - Whole month view
+- 7-day/Week view
 - Back/next traversal of months
 - Current day highlighting
-- currently-viewed month highlighting
-- click to select, and drag to select date range
-- mini/summary calendar view
-- independently traverse months in summary calendar
-- click summary calendar to update main calendar
+- Currently-viewed month highlighting
+- Click to select, and drag to select date/time range
+- Mini/summary calendar view
+- Independently traverse months in summary calendar
+- Click date in summary calendar to update main calendar
+- Currently-viewed date range reflected in summary calendar
+- Current time shown in week view; updates automatically
+- Automatically changing day if calendar is open when date changes
 
 ### Future features
 
-- Week / 7-day-rolling views
-- currently-viewed date range reflected in summary calendar
+- Agenda view
 - Events: adding, removing, updating, displaying (all views)
 ...
 - (Optional) 'flow' layout for months (default on mobile?)

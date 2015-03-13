@@ -1,3 +1,5 @@
 node_modules
 .sass-cache
 _build.js
+*.sublime-project
+*.sublime-workspace

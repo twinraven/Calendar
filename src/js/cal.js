@@ -115,7 +115,7 @@ var app = app || {};
                     this.asTwoDigits(d.getHours()) +
                     ':' +
                     this.asTwoDigits(d.getMinutes()) +
-                    ':00';
+                    ':00Z';
         },
 
 

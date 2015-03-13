@@ -28,7 +28,6 @@ module.exports = function ( grunt ) {
 		// JSHINT
 		jshint: { /* Lint the Gruntfile, all modules and specs except JQuery. */
 			all: [
-                'Gruntfile.js',
                 'src/js/**/*.js',
 
                 // Nots
@@ -124,7 +123,7 @@ module.exports = function ( grunt ) {
 		sass: {
 			dev: {
 				files: {
-					'src/css/main.css': 'src/scss/main.scss'
+				'src/css/main.css': 'src/scss/main.scss'
 				},
 				options: {
 					outputStyle: 'nested'

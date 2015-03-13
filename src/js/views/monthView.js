@@ -29,6 +29,7 @@ var app = app || {};
             this.listenTo(app.events, 'change:date', this.handleChangeDate);
             this.listenTo(app.events, 'change:mark', this.handleMarkDateRange);
             this.listenTo(app.events, 'clock:tick', this.handleClockTick);
+            this.listenTo(app.events, 'api:data', this.handleApiData);
         },
 
 
@@ -199,6 +200,12 @@ var app = app || {};
                     app.events.trigger('change:date', now);
                 }
             }
+        },
+
+        handleApiData: function (data) {
+            this.monthData.map(function (month) {
+                //
+            });
         },
 
 

@@ -42,6 +42,8 @@ var app = app || {};
             this.render();
 
             this.startClock();
+
+            this.loadAndMergeApiData();
         },
 
 
@@ -316,6 +318,23 @@ var app = app || {};
             // this event is listened to in the week and month views, so by
             // triggering this, we prompt the calendar views to update themselves
             app.events.trigger('change:date', this.activeDate);
+        },
+
+
+        // Calendar API access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        loadAndMergeApiData: function () {
+            app.apiData = new app.gApiCollection();
+
+            var req = app.apiData.fetch();
+
+            req.success(function(data) {
+                app.events.trigger('api:data', app.apiData);
+            });
+
+            req.error(function(data, othera, otherb) {
+                // handle error
+            })
         },
 
 

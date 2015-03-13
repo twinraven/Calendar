@@ -1,131 +1,130 @@
- {
-
-   "kind": "calendar#event",
-   "etag": "\"2548603684080000\"",
-   "id": "527nub1pd5a17g99vp14a25m80",
-   "status": "confirmed",
-   "htmlLink": "https://www.google.com/calendar/event?eid=NTI3bnViMXBkNWExN2c5OXZwMTRhMjVtODAgdG9tLmJyYW5AbQ",
-   "created": "2015-05-19T20:44:02.000Z",
-   "updated": "2015-05-19T20:44:02.040Z",
-   "summary": "Stag do!",
-   "creator": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "organizer": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "start": {
-    "date": "2015-05-17"
-   },
-   "end": {
-    "date": "2015-05-19"
-   },
-   "iCalUID": "527nub1pd5a17g99vp14a25m80@google.com",
-   "sequence": 0,
-   "reminders": {
-    "useDefault": false
-   }
-  },
-  {
-
-   "kind": "calendar#event",
-   "etag": "\"2555785336654000\"",
-   "id": "3f1hmnh5udhnjutcvjl105l7fk",
-   "status": "confirmed",
-   "htmlLink": "https://www.google.com/calendar/event?eid=M2YxaG1uaDV1ZGhuanV0Y3ZqbDEwNWw3ZmsgdG9tLmJyYW5AbQ",
-   "created": "2015-04-17T16:09:24.000Z",
-   "updated": "2015-04-30T10:11:08.327Z",
-   "summary": "Doctors",
-   "creator": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "organizer": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "start": {
-    "dateTime": "2015-05-21T16:00:00+01:00"
-   },
-   "end": {
-    "dateTime": "2015-05-21T17:00:00+01:00"
-   },
-   "visibility": "private",
-   "iCalUID": "3f1hmnh5udhnjutcvjl105l7fk@google.com",
-   "sequence": 0,
-   "reminders": {
-    "useDefault": true
-   }
-  },
-  {
-   "kind": "calendar#event",
-   "etag": "\"2579033800416000\"",
-   "id": "hlm0llpjnlmfq4ltgqv7nnarhc",
-   "status": "confirmed",
-   "htmlLink": "https://www.google.com/calendar/event?eid=aGxtMGxscGpubG1mcTRsdGdxdjdubmFyaGMgdG9tLmJyYW5AbQ",
-   "created": "2015-4-09T11:52:53.000Z",
-   "updated": "2015-5-11T23:08:20.208Z",
-   "summary": "Book Titanic exhibition visit",
-   "description": "Speak to Martyn & Jen - they're interested too.\n\nSite here: http://www.titaniclondon.co.uk/the-exhibition.html",
-   "location": "The O2",
-   "creator": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "organizer": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "start": {
-    "date": "2015-05-04"
-   },
-   "end": {
-    "date": "2015-05-05"
-   },
-   "transparency": "transparent",
-   "iCalUID": "hlm0llpjnlmfq4ltgqv7nnarhc@google.com",
-   "sequence": 0,
-   "reminders": {
-    "useDefault": false
-   }
-  },
-  {
-
-   "kind": "calendar#event",
-   "etag": "\"2579033800908000\"",
-   "id": "_6crj2dhg8grk2h218p0j8cpo6t0k8d1g690jeha664q44c9j8cpj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
-   "status": "confirmed",
-   "htmlLink": "https://www.google.com/calendar/event?eid=XzZjcmoyZGhnOGdyazJoMjE4cDBqOGNwbzZ0MGs4ZDFnNjkwamVoYTY2NHE0NGM5ajhjcGowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzAgdG9tLmJyYW5AbQ",
-   "created": "2010-4-29T21:47:05.000Z",
-   "updated": "2010-5-11T23:08:20.454Z",
-   "summary": "Martyn & Jen",
-   "creator": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "organizer": {
-    "email": "tom.bran@gmail.com",
-    "displayName": "Tom Bran",
-    "self": true
-   },
-   "start": {
-    "dateTime": "2015-5-08T19:00:00Z"
-   },
-   "end": {
-    "dateTime": "2015-5-08T22:00:00Z"
-   },
-   "iCalUID": "37160D7ADAFA4387AD402A7EF14B13C300000000000000000000000000000000",
-   "sequence": 1,
-   "reminders": {
-    "useDefault": true
-   }
-  }
+[
+    {
+        "kind": "calendar#event",
+        "etag": "\"2548603684080000\"",
+        "id": "527nub1pd5a17g99vp14a25m80",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=NTI3bnViMXBkNWExN2c5OXZwMTRhMjVtODAgdG9tLmJyYW5AbQ",
+        "created": "2015-05-19T20:44:02.000Z",
+        "updated": "2015-05-19T20:44:02.040Z",
+        "summary": "Stag do!",
+        "creator": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "organizer": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "start": {
+            "date": "2015-05-17"
+        },
+        "end": {
+            "date": "2015-05-19"
+        },
+        "iCalUID": "527nub1pd5a17g99vp14a25m80@google.com",
+        "sequence": 0,
+        "reminders": {
+            "useDefault": false
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"2555785336654000\"",
+        "id": "3f1hmnh5udhnjutcvjl105l7fk",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=M2YxaG1uaDV1ZGhuanV0Y3ZqbDEwNWw3ZmsgdG9tLmJyYW5AbQ",
+        "created": "2015-04-17T16:09:24.000Z",
+        "updated": "2015-04-30T10:11:08.327Z",
+        "summary": "Doctors",
+        "creator": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "organizer": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2015-05-21T16:00:00+01:00"
+        },
+        "end": {
+            "dateTime": "2015-05-21T17:00:00+01:00"
+        },
+        "visibility": "private",
+        "iCalUID": "3f1hmnh5udhnjutcvjl105l7fk@google.com",
+        "sequence": 0,
+        "reminders": {
+            "useDefault": true
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"2579033800416000\"",
+        "id": "hlm0llpjnlmfq4ltgqv7nnarhc",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=aGxtMGxscGpubG1mcTRsdGdxdjdubmFyaGMgdG9tLmJyYW5AbQ",
+        "created": "2015-4-09T11:52:53.000Z",
+        "updated": "2015-5-11T23:08:20.208Z",
+        "summary": "Book Titanic exhibition visit",
+        "description": "Speak to Martyn & Jen - they're interested too.\n\nSite here: http://www.titaniclondon.co.uk/the-exhibition.html",
+        "location": "The O2",
+        "creator": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "organizer": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "start": {
+            "date": "2015-05-04"
+        },
+        "end": {
+            "date": "2015-05-05"
+        },
+        "transparency": "transparent",
+        "iCalUID": "hlm0llpjnlmfq4ltgqv7nnarhc@google.com",
+        "sequence": 0,
+        "reminders": {
+            "useDefault": false
+        }
+    },
+    {
+        "kind": "calendar#event",
+        "etag": "\"2579033800908000\"",
+        "id": "_6crj2dhg8grk2h218p0j8cpo6t0k8d1g690jeha664q44c9j8cpj0c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c1g60o30c0",
+        "status": "confirmed",
+        "htmlLink": "https://www.google.com/calendar/event?eid=XzZjcmoyZGhnOGdyazJoMjE4cDBqOGNwbzZ0MGs4ZDFnNjkwamVoYTY2NHE0NGM5ajhjcGowYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzFnNjBvMzBjMWc2MG8zMGMxZzYwbzMwYzAgdG9tLmJyYW5AbQ",
+        "created": "2010-4-29T21:47:05.000Z",
+        "updated": "2010-5-11T23:08:20.454Z",
+        "summary": "Martyn & Jen",
+        "creator": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "organizer": {
+            "email": "tom.bran@gmail.com",
+            "displayName": "Tom Bran",
+            "self": true
+        },
+        "start": {
+            "dateTime": "2015-5-08T19:00:00Z"
+        },
+        "end": {
+            "dateTime": "2015-5-08T22:00:00Z"
+        },
+        "iCalUID": "37160D7ADAFA4387AD402A7EF14B13C300000000000000000000000000000000",
+        "sequence": 1,
+        "reminders": {
+            "useDefault": true
+        }
+    }
+]

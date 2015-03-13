@@ -197,6 +197,15 @@ var app = app || {};
             return num + suffix;
         },
 
+        getPercentDayComplete : function (date) {
+            var d = app.cal.getObjectFromDate(date);
+            var dayStart = app.cal.newDate(d.year, d.month, d.day);
+            var msSinceDayStart = date.getTime() - dayStart.getTime();
+            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+
+            return percentComplete;
+        },
+
         getTimeMinsLater : function (mins, time) {
             var d = this.getObjectFromDate(time);
             var later = new Date(d.year, d.month, d.day, d.hour, d.minute + mins);
@@ -218,6 +227,15 @@ var app = app || {};
             var currentWeekStartDate = this.getWeekStartDate(now);
 
             return (weekStartDate.getTime() === currentWeekStartDate.getTime());
+        },
+
+        isDateToday : function (date) {
+            var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+            var active = new Date(date);
+            var nowDate = now.getDate();
+            var activeDate = active.getDate();
+
+            return (nowDate === activeDate);
         },
 
         isFullDay : function (timeFrom, timeTo) {

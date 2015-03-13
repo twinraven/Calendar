@@ -20,12 +20,11 @@ var app = app || {};
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-            var self = this;
 
             // keep track of own date, irrespective of app-wide state
             this.selfWeek = (params && params.date) || app.cal.newDate();
 
-            this.listenTo(app.events, 'change:date', function (date) { self.handleChangeWeek.call(self, date) });
+            this.listenTo(app.events, 'change:date', this.handleChangeDate);
         },
 
 
@@ -48,6 +47,8 @@ var app = app || {};
 
             return this.el;
         },
+
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
             this.$week = this.$('.week-days');
@@ -135,7 +136,7 @@ var app = app || {};
 
         // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleChangeWeek: function (date) {
+        handleChangeDate: function (date) {
             // normalise date so we're always dealing with the first day of the week
             var newDate = app.cal.getWeekStartDate(date);
 

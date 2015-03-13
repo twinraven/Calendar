@@ -22,14 +22,13 @@ var app = app || {};
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-            var self = this;
-
 
             // keep track of own date, irrespective of app-wide state - but init with external val
             this.selfMonth = (params && params.date) || app.cal.newDate();
 
-            this.listenTo(app.events, 'change:date', function (date) { self.handleDateChange.call(self, date) });
-            this.listenTo(app.events, 'change:mark', function (dates) { self.handleMarkDateRange.call(self, dates) });
+            this.listenTo(app.events, 'change:date', this.handleChangeDate);
+            this.listenTo(app.events, 'change:mark', this.handleMarkDateRange);
+            this.listenTo(app.events, 'clock:tick', this.handleClockTick);
         },
 
 
@@ -53,6 +52,8 @@ var app = app || {};
 
             return this.el;
         },
+
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
             this.$month = this.$('.month-days');
@@ -178,7 +179,7 @@ var app = app || {};
 
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleDateChange: function (date) {
+        handleChangeDate: function (date) {
             this.gotoMonth({ 'newDate': date });
         },
 
@@ -188,6 +189,15 @@ var app = app || {};
             this.storeMarkedDates(dates);
 
             this.renderDays();
+        },
+
+        handleClockTick: function () {
+            if (!app.state.isDragging && !app.state.hasSelection) {
+
+                if (!app.cal.isDateToday(this.selfMonth)) {
+                    app.events.trigger('change:date', now);
+                }
+            }
         },
 
 

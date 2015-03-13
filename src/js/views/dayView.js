@@ -48,6 +48,8 @@ var app = app || {};
             return this.el;
         },
 
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         setState: function () {
             var m = this.model;
             this.today = app.cal.newDate().toDateString();

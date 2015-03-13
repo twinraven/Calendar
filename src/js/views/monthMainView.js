@@ -27,7 +27,7 @@ var app = app || {};
             // call the initialize method of parent/super class (as we want to add more init methods)
             app.monthView.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'clear:selection', this.clearDrag);
+            this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
         },
 
 
@@ -37,7 +37,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-               app.isDragging = true;
+               app.state.isDragging = true;
                this.setDragDateStart($el, $el.data('date'));
             }
         },
@@ -47,22 +47,28 @@ var app = app || {};
 
             if ($el.is('.day-inner')) {
                 var endDateCorrected = app.cal.getDateTomorrow(this.dragDateEnd);
-                app.isDragging = false;
+                app.state.isDragging = false;
 
                 app.events.trigger('add:event', {
                     'from': this.dragDateStart,
                     'to': endDateCorrected,
                     'fullday': true
                 });
+
+                app.state.hasSelection = true;
             }
         },
 
         handleMouseOver: function (e) {
             var $el = $(e.target);
 
-            if (app.isDragging) {
+            if (app.state.isDragging) {
                this.setDragDateEnd($el, $el.data('date'));
             }
+        },
+
+        handleClearSelection: function () {
+            this.clearDrag();
         },
 
 
@@ -90,6 +96,8 @@ var app = app || {};
 
         clearDrag: function () {
             this.markDateRangeAsHighlight(null, null);
+
+            app.state.hasSelection = false;
 
             this.renderDays();
         }

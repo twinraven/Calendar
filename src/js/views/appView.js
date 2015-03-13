@@ -28,7 +28,6 @@ var app = app || {};
         // Init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function () {
-            var self = this;
 
             this.cacheSelectors();
 
@@ -41,6 +40,8 @@ var app = app || {};
             this.initializeSubViews();
 
             this.render();
+
+            this.startClock();
         },
 
 
@@ -58,8 +59,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            this.listenTo(app.events, 'add:event', function (event) { self.handleAddEvent.call(self, event) });
-            this.listenTo(app.events, 'goto:date', function (date) { self.handleDateChange.call(self, date) });
+            this.listenTo(app.events, 'add:event', this.handleAddEvent);
+            this.listenTo(app.events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e) });
@@ -208,6 +209,37 @@ var app = app || {};
             return nowMonth.getTime() === activeMonth.getTime();
         },
 
+        // Time-based eventing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        // work out how much time until the current minute ends.
+        // Once it does, start a once-a-minute timer to update the current time line
+        startClock: function () {
+            var self = this;
+            var newDate = new Date();
+            var d = app.cal.getObjectFromDate(newDate);
+            var endOfCurrentMinute = new Date(d.year, d.month, d.day, d.hour, d.minute + 1);
+            var diff = endOfCurrentMinute.getTime() - newDate.getTime();
+
+            this.clockTimeout = this.minuteInterval = null;
+
+            // timeout to the end of the minute
+            this.clockTimeout = setTimeout(function () {
+                // tick now, at the top of the minute - then once every minute from now
+                app.events.trigger('clock:tick');
+
+                // interval for every minute
+                self.minuteInterval = setInterval(function () {
+                    app.events.trigger('clock:tick');
+
+                }, 10000); //app.const.MS_IN_MINUTE
+            }, diff);
+        },
+
+        stopMinuteTimer: function () {
+            clearTimeout(this.clockTimeout);
+            clearInterval(this.minuteInterval);
+        },
+
 
         // Date traversal event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -318,7 +350,7 @@ var app = app || {};
 
         // custom app events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleDateChange: function (date) {
+        handleGotoDate: function (date) {
             this.gotoDate({'newDate': date});
         },
 

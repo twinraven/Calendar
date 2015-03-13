@@ -30,6 +30,8 @@ var app = app || {};
             return this.el;
         },
 
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         renderMonthName: function ($elem) {
             var d = this.selfMonth;
 

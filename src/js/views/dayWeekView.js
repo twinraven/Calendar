@@ -24,8 +24,9 @@ var app = app || {};
 
             app.dayView.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'clear:selection', this.clearDrag);
             this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true) });
+            this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(app.events, 'clock:tick', this.handleClockTick);
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,13 +42,14 @@ var app = app || {};
 
             if (this.isToday()) {
                 this.setTimeLinePosition();
-                this.startTimeLineTicker();
             }
 
             this.$times = this.$('.time-link');
 
             return this.el;
         },
+
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
@@ -83,18 +85,15 @@ var app = app || {};
 
         setTimeLinePosition: function () {
             var $time = this.$('.now');
-            var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+            var now = new Date();
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            if (now.getDate() !== new Date(this.today).getDate()) {
+            if (!app.cal.isDateToday(this.today)) {
                 app.events.trigger('change:date', now);
             }
 
-            var d = app.cal.getObjectFromDate(now);
-            var dayStart = app.cal.newDate(d.year, d.month, d.day);
-            var msSinceDayStart = now.getTime() - dayStart.getTime();
-            var percentComplete = (msSinceDayStart / app.const.MS_IN_DAY) * 100;
+            var percentDayComplete = app.cal.getPercentDayComplete(now);
 
             $time.attr('datetime', app.cal.getNewDateId(now));
             $time.text(now.toString());
@@ -102,32 +101,6 @@ var app = app || {};
             if ($time.length) {
                 $time.removeClass('is-hidden').css('top', percentComplete + '%');
             }
-        },
-
-        // work out how much time until the current minute ends. Once it does, start a
-        // once-a-minute timer to update the current time line
-        startTimeLineTicker: function () {
-            var self = this;
-            var newDate = new Date();
-            var now = app.cal.getObjectFromDate(newDate);
-            var endOfCurrentMinute = new Date(now.year, now.month, now.day, now.hour, now.minute + 1);
-            var diff = endOfCurrentMinute.getTime() - newDate.getTime();
-
-            this.tickerTimeout = this.tickerInterval = null;
-
-            // timeout to the end of the minute
-            this.tickerTimeout = setTimeout(function () {
-                // interval for every minute
-                self.tickerInterval = setInterval(function () {
-                    self.setTimeLinePosition();
-
-                }, app.const.MS_IN_MINUTE);
-            }, diff);
-        },
-
-        stopTimeLineTicker: function () {
-            clearTimeout(this.tickerTimeout);
-            clearInterval(this.tickerInterval);
         },
 
 
@@ -180,6 +153,16 @@ var app = app || {};
                 if (($el && $el.is('.time-link')) || externalEvent) {
                     this.createNewEvent();
                 }
+            }
+        },
+
+        handleClearSelection: function () {
+            this.clearDrag();
+        },
+
+        handleClockTick: function () {
+            if (this.isToday()) {
+                this.setTimeLinePosition();
             }
         },
 
@@ -265,7 +248,6 @@ var app = app || {};
                 time.remove();
             });
 
-            this.stopTimeLineTicker();
             this.undelegateEvents();
             this.stopListening();
             this.timeViews = null;

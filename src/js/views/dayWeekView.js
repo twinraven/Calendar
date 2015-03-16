@@ -26,7 +26,7 @@ var app = app || {};
 
             this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true); });
             this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
-            this.listenTo(app.events, 'clock:tick', this.handleClockTick);
+            //this.listenTo(app.events, 'clock:tick', this.handleClockTick); // broken?
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

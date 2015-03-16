@@ -28,7 +28,7 @@ var app = app || {};
 
             this.listenTo(app.events, 'change:date', this.handleChangeDate);
             this.listenTo(app.events, 'change:mark', this.handleMarkDateRange);
-            this.listenTo(app.events, 'clock:tick', this.handleClockTick);
+            //this.listenTo(app.events, 'clock:tick', this.handleClockTick); // broken?
             this.listenTo(app.events, 'api:data', this.handleApiData);
         },
 
@@ -197,6 +197,7 @@ var app = app || {};
                 var now = app.cal.newDate();
 
                 if (app.state.today.getTime() !== now.getTime()) {
+                    this.selfMonth = now;
                     app.events.trigger('change:date', now);
                     app.state.today = now;
                 }

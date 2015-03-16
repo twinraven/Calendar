@@ -12,6 +12,18 @@ var app = app || {};
 	app.gApiCollection = Backbone.Collection.extend({
 		url: 'api/calendar-v3.json',
 		// Reference to this collection's model.
-		model: app.gApi
+		model: app.gApi,
+
+		comparator: 'etag',
+
+		parse: function (dates) {
+			dates.map(function (item) {
+				item.isFullDay = _.has(item.start.date);
+
+				return item;
+			});
+
+			return dates;
+		}
 	});
 })();

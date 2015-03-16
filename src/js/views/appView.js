@@ -43,7 +43,7 @@ var app = app || {};
 
             this.startClock();
 
-            this.loadAndMergeApiData();
+            this.loadApiData();
         },
 
 
@@ -323,7 +323,7 @@ var app = app || {};
 
         // Calendar API access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        loadAndMergeApiData: function () {
+        loadApiData: function () {
             app.apiData = new app.gApiCollection();
 
             var req = app.apiData.fetch();
@@ -334,7 +334,7 @@ var app = app || {};
 
             req.error(function(data, othera, otherb) {
                 // handle error
-            })
+            });
         },
 
 

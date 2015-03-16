@@ -65,7 +65,7 @@ var app = app || {};
             this.listenTo(app.events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
-            this.$body.on('DOMMouseScroll mousewheel', function (e) { self.handleScroll.call(self, e); });
+            this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 50));
             this.$body.on('keydown', function (e) { self.handleKeyPress.call(self, e); });
         },
 

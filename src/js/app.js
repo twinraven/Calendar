@@ -22,6 +22,7 @@ $(function () {
 
 	// mutable app-wide properties
 	app.state = {
+		today: app.cal.newDate(),
 	    startDay : 'mon',
 		viewMode: app.constants.MONTH
 	};

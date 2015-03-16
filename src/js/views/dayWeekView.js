@@ -89,8 +89,9 @@ var app = app || {};
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            if (!app.cal.isDateToday(this.today)) {
+            if (app.state.today.getTime() !== now.getTime()) {
                 app.events.trigger('change:date', now);
+                app.state.today = now;
             }
 
             var percentDayComplete = app.cal.getPercentDayComplete(now);

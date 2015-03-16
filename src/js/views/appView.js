@@ -65,7 +65,7 @@ var app = app || {};
             this.listenTo(app.events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
-            this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 50));
+            this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 100));
             this.$body.on('keydown', function (e) { self.handleKeyPress.call(self, e); });
         },
 
@@ -233,7 +233,7 @@ var app = app || {};
                 self.minuteInterval = setInterval(function () {
                     app.events.trigger('clock:tick');
 
-                }, 10000); //app.constants.MS_IN_MINUTE
+                }, app.constants.MS_IN_MINUTE);
             }, diff);
         },
 

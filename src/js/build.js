@@ -72,9 +72,12 @@ var App = App || {};
 
         getDaysInMonth : function (date) {
             var d = this.getObjectFromDate(date);
+            var monthStart = this.newDate(d.year, d.month, 1);
+            var monthEnd = this.newDate(d.year, d.month + 1, 1);
+            var len = Math.round((monthEnd - monthStart) / App.Constants.MS_IN_DAY);
 
             // add 1 to month, then request day 0 -- gets last day of previous month
-            return new Date(d.year, d.month + 1, 0).getDate();
+            return len;
         },
 
 
@@ -114,7 +117,7 @@ var App = App || {};
         getRowsInMonth : function (date) {
             var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
 
-            return (Math.ceil(daysInGrid / App.constants.DAYS_IN_WEEK));
+            return (Math.ceil(daysInGrid / App.Constants.DAYS_IN_WEEK));
         },
 
 
@@ -169,7 +172,7 @@ var App = App || {};
 
             if (App.State.startDay === 'mon') {
                  // JS getDay() returns a sunday-0-indexed value
-                num = (num + (App.constants.DAYS_IN_WEEK - 1)) % App.constants.DAYS_IN_WEEK;
+                num = (num + (App.Constants.DAYS_IN_WEEK - 1)) % App.Constants.DAYS_IN_WEEK;
             }
 
             return num;
@@ -195,7 +198,7 @@ var App = App || {};
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
 
-            return this.newDate(d.year, d.month, d.day + (App.constants.DAYS_IN_WEEK - 1));
+            return this.newDate(d.year, d.month, d.day + (App.Constants.DAYS_IN_WEEK - 1));
         },
 
         getTimeAs12HourFormat : function (num) {
@@ -217,7 +220,7 @@ var App = App || {};
             var d = this.getObjectFromDate(date);
             var dayStart = this.newDate(d.year, d.month, d.day);
             var msSinceDayStart = date.getTime() - dayStart.getTime();
-            var percentComplete = (msSinceDayStart / App.constants.MS_IN_DAY) * 100;
+            var percentComplete = (msSinceDayStart / App.Constants.MS_IN_DAY) * 100;
 
             return percentComplete;
         },
@@ -259,7 +262,7 @@ var App = App || {};
             var to = timeTo.getTime();
             var diff = to - from;
 
-            return diff === App.constants.MS_IN_DAY;
+            return diff === App.Constants.MS_IN_DAY;
         },
 
 
@@ -267,22 +270,22 @@ var App = App || {};
 
 
         getPrevDateRange : function (date, mode) {
-            if (mode === App.constants.WEEK) {
+            if (mode === App.Constants.WEEK) {
                 return this.getPrevWeek(date);
             }
 
-            if (mode === App.constants.MONTH) {
+            if (mode === App.Constants.MONTH) {
                 return this.getPrevMonth(date);
             }
         },
 
 
         getNextDateRange : function (date, mode) {
-            if (mode === App.constants.WEEK) {
+            if (mode === App.Constants.WEEK) {
                 return this.getNextWeek(date);
             }
 
-            if (mode === App.constants.MONTH) {
+            if (mode === App.Constants.MONTH) {
                 return this.getNextMonth(date);
             }
         },
@@ -322,7 +325,7 @@ var App = App || {};
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
-            return Math.floor((dTo.getTime() - dFrom.getTime()) / App.constants.MS_IN_DAY) + 1;
+            return Math.round((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
         },
 
 
@@ -343,10 +346,9 @@ var App = App || {};
         getMonthData : function (date) {
             var d = this.getObjectFromDate(date);
             var dateFrom = new Date(d.year, d.month, 1);
-            var dateTo = new Date(d.year, d.month, this.getDaysInMonth(date));
+            var dateTo = new Date(d.year, d.month + 1, 1);
 
             var data = this.getDateRangeData(dateFrom, dateTo);
-
             return data;
         },
 
@@ -364,7 +366,7 @@ var App = App || {};
             var x, y;
             var data = [];
 
-            for (x = 0, y = App.constants.HRS_IN_DAY; x < y; x++) {
+            for (x = 0, y = App.Constants.HRS_IN_DAY; x < y; x++) {
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 0, (x * 2)));
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 30, (x * 2 + 1)));
             }
@@ -376,7 +378,7 @@ var App = App || {};
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getMonthGridData : function (date) {
             var thisMonthData = this.getMonthData(date);
-            var totalBlocksInGrid = this.getRowsInMonth(date) * App.constants.DAYS_IN_WEEK;
+            var totalBlocksInGrid = this.getRowsInMonth(date) * App.Constants.DAYS_IN_WEEK;
 
             var daysMissingAtFront = 0;
             var daysMissingAtEnd = 0;
@@ -449,7 +451,7 @@ var App = App || {};
 	// Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// immutable App-wide properties
-	App.constants = {
+	App.Constants = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
 	    ESC_KEY : 27,
@@ -465,7 +467,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.constants.MONTH
+		viewMode: App.Constants.MONTH
 	};
 
 	App.Models = {};
@@ -971,7 +973,7 @@ var App = App || {};
             var x = 0;
             var data = {};
 
-            while (x < App.constants.HRS_IN_DAY) {
+            while (x < App.Constants.HRS_IN_DAY) {
                 data = { 'hour': App.Methods.getTimeAs12HourFormat(x) };
 
                 this.$timeLabels.append(this.timeLabelTemplate(data));
@@ -1222,8 +1224,8 @@ var App = App || {};
         },
 
         renderWeekFragment: function (x) {
-            var startPos = App.constants.DAYS_IN_WEEK * x;
-            var endPos = startPos + App.constants.DAYS_IN_WEEK;
+            var startPos = App.Constants.DAYS_IN_WEEK * x;
+            var endPos = startPos + App.Constants.DAYS_IN_WEEK;
             var weekData = this.monthData.slice(startPos, endPos);
 
             var weekFragment = document.createDocumentFragment();
@@ -1701,7 +1703,7 @@ var App = App || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(App.constants.WEEK);
+            this.setViewMode(App.Constants.WEEK);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -1709,7 +1711,7 @@ var App = App || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(App.constants.MONTH);
+            this.setViewMode(App.Constants.MONTH);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -1730,11 +1732,11 @@ var App = App || {};
         },
 
         isViewModeWeek: function () {
-            return App.State.viewMode === App.constants.WEEK;
+            return App.State.viewMode === App.Constants.WEEK;
         },
 
         isViewModeMonth: function () {
-            return App.State.viewMode === App.constants.MONTH;
+            return App.State.viewMode === App.Constants.MONTH;
         },
 
         isCurrentMonthActive: function (date) {
@@ -1771,7 +1773,7 @@ var App = App || {};
                 self.minuteInterval = setInterval(function () {
                     App.Events.trigger('clock:tick');
 
-                }, 10000); //App.constants.MS_IN_MINUTE
+                }, 10000); //App.Constants.MS_IN_MINUTE
             }, diff);
         },
 
@@ -1882,7 +1884,7 @@ var App = App || {};
             var code = e.keyCode || e.which;
 
             // escape key
-            if (code === App.constants.ESC_KEY) {
+            if (code === App.Constants.ESC_KEY) {
                 App.Events.trigger('clear:selection');
             }
         },

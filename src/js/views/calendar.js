@@ -163,7 +163,7 @@ var App = App || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(App.constants.WEEK);
+            this.setViewMode(App.Constants.WEEK);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -171,7 +171,7 @@ var App = App || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(App.constants.MONTH);
+            this.setViewMode(App.Constants.MONTH);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -192,11 +192,11 @@ var App = App || {};
         },
 
         isViewModeWeek: function () {
-            return App.State.viewMode === App.constants.WEEK;
+            return App.State.viewMode === App.Constants.WEEK;
         },
 
         isViewModeMonth: function () {
-            return App.State.viewMode === App.constants.MONTH;
+            return App.State.viewMode === App.Constants.MONTH;
         },
 
         isCurrentMonthActive: function (date) {
@@ -233,7 +233,7 @@ var App = App || {};
                 self.minuteInterval = setInterval(function () {
                     App.Events.trigger('clock:tick');
 
-                }, 10000); //App.constants.MS_IN_MINUTE
+                }, 10000); //App.Constants.MS_IN_MINUTE
             }, diff);
         },
 
@@ -344,7 +344,7 @@ var App = App || {};
             var code = e.keyCode || e.which;
 
             // escape key
-            if (code === App.constants.ESC_KEY) {
+            if (code === App.Constants.ESC_KEY) {
                 App.Events.trigger('clear:selection');
             }
         },

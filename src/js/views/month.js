@@ -100,8 +100,8 @@ var App = App || {};
         },
 
         renderWeekFragment: function (x) {
-            var startPos = App.constants.DAYS_IN_WEEK * x;
-            var endPos = startPos + App.constants.DAYS_IN_WEEK;
+            var startPos = App.Constants.DAYS_IN_WEEK * x;
+            var endPos = startPos + App.Constants.DAYS_IN_WEEK;
             var weekData = this.monthData.slice(startPos, endPos);
 
             var weekFragment = document.createDocumentFragment();

@@ -7,7 +7,7 @@ var App = App || {};
 	// Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	// immutable App-wide properties
-	App.constants = {
+	App.Constants = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
 	    ESC_KEY : 27,
@@ -23,7 +23,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.constants.MONTH
+		viewMode: App.Constants.MONTH
 	};
 
 	App.Models = {};

@@ -5,7 +5,9 @@ module.exports = function ( grunt ) {
 	// Array of Script files to include into build
 	var APP_SCRIPTS = [
 		// all, for now
-		'src/js/**/*.js'
+		'src/js/**/*.js',
+		'!src/js/**/_build.js',
+		'!src/js/vendor/**/*.js'
 	];
 
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);

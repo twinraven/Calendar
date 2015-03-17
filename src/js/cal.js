@@ -50,6 +50,10 @@ var app = app || {};
             newDate = new (Date.bind.apply(Date, args))();
             newDate.setHours(0,0,0,0); // remove chance of GMT weirdness
 
+            if (newDate.getTimezoneOffset() !== 0) {
+                // bugger.
+            }
+
             return newDate;
         },
 
@@ -306,7 +310,7 @@ var app = app || {};
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
-            return Math.ceil((dTo.getTime() - dFrom.getTime()) / app.constants.MS_IN_DAY) + 1;
+            return Math.floor((dTo.getTime() - dFrom.getTime()) / app.constants.MS_IN_DAY) + 1;
         },
 
 

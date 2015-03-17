@@ -39,6 +39,14 @@
 			</div>
 		</script>
 
+		<script type="text/template" id="week-month-template">
+			<ul class="week-month"></ul>
+
+			<div class="week-month-events">
+
+			</div>
+		</script>
+
 
 		<script type="text/template" id="month-summary-template">
 			<h4 class="cal-title"></h4>
@@ -58,11 +66,6 @@
 				<h3 class="date" id="date-main-<%= id %>">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
-				<ul class="cal-events">
-				<% _.each(events.time, function (event) { %>
-					<li><%= event.title %></li>
-				<% }); %>
-				</ul>
 			</div>
 		</script>
 
@@ -104,7 +107,7 @@
 			<time datetime="" class="now is-hidden"></time>
 			<span class="new-event is-hidden">New Event</span>
 
-			<ul class="cal-events-grid"></ul>
+			<ul class="cal-day-grid"></ul>
 
 			<ul class="cal-events">
 			<% _.each(events.time, function (event) { %>
@@ -154,6 +157,7 @@
 		<script src="js/views/dayView.js"></script>
 		<script src="js/views/timeView.js"></script>
 
+		<script src="js/views/weekMonthView.js"></script>
 		<script src="js/views/dayWeekView.js"></script>
 		<script src="js/views/daySummaryView.js"></script>
 		<script src="js/views/monthMainView.js"></script>

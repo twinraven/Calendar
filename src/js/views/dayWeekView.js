@@ -161,6 +161,7 @@ var app = app || {};
             this.clearDrag();
         },
 
+        // broken?
         handleClockTick: function () {
             if (this.isToday()) {
                 this.setTimeLinePosition();

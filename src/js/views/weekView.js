@@ -41,7 +41,7 @@ var app = app || {};
 
             this.setWeekData();
 
-            this.renderDays();
+            this.renderDates();
 
             this.scrollTimeIntoView();
 
@@ -95,7 +95,7 @@ var app = app || {};
             this.addWeekDataToCollection();
         },
 
-        renderDays: function () {
+        renderDates: function () {
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.weekData.map(function (day) {

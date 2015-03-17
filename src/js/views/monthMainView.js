@@ -91,7 +91,7 @@ var app = app || {};
                 this.markDateRangeAsHighlight(this.dragDateEnd, this.dragDateStart);
             }
 
-            this.renderDays();
+            this.renderDates();
         },
 
         clearDrag: function () {
@@ -99,7 +99,7 @@ var app = app || {};
 
             app.state.hasSelection = false;
 
-            this.renderDays();
+            this.renderDates();
         }
     });
 })(jQuery);

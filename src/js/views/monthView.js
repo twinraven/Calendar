@@ -16,7 +16,7 @@ var app = app || {};
         // allows for sub-class overriding
         customDayView: app.dayView,
 
-        collection: app.dateCollection,
+        //collection: app.dateCollection,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -41,7 +41,7 @@ var app = app || {};
 
             this.cacheSelectors();
 
-            this.renderWeekDayLabels();
+            this.renderDayLabels();
 
             this.setMonthData();
 
@@ -49,7 +49,7 @@ var app = app || {};
 
             this.markPredefinedDates();
 
-            this.renderDays();
+            this.renderDates();
 
             return this.el;
         },
@@ -61,7 +61,7 @@ var app = app || {};
             this.$labels = this.$('.cal-labels');
         },
 
-        renderWeekDayLabels: function () {
+        renderDayLabels: function () {
             var self = this;
 
             _.each(app.cal.labels.week, function (day, i) {
@@ -75,7 +75,8 @@ var app = app || {};
 
         // flagged for removal? depends if switching to table layout
         setRowsInMonth: function () {
-            this.$el.attr('data-cal-rows', app.cal.getRowsInMonth(this.selfMonth));
+            this.rowsInMonth = app.cal.getRowsInMonth(this.selfMonth);
+            this.$el.attr('data-cal-rows', this.rowsInMonth);
         },
 
         markPredefinedDates: function () {
@@ -103,6 +104,35 @@ var app = app || {};
 
             this.$month.empty();
             this.$month.append(fragment);
+        },
+
+        renderDates: function () {
+            var fragment;
+            var x, y;
+            var startPos;
+            var endPos;
+            var weekData;
+            var weekView;
+
+            /*for (x = 0, y = this.rowsInMonth; x < y; x++) {
+                startPos = app.constants.DAYS_IN_WEEK * x;
+                endPos = startPos + app.constants.DAYS_IN_WEEK - 1;
+
+                weekData = this.monthData.slice(startPos, endPos);
+
+                fragment = document.createDocumentFragment();
+
+                weekView = new app.weekMonthView({
+                    collection: weekData,
+                    dayView: this.customDayView
+                });
+
+                fragment.appendChild(weekView.render());
+
+                this.$month.append(fragment);
+            }*/
+
+            console.log(this.rowsInMonth);
         },
 
 
@@ -189,9 +219,10 @@ var app = app || {};
 
             this.storeMarkedDates(dates);
 
-            this.renderDays();
+            this.renderDates();
         },
 
+        // broken?
         handleClockTick: function () {
             if (!app.state.isDragging && !app.state.hasSelection) {
                 var now = app.cal.newDate();
@@ -215,8 +246,8 @@ var app = app || {};
 
         close: function () {
             // remove all child/sub views completely
-            _.each(this.dayViews, function (day) {
-                day.remove();
+            _.each(this.weekViews, function (week) {
+                week.remove();
             });
 
             // unbind all listeners from memory

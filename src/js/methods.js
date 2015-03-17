@@ -161,7 +161,7 @@ var App = App || {};
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
 
-            return this.newDate(d.year, d.month, d.day + (App.Constants.DAYS_IN_WEEK - 1));
+            return this.newDate(d.year, d.month, d.day + (App.Constants.DAYS_IN_WEEK));
         },
 
         getTimeAs12HourFormat : function (num) {

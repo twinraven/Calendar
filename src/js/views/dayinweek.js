@@ -76,13 +76,14 @@ var App = App || {};
         setTimeLinePosition: function () {
             var $time = this.$('.now');
             var now = new Date();
+            var day = App.Methods.newDate(now);
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            /*if (App.State.today.getTime() !== now.getTime()) {
-                App.Events.trigger('change:date', now);
-                App.State.today = now;
-            }*/
+            if (App.State.today.getTime() !== day.getTime()) {
+                App.Events.trigger('change:date', day);
+                App.State.today = day;
+            }
 
             var percentDayComplete = App.Methods.getPercentDayComplete(now);
 

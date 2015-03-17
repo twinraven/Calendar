@@ -123,7 +123,7 @@ var App = App || {};
             this.monthData.each(function (day) {
                 var date = App.Methods.newDate(day.get('date'));
                 var prop = {};
-                if (date >= dateFrom && date <= dateTo) {
+                if (date >= dateFrom && date < dateTo) {
                     prop[attr] = true;
                 } else {
                     prop[attr] = false;

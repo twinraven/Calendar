@@ -196,7 +196,7 @@ module.exports = function ( grunt ) {
 				livereload: true
 			},
 			configuration: {
-				files: ['Gruntfile.js', 'src/images/**', 'src/js/**/*', 'src/scss/**/*.{scss,sass}', 'src/**/*.html'],
+				files: ['Gruntfile.js', 'src/images/**', 'src/js/**/*', 'src/scss/**/*.{scss,sass}', 'src/**/*.html', '!src/js/build.js'],
 				tasks: ['dev']
 			}
 		}
@@ -206,7 +206,7 @@ module.exports = function ( grunt ) {
 
 	// development build - run 'grunt dev'
 	grunt.registerTask( 'dev', ['clean', 'build-dev'] );
-	grunt.registerTask( 'build-dev', ['sass:dev', /*'autoprefixer:dev', */'concat:dev', 'jshint'] );
+	grunt.registerTask( 'build-dev', ['sass:dev', /*'autoprefixer:dev', */'concat:dev'] );
 
 	grunt.registerTask( 'dist', ['clean', 'build-dist'] );
 	grunt.registerTask( 'build-dist', ['sass:dist', 'autoprefixer:dist', 'copy', 'uglify'] );

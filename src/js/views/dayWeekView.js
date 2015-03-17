@@ -10,6 +10,7 @@ var app = app || {};
     // Our overall **AppView** is the top-level piece of UI.
     app.dayWeekView = app.dayView.extend({
         template: _.template($('#day-week-template').html()),
+        timeTemplate: _.template($('#time-template').html()),
 
         events: {
             'mousedown .time-link': 'handleMouseDown',
@@ -36,8 +37,6 @@ var app = app || {};
 
             this.cacheSelectors();
 
-            this.setTimeData();
-
             this.renderTime();
 
             if (this.isToday()) {
@@ -53,31 +52,21 @@ var app = app || {};
 
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
-            this.$day = this.$('.cal-day-grid');
-        },
-
-        setTimeData: function () {
-            if (this.timeData) { this.timeData.reset(); }
-
-            this.timeData = new app.timeCollection();
-            this.addTimeDataToCollection();
+            this.$dayTimes = this.$('.cal-day-times');
         },
 
         renderTime: function () {
+            var timeData = app.cal.getTimeData(this.day);
+
             var fragment = document.createDocumentFragment();
 
-            this.timeViews = this.timeData.map(function renderTimeFragment(time) {
-                var view = new app.timeView({
-                    model: time
-                });
-
-                fragment.appendChild(view.render());
-
-                return view;
+            // for every half-hour of the day, render the time template
+            _.each(timeData, function (time) {
+                fragment.appendChild($(this.timeTemplate(time))[0]);
             }, this);
 
-            this.$day.empty();
-            this.$day.append(fragment);
+            this.$dayTimes.empty();
+            this.$dayTimes.append(fragment);
         },
 
         isToday: function () {
@@ -103,18 +92,6 @@ var app = app || {};
             if ($time.length) {
                 $time.removeClass('is-hidden').css('top', percentDayComplete + '%');
             }
-        },
-
-
-        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        addTimeDataToCollection: function (day) {
-            // load data
-            var data = app.cal.getTimeData(this.day);
-
-            data.map(function (d) {
-                this.timeData.add(d);
-            }, this);
         },
 
 
@@ -245,13 +222,9 @@ var app = app || {};
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         close: function () {
-            _.each(this.timeViews, function (time) {
-                time.remove();
-            });
-
             this.undelegateEvents();
             this.stopListening();
-            this.timeViews = null;
+            this.remove();
         }
     });
 })(jQuery);

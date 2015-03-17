@@ -61,7 +61,7 @@
 
 		<script type="text/template" id="day-main-template">
 			<div class="day-inner" data-date="<%= id %>">
-				<h3 class="date" id="date-main-<%= id %>">
+				<h3 class="date">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
 			</div>
@@ -105,7 +105,7 @@
 			<time datetime="" class="now is-hidden"></time>
 			<span class="new-event is-hidden">New Event</span>
 
-			<ul class="cal-day-grid"></ul>
+			<ul class="cal-day-times"></ul>
 
 			<ul class="cal-events">
 			<% _.each(events.time, function (event) { %>
@@ -116,7 +116,9 @@
 
 
 		<script type="text/template" id="time-template">
-			<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
+			<li class="time">
+				<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
+			</li>
 		</script>
 
 
@@ -145,15 +147,12 @@
 		<script src="js/events/events.js"></script>
 		<script src="js/models/dayModel.js"></script>
 		<script src="js/models/gApiModel.js"></script>
-		<script src="js/models/timeModel.js"></script>
 		<script src="js/collections/gApiCollection.js"></script>
 		<script src="js/collections/dateCollection.js"></script>
-		<script src="js/collections/timeCollection.js"></script>
 
 		<script src="js/views/monthView.js"></script>
 		<script src="js/views/weekView.js"></script>
 		<script src="js/views/dayView.js"></script>
-		<script src="js/views/timeView.js"></script>
 
 		<script src="js/views/monthRowView.js"></script>
 		<script src="js/views/dayWeekView.js"></script>

@@ -1,9 +1,14 @@
 TODO:
 
+- Fix weird week-view bug
+- Consider removing time collection/model/view, use static markup. Benefits of keeping in BB?
+- Render events to month/week views
 - refactor JS file/module naming. Getting unmanageable - split into folders perhaps? sub-modules
 
 
+TECH DEBT:
 
+- fix auto-updating views every minute (breaks when you're not viewing current week/month)
 
 
 LONG-TERM:

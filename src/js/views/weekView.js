@@ -102,6 +102,7 @@ var app = app || {};
                 var view = new app.dayWeekView({
                     model: day
                 });
+
                 fragment.appendChild(view.render());
 
                 return view;

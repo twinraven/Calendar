@@ -106,33 +106,34 @@ var app = app || {};
         },*/
 
         renderDates: function () {
-            var monthFragment = document.createDocumentFragment();
             var weekFragment;
+            var monthFragment = document.createDocumentFragment();
             var x, y;
-            var startPos;
-            var endPos;
-            var weekData;
-            var weekMonthView;
 
             for (x = 0, y = this.rowsInMonth; x < y; x++) {
-                startPos = app.constants.DAYS_IN_WEEK * x;
-                endPos = startPos + app.constants.DAYS_IN_WEEK;
-
-                weekData = this.monthData.slice(startPos, endPos);
-
-                weekFragment = document.createDocumentFragment();
-
-                weekMonthView = new app.weekMonthView({
-                    collection: weekData,
-                    dayView: this.customDayView
-                });
-                weekFragment.appendChild(weekMonthView.render());
-
+                weekFragment = this.renderWeekFragment(x);
                 monthFragment.appendChild(weekFragment);
             }
 
             this.$month.empty();
             this.$month.append(monthFragment);
+        },
+
+        renderWeekFragment: function (x) {
+            var startPos = app.constants.DAYS_IN_WEEK * x;
+            var endPos = startPos + app.constants.DAYS_IN_WEEK;
+            var weekData = this.monthData.slice(startPos, endPos);
+
+            var weekFragment = document.createDocumentFragment();
+
+            var monthRowView = new app.monthRowView({
+                collection: weekData,
+                dayView: this.customDayView
+            });
+
+            weekFragment.appendChild(monthRowView.render());
+
+            return weekFragment;
         },
 
 

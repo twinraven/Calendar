@@ -53,7 +53,7 @@ var app = app || {};
 
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
-            this.$day = this.$('.cal-events-grid');
+            this.$day = this.$('.cal-day-grid');
         },
 
         setTimeData: function () {
@@ -66,10 +66,11 @@ var app = app || {};
         renderTime: function () {
             var fragment = document.createDocumentFragment();
 
-            this.timeViews = this.timeData.map(function (time) {
+            this.timeViews = this.timeData.map(function renderTimeFragment(time) {
                 var view = new app.timeView({
                     model: time
                 });
+
                 fragment.appendChild(view.render());
 
                 return view;
@@ -89,10 +90,10 @@ var app = app || {};
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            if (app.state.today.getTime() !== now.getTime()) {
+            /*if (app.state.today.getTime() !== now.getTime()) {
                 app.events.trigger('change:date', now);
                 app.state.today = now;
-            }
+            }*/
 
             var percentDayComplete = app.cal.getPercentDayComplete(now);
 

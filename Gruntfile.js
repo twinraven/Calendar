@@ -4,10 +4,27 @@ module.exports = function ( grunt ) {
 
 	// Array of Script files to include into build
 	var APP_SCRIPTS = [
-		// all, for now
-		'src/js/**/*.js',
-		'!src/js/**/_build.js',
-		'!src/js/vendor/**/*.js'
+		'src/js/methods.js',
+
+		'src/js/config.js',
+
+		'src/js/events/*.js',
+
+		'src/js/models/*.js',
+
+		'src/js/collections/*.js',
+
+		'src/js/views/day.js',
+		'src/js/views/dayinsummary.js',
+		'src/js/views/dayinweek.js',
+		'src/js/views/week.js',
+		'src/js/views/row.js',
+		'src/js/views/month.js',
+		'src/js/views/monthinsummary.js',
+		'src/js/views/monthinfull.js',
+		'src/js/views/calendar.js',
+
+		'src/js/app.js'
 	];
 
 	require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
@@ -34,7 +51,7 @@ module.exports = function ( grunt ) {
 
                 // Nots
                 '!src/js/vendor/**/*.js',
-                '!**/*/_build.js'
+                '!**/*/build.js'
 			],
 			options: {
 				bitwise: false,
@@ -148,7 +165,7 @@ module.exports = function ( grunt ) {
 			},
 			dev: {
 				src: APP_SCRIPTS,
-				dest: 'src/js/_build.js'
+				dest: 'src/js/build.js'
 			},
 			dist: {
 				src: APP_SCRIPTS,

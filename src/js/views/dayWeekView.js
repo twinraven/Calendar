@@ -108,14 +108,12 @@ var app = app || {};
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         addTimeDataToCollection: function (day) {
-            var self = this;
-
             // load data
             var data = app.cal.getTimeData(this.day);
 
             data.map(function (d) {
-                self.timeData.add(d);
-            });
+                this.timeData.add(d);
+            }, this);
         },
 
 

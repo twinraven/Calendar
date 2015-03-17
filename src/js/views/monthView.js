@@ -197,14 +197,12 @@ var app = app || {};
         },
 
         addMonthDataToCollection: function () {
-            var self = this;
-
             // load data
             var data = app.cal.getMonthGridData(this.selfMonth);
 
             data.map(function (d) {
-                self.monthData.add(d);
-            });
+                this.monthData.add(d);
+            }, this);
         },
 
 

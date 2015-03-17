@@ -123,14 +123,12 @@ var app = app || {};
         // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         addWeekDataToCollection: function () {
-            var self = this;
-
             // load data
             var data = app.cal.getWeekData(this.selfWeek);
 
             data.map(function (d) {
-                self.weekData.add(d);
-            });
+                this.weekData.add(d);
+            }, this);
         },
 
 

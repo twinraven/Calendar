@@ -1,5 +1,5 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -8,7 +8,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Views.day = Backbone.View.extend({
+    App.Views.day = Backbone.View.extend({
         template: _.template($('#day-main-template').html()),
 
         tagName: 'li',
@@ -19,7 +19,7 @@ var app = app || {};
         initialize: function (params) {
             this.options = params;
 
-            this.day = (params && params.model && params.model.id) || app.Methods.newDate();
+            this.day = (params && params.model && params.model.id) || App.Methods.newDate();
             this.day = new Date(this.day);
 
             this.listenTo(this.model, 'destroy', this.close);
@@ -40,7 +40,7 @@ var app = app || {};
         setState: function () {
             var m = this.model;
             var classes = [];
-            this.today = app.Methods.newDate().toDateString();
+            this.today = App.Methods.newDate().toDateString();
 
             // highlight today
             if (m.get('date') === this.today) {

@@ -1,5 +1,5 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -8,7 +8,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Calendar = Backbone.View.extend({
+    App.Calendar = Backbone.View.extend({
         el: '#app',
 
         // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -33,7 +33,7 @@ var app = app || {};
 
             this.bindEvents();
 
-            this.setActiveDate(app.Methods.newDate());
+            this.setActiveDate(App.Methods.newDate());
 
             this.initializeSubViews();
 
@@ -61,8 +61,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            this.listenTo(app.Events, 'add:event', this.handleAddEvent);
-            this.listenTo(app.Events, 'goto:date', this.handleGotoDate);
+            this.listenTo(App.Events, 'add:event', this.handleAddEvent);
+            this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 50));
@@ -73,7 +73,7 @@ var app = app || {};
             // summary -- sidebar mini-calendar
             // always initialize this, as it is permanent. View used in main panel is changeable,
             // so this is handled in assignViews (called from .render())
-            this.summaryView = new app.Views.monthInSummary({
+            this.summaryView = new App.Views.monthInSummary({
                 dayTemplate: '#day-summary-template'
             });
         },
@@ -102,13 +102,13 @@ var app = app || {};
             }
 
             if (this.isViewModeWeek()) {
-                this.mainView = new app.Views.week({
+                this.mainView = new App.Views.week({
                     date: this.activeDate
                 });
             }
 
             if (this.isViewModeMonth()) {
-                this.mainView = new app.Views.monthInFull({
+                this.mainView = new App.Views.monthInFull({
                     dayTemplate: '#day-main-template',
                     date: this.activeDate
                 });
@@ -124,21 +124,21 @@ var app = app || {};
         },
 
         markDates: function () {
-            var d = app.Methods.getObjectFromDate(this.activeDate);
+            var d = App.Methods.getObjectFromDate(this.activeDate);
 
             // if viewing a week, highlight from the first to the last day of the current week
             if (this.isViewModeWeek()) {
-                app.Events.trigger('change:mark', {
-                    'from': app.Methods.getWeekStartDate(this.activeDate),
-                    'to': app.Methods.getWeekEndDate(this.activeDate)
+                App.Events.trigger('change:mark', {
+                    'from': App.Methods.getWeekStartDate(this.activeDate),
+                    'to': App.Methods.getWeekEndDate(this.activeDate)
                 });
             }
 
             // if viewing a month, highlight from the first to the last day of the current month
             if (this.isViewModeMonth()) {
-                app.Events.trigger('change:mark', {
-                    'from': app.Methods.newDate(d.year, d.month, 1),
-                    'to': app.Methods.newDate(d.year, d.month, app.Methods.getDaysInMonth(this.activeDate))
+                App.Events.trigger('change:mark', {
+                    'from': App.Methods.newDate(d.year, d.month, 1),
+                    'to': App.Methods.newDate(d.year, d.month, App.Methods.getDaysInMonth(this.activeDate))
                 });
             }
         },
@@ -146,14 +146,14 @@ var app = app || {};
         updateMonthTitle: function () {
             var d = this.activeDate;
 
-            this.$title.text(app.Methods.getMonthName(d) + ' ' + app.Methods.getYear(d));
+            this.$title.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
 
         // View mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setViewMode: function (mode) {
-            app.State.viewMode = mode;
+            App.State.viewMode = mode;
 
             this.setActiveDate(this.activeDate);
 
@@ -163,7 +163,7 @@ var app = app || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.constants.WEEK);
+            this.setViewMode(App.constants.WEEK);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -171,7 +171,7 @@ var app = app || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.constants.MONTH);
+            this.setViewMode(App.constants.MONTH);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -192,21 +192,21 @@ var app = app || {};
         },
 
         isViewModeWeek: function () {
-            return app.State.viewMode === app.constants.WEEK;
+            return App.State.viewMode === App.constants.WEEK;
         },
 
         isViewModeMonth: function () {
-            return app.State.viewMode === app.constants.MONTH;
+            return App.State.viewMode === App.constants.MONTH;
         },
 
         isCurrentMonthActive: function (date) {
             var d = date || this.activeDate;
 
-            var now = app.Methods.getObjectFromDate(app.Methods.newDate());
-            var active = app.Methods.getObjectFromDate(d);
+            var now = App.Methods.getObjectFromDate(App.Methods.newDate());
+            var active = App.Methods.getObjectFromDate(d);
 
-            var nowMonth = app.Methods.newDate(now.year, now.month, 1);
-            var activeMonth = app.Methods.newDate(active.year, active.month, 1);
+            var nowMonth = App.Methods.newDate(now.year, now.month, 1);
+            var activeMonth = App.Methods.newDate(active.year, active.month, 1);
 
             return nowMonth.getTime() === activeMonth.getTime();
         },
@@ -218,7 +218,7 @@ var app = app || {};
         startClock: function () {
             var self = this;
             var newDate = new Date();
-            var d = app.Methods.getObjectFromDate(newDate);
+            var d = App.Methods.getObjectFromDate(newDate);
             var endOfCurrentMinute = new Date(d.year, d.month, d.day, d.hour, d.minute + 1);
             var diff = endOfCurrentMinute.getTime() - newDate.getTime();
 
@@ -227,13 +227,13 @@ var app = app || {};
             // timeout to the end of the minute
             this.clockTimeout = setTimeout(function () {
                 // tick now, at the top of the minute - then once every minute from now
-                app.Events.trigger('clock:tick');
+                App.Events.trigger('clock:tick');
 
                 // interval for every minute
                 self.minuteInterval = setInterval(function () {
-                    app.Events.trigger('clock:tick');
+                    App.Events.trigger('clock:tick');
 
-                }, 10000); //app.constants.MS_IN_MINUTE
+                }, 10000); //App.constants.MS_IN_MINUTE
             }, diff);
         },
 
@@ -265,7 +265,7 @@ var app = app || {};
             if (e) { e.preventDefault(); }
 
             this.gotoDate({
-                'newDate': app.Methods.newDate()
+                'newDate': App.Methods.newDate()
             });
         },
 
@@ -274,10 +274,10 @@ var app = app || {};
 
             if (params.increment) {
                 if (params.increment === 'next') {
-                    date = app.Methods.getNextDateRange(this.activeDate, app.State.viewMode);
+                    date = App.Methods.getNextDateRange(this.activeDate, App.State.viewMode);
 
                 } else if (params.increment === 'prev') {
-                    date = app.Methods.getPrevDateRange(this.activeDate, app.State.viewMode);
+                    date = App.Methods.getPrevDateRange(this.activeDate, App.State.viewMode);
                 }
 
             } else if (params.newDate) {
@@ -291,11 +291,11 @@ var app = app || {};
 
         setActiveDate: function (date) {
             var d;
-            var newDate = app.Methods.newDate();
+            var newDate = App.Methods.newDate();
 
             if (this.isViewModeWeek()) {
                 // normalise date so we're always dealing with the first day of the week
-                newDate = app.Methods.getWeekStartDate(date);
+                newDate = App.Methods.getWeekStartDate(date);
             }
 
             // set the currentDate to the first of the month, only if
@@ -303,8 +303,8 @@ var app = app || {};
             // (if the latter, we want to keep today as the active date, so if
             // we switch to week mode, it highlights the correct week)
             if (this.isViewModeMonth() && !this.isCurrentMonthActive(date)) {
-                d = app.Methods.getObjectFromDate(date);
-                newDate = app.Methods.newDate(d.year, d.month, 1);
+                d = App.Methods.getObjectFromDate(date);
+                newDate = App.Methods.newDate(d.year, d.month, 1);
             }
 
             this.activeDate = newDate;
@@ -317,19 +317,19 @@ var app = app || {};
         updateAllCalendars: function () {
             // this event is listened to in the week and month views, so by
             // triggering this, we prompt the calendar views to update themselves
-            app.Events.trigger('change:date', this.activeDate);
+            App.Events.trigger('change:date', this.activeDate);
         },
 
 
         // Calendar API access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         loadApiData: function () {
-            app.apiData = new app.eventCollection();
+            App.apiData = new App.Collections.events();
 
-            var req = app.apiData.fetch();
+            var req = App.apiData.fetch();
 
             req.success(function(data) {
-                app.Events.trigger('api:data', app.apiData);
+                App.Events.trigger('api:data', App.apiData);
             });
 
             req.error(function(data, othera, otherb) {
@@ -344,8 +344,8 @@ var app = app || {};
             var code = e.keyCode || e.which;
 
             // escape key
-            if (code === app.constants.ESC_KEY) {
-                app.Events.trigger('clear:selection');
+            if (code === App.constants.ESC_KEY) {
+                App.Events.trigger('clear:selection');
             }
         },
 
@@ -363,11 +363,11 @@ var app = app || {};
         handleMouseUp: function (e) {
             if (e) { e.preventDefault(); }
 
-            app.Events.trigger('mouse:up');
+            App.Events.trigger('mouse:up');
         },
 
 
-        // custom app events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // custom App events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleGotoDate: function (date) {
             this.gotoDate({'newDate': date});

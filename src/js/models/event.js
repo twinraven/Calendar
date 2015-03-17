@@ -1,5 +1,5 @@
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
     'use strict';
@@ -7,5 +7,5 @@ var app = app || {};
     // Model
     // ----------
 
-    app.eventModel = Backbone.Model.extend({});
+    App.Models.event = Backbone.Model.extend({});
 })();

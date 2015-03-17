@@ -1,5 +1,5 @@
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
 	'use strict';
@@ -9,10 +9,10 @@ var app = app || {};
 
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
-	app.eventCollection = Backbone.Collection.extend({
-		url: 'api/calendar-v3.json',
+	App.Collections.events = Backbone.Collection.extend({
+		url: 'api/data.json',
 		// Reference to this collection's model.
-		model: app.eventModel,
+		model: App.Models.event,
 
 		comparator: 'etag',
 

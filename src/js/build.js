@@ -4,37 +4,44 @@
  */ 
 
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
-    app.Methods = {
-        labels : {
-            week : [
-                'Monday',
-                'Tuesday',
-                'Wednesday',
-                'Thursday',
-                'Friday',
-                'Saturday',
-                'Sunday'
-            ],
-            month: [
-                'January',
-                'Febuary',
-                'March',
-                'April',
-                'May',
-                'June',
-                'July',
-                'August',
-                'September',
-                'October',
-                'November',
-                'December'
-            ]
-        },
+    App.Labels = {
+        week : [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        ],
+        month: [
+            'January',
+            'Febuary',
+            'March',
+            'April',
+            'May',
+            'June',
+            'July',
+            'August',
+            'September',
+            'October',
+            'November',
+            'December'
+        ]
+    };
+})(jQuery);
+/* global Backbone, jQuery, _ */
+var App = App || {};
+
+(function ($) {
+    'use strict';
+
+    App.Methods = {
 
         // Basic date methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -82,7 +89,7 @@ var app = app || {};
 
 
         getMonthName : function (date) {
-            return this.labels.month[date.getMonth()];
+            return App.Labels.month[date.getMonth()];
         },
 
 
@@ -107,7 +114,7 @@ var app = app || {};
         getRowsInMonth : function (date) {
             var daysInGrid = this.getDaysInMonth(date) + this.getMonthStartDayNum(date);
 
-            return (Math.ceil(daysInGrid / app.constants.DAYS_IN_WEEK));
+            return (Math.ceil(daysInGrid / App.constants.DAYS_IN_WEEK));
         },
 
 
@@ -153,16 +160,16 @@ var app = app || {};
         },
 
         getDayOfWeekName : function (num) {
-            return this.labels.week[num];
+            return App.Labels.week[num];
         },
 
 
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 
-            if (app.State.startDay === 'mon') {
+            if (App.State.startDay === 'mon') {
                  // JS getDay() returns a sunday-0-indexed value
-                num = (num + (app.constants.DAYS_IN_WEEK - 1)) % app.constants.DAYS_IN_WEEK;
+                num = (num + (App.constants.DAYS_IN_WEEK - 1)) % App.constants.DAYS_IN_WEEK;
             }
 
             return num;
@@ -188,7 +195,7 @@ var app = app || {};
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
 
-            return this.newDate(d.year, d.month, d.day + (app.constants.DAYS_IN_WEEK - 1));
+            return this.newDate(d.year, d.month, d.day + (App.constants.DAYS_IN_WEEK - 1));
         },
 
         getTimeAs12HourFormat : function (num) {
@@ -210,7 +217,7 @@ var app = app || {};
             var d = this.getObjectFromDate(date);
             var dayStart = this.newDate(d.year, d.month, d.day);
             var msSinceDayStart = date.getTime() - dayStart.getTime();
-            var percentComplete = (msSinceDayStart / app.constants.MS_IN_DAY) * 100;
+            var percentComplete = (msSinceDayStart / App.constants.MS_IN_DAY) * 100;
 
             return percentComplete;
         },
@@ -252,7 +259,7 @@ var app = app || {};
             var to = timeTo.getTime();
             var diff = to - from;
 
-            return diff === app.constants.MS_IN_DAY;
+            return diff === App.constants.MS_IN_DAY;
         },
 
 
@@ -260,22 +267,22 @@ var app = app || {};
 
 
         getPrevDateRange : function (date, mode) {
-            if (mode === app.constants.WEEK) {
+            if (mode === App.constants.WEEK) {
                 return this.getPrevWeek(date);
             }
 
-            if (mode === app.constants.MONTH) {
+            if (mode === App.constants.MONTH) {
                 return this.getPrevMonth(date);
             }
         },
 
 
         getNextDateRange : function (date, mode) {
-            if (mode === app.constants.WEEK) {
+            if (mode === App.constants.WEEK) {
                 return this.getNextWeek(date);
             }
 
-            if (mode === app.constants.MONTH) {
+            if (mode === App.constants.MONTH) {
                 return this.getNextMonth(date);
             }
         },
@@ -315,7 +322,7 @@ var app = app || {};
             var dFrom = this.newDate(dateFrom);
             var dTo = this.newDate(dateTo);
 
-            return Math.floor((dTo.getTime() - dFrom.getTime()) / app.constants.MS_IN_DAY) + 1;
+            return Math.floor((dTo.getTime() - dFrom.getTime()) / App.constants.MS_IN_DAY) + 1;
         },
 
 
@@ -357,7 +364,7 @@ var app = app || {};
             var x, y;
             var data = [];
 
-            for (x = 0, y = app.constants.HRS_IN_DAY; x < y; x++) {
+            for (x = 0, y = App.constants.HRS_IN_DAY; x < y; x++) {
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 0, (x * 2)));
                 data.push(this.getNewTimeData(d.year, d.month, d.day, x, 30, (x * 2 + 1)));
             }
@@ -369,7 +376,7 @@ var app = app || {};
         // we want to build a full grid of days, so may need days from preceding and proceeding months
         getMonthGridData : function (date) {
             var thisMonthData = this.getMonthData(date);
-            var totalBlocksInGrid = this.getRowsInMonth(date) * app.constants.DAYS_IN_WEEK;
+            var totalBlocksInGrid = this.getRowsInMonth(date) * App.constants.DAYS_IN_WEEK;
 
             var daysMissingAtFront = 0;
             var daysMissingAtEnd = 0;
@@ -434,15 +441,15 @@ var app = app || {};
     };
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
 	'use strict';
 
 	// Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	// immutable app-wide properties
-	app.constants = {
+	// immutable App-wide properties
+	App.constants = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
 	    ESC_KEY : 27,
@@ -454,31 +461,31 @@ var app = app || {};
 	    HRS_IN_DAY: 24
 	};
 
-	// mutable app-wide properties
-	app.State = {
-		today: app.Methods.newDate(),
+	// mutable App-wide properties
+	App.State = {
+		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: app.constants.MONTH
+		viewMode: App.constants.MONTH
 	};
 
-	app.Models = {};
-	app.Collections = {};
-	app.Views = {};
-	app.Events = {};
+	App.Models = {};
+	App.Collections = {};
+	App.Views = {};
+	App.Events = {};
 
 })(jQuery);
 
 /* global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
-	_.extend(app.Events, Backbone.Events);
+	_.extend(App.Events, Backbone.Events);
 
 })(jQuery);
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
     'use strict';
@@ -486,7 +493,7 @@ var app = app || {};
     // Model
     // ----------
 
-    app.dayModel = Backbone.Model.extend({
+    App.Models.date = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
             isActive: false,
@@ -500,7 +507,7 @@ var app = app || {};
 })();
 
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
     'use strict';
@@ -508,11 +515,11 @@ var app = app || {};
     // Model
     // ----------
 
-    app.eventModel = Backbone.Model.extend({});
+    App.Models.event = Backbone.Model.extend({});
 })();
 
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
 	'use strict';
@@ -522,10 +529,10 @@ var app = app || {};
 
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
-	app.dateCollection = Backbone.Collection.extend({
+	App.Collections.dates = Backbone.Collection.extend({
 		url: '/',
 		// Reference to this collection's model.
-		model: app.dayModel,
+		model: App.Models.date,
 
 		// Save all of the todo items under the `"calendar"` namespace.
 		localStorage: new Backbone.LocalStorage('calendar-backbone')
@@ -533,7 +540,7 @@ var app = app || {};
 })();
 
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
 	'use strict';
@@ -543,10 +550,10 @@ var app = app || {};
 
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
-	app.eventCollection = Backbone.Collection.extend({
-		url: 'api/calendar-v3.json',
+	App.Collections.events = Backbone.Collection.extend({
+		url: 'api/data.json',
 		// Reference to this collection's model.
-		model: app.eventModel,
+		model: App.Models.event,
 
 		comparator: 'etag',
 
@@ -563,7 +570,7 @@ var app = app || {};
 })();
 
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -572,7 +579,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Views.day = Backbone.View.extend({
+    App.Views.day = Backbone.View.extend({
         template: _.template($('#day-main-template').html()),
 
         tagName: 'li',
@@ -583,7 +590,7 @@ var app = app || {};
         initialize: function (params) {
             this.options = params;
 
-            this.day = (params && params.model && params.model.id) || app.Methods.newDate();
+            this.day = (params && params.model && params.model.id) || App.Methods.newDate();
             this.day = new Date(this.day);
 
             this.listenTo(this.model, 'destroy', this.close);
@@ -604,7 +611,7 @@ var app = app || {};
         setState: function () {
             var m = this.model;
             var classes = [];
-            this.today = app.Methods.newDate().toDateString();
+            this.today = App.Methods.newDate().toDateString();
 
             // highlight today
             if (m.get('date') === this.today) {
@@ -640,7 +647,7 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -649,12 +656,12 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Views.dayInSummary = app.Views.day.extend({
+    App.Views.dayInSummary = App.Views.day.extend({
         template: _.template($('#day-summary-template').html())
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -663,7 +670,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Views.dayInWeek = app.Views.day.extend({
+    App.Views.dayInWeek = App.Views.day.extend({
         template: _.template($('#day-week-template').html()),
         timeTemplate: _.template($('#time-template').html()),
 
@@ -678,17 +685,17 @@ var app = app || {};
         initialize: function (params) {
             var self = this;
 
-            app.Views.day.prototype.initialize.apply(this, [params]);
+            App.Views.day.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.Events, 'mouse:up', function () { self.handleMouseUp(null, true); });
-            this.listenTo(app.Events, 'clear:selection', this.handleClearSelection);
-            //this.listenTo(app.Events, 'clock:tick', this.handleClockTick); // broken?
+            this.listenTo(App.Events, 'mouse:up', function () { self.handleMouseUp(null, true); });
+            this.listenTo(App.Events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(App.Events, 'clock:tick', this.handleClockTick); // broken?
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            app.Views.day.prototype.render.apply(this);
+            App.Views.day.prototype.render.apply(this);
 
             this.cacheSelectors();
 
@@ -711,7 +718,7 @@ var app = app || {};
         },
 
         renderTime: function () {
-            var timeData = app.Methods.getTimeData(this.day);
+            var timeData = App.Methods.getTimeData(this.day);
 
             var fragment = document.createDocumentFragment();
 
@@ -734,14 +741,14 @@ var app = app || {};
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            /*if (app.State.today.getTime() !== now.getTime()) {
-                app.Events.trigger('change:date', now);
-                app.State.today = now;
+            /*if (App.State.today.getTime() !== now.getTime()) {
+                App.Events.trigger('change:date', now);
+                App.State.today = now;
             }*/
 
-            var percentDayComplete = app.Methods.getPercentDayComplete(now);
+            var percentDayComplete = App.Methods.getPercentDayComplete(now);
 
-            $time.attr('datetime', app.Methods.getNewDateId(now));
+            $time.attr('datetime', App.Methods.getNewDateId(now));
             $time.text(now.toString());
 
             if ($time.length) {
@@ -755,7 +762,7 @@ var app = app || {};
         handleMouseDown: function (e) {
             var $el = $(e.target);
 
-            app.Events.trigger('clear:selection');
+            App.Events.trigger('clear:selection');
 
             if ($el.is('.time-link')) {
                 this.isDragging = true;
@@ -841,14 +848,14 @@ var app = app || {};
 
         createNewEvent: function () {
             var data = this.getStartEndData();
-            var endTimeCorrected = app.Methods.getTimeMinsLater(30, data.endTime);
+            var endTimeCorrected = App.Methods.getTimeMinsLater(30, data.endTime);
 
             this.markTimeRangeAsHighlight(data.startId, data.endId);
 
-            app.Events.trigger('add:event', {
+            App.Events.trigger('add:event', {
                 'from': data.startTime,
                 'to': endTimeCorrected,
-                'fullday': app.Methods.isFullDay(data.startTime, endTimeCorrected)
+                'fullday': App.Methods.isFullDay(data.startTime, endTimeCorrected)
             });
         },
 
@@ -884,7 +891,7 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -892,24 +899,24 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.Views.week = Backbone.View.extend({
+    App.Views.week = Backbone.View.extend({
 
         // templating and setup
         template: _.template($('#week-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
         timeLabelTemplate: _.template($('#time-label-template').html()),
 
-        collection: app.dateCollection,
+        collection: App.Collections.dates,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
 
-            // keep track of own date, irrespective of app-wide state
-            this.selfWeek = (params && params.date) || app.Methods.newDate();
+            // keep track of own date, irrespective of App-wide state
+            this.selfWeek = (params && params.date) || App.Methods.newDate();
 
-            this.listenTo(app.Events, 'change:date', this.handleChangeDate);
+            this.listenTo(App.Events, 'change:date', this.handleChangeDate);
         },
 
 
@@ -944,16 +951,16 @@ var app = app || {};
 
         renderDayLabels: function () {
             var self = this;
-            var d = app.Methods.getObjectFromDate(self.selfWeek);
+            var d = App.Methods.getObjectFromDate(self.selfWeek);
 
-            _.each(app.Methods.labels.week, function (day, i) {
-                var newDate = app.Methods.newDate(d.year, d.month, d.day + i);
-                var newDateObj = app.Methods.getObjectFromDate(newDate);
+            _.each(App.Labels.week, function (day, i) {
+                var newDate = App.Methods.newDate(d.year, d.month, d.day + i);
+                var newDateObj = App.Methods.getObjectFromDate(newDate);
 
                 var data = {
                     'date': newDateObj.day + '/' + newDateObj.month,
-                    'label': app.Methods.labels.week[i].slice(0, 3),
-                    'initial': app.Methods.labels.week[i].slice(0, 1)
+                    'label': App.Labels.week[i].slice(0, 3),
+                    'initial': App.Labels.week[i].slice(0, 1)
                 };
 
                 self.$labels.append(self.titleTemplate(data));
@@ -964,8 +971,8 @@ var app = app || {};
             var x = 0;
             var data = {};
 
-            while (x < app.constants.HRS_IN_DAY) {
-                data = { 'hour': app.Methods.getTimeAs12HourFormat(x) };
+            while (x < App.constants.HRS_IN_DAY) {
+                data = { 'hour': App.Methods.getTimeAs12HourFormat(x) };
 
                 this.$timeLabels.append(this.timeLabelTemplate(data));
 
@@ -976,7 +983,7 @@ var app = app || {};
         setWeekData: function () {
             if (this.weekData) { this.weekData.reset(); }
 
-            this.weekData = new app.dateCollection();
+            this.weekData = new App.Collections.dates();
             this.addWeekDataToCollection();
         },
 
@@ -984,7 +991,7 @@ var app = app || {};
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.weekData.map(function (day) {
-                var view = new app.Views.dayInWeek({
+                var view = new App.Views.dayInWeek({
                     model: day
                 });
 
@@ -1000,7 +1007,7 @@ var app = app || {};
         scrollTimeIntoView: function () {
             var now = new Date();
 
-            if (now.getHours() >= 12 && app.Methods.isCurrentWeek(this.selfWeek)) {
+            if (now.getHours() >= 12 && App.Methods.isCurrentWeek(this.selfWeek)) {
                 this.$grid.scrollTop(500);
             }
         },
@@ -1010,7 +1017,7 @@ var app = app || {};
 
         addWeekDataToCollection: function () {
             // load data
-            var data = app.Methods.getWeekData(this.selfWeek);
+            var data = App.Methods.getWeekData(this.selfWeek);
 
             data.map(function (d) {
                 this.weekData.add(d);
@@ -1022,7 +1029,7 @@ var app = app || {};
 
         handleChangeDate: function (date) {
             // normalise date so we're always dealing with the first day of the week
-            var newDate = app.Methods.getWeekStartDate(date);
+            var newDate = App.Methods.getWeekStartDate(date);
 
             this.selfWeek = newDate;
 
@@ -1044,7 +1051,7 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -1052,14 +1059,14 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.Views.row = Backbone.View.extend({
+    App.Views.row = Backbone.View.extend({
         tagName: 'li',
         className: 'week-row',
 
         // templating and setup
         template: _.template($('#week-month-template').html()), // for containing elem & markup
 
-        collection: app.dateCollection,
+        collection: App.Collections.dates,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1114,7 +1121,7 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -1122,29 +1129,27 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.Views.month = Backbone.View.extend({
+    App.Views.month = Backbone.View.extend({
 
         // templating and setup
         template: _.template($('#month-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-title-template').html()), // for containing elem & markup
 
         // allows for sub-class overriding
-        customDayView: app.Views.day,
-
-        //collection: app.dateCollection,
+        customDayView: App.Views.day,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
 
-            // keep track of own date, irrespective of app-wide state - but init with external val
-            this.selfMonth = (params && params.date) || app.Methods.newDate();
+            // keep track of own date, irrespective of App-wide state - but init with external val
+            this.selfMonth = (params && params.date) || App.Methods.newDate();
 
-            this.listenTo(app.Events, 'change:date', this.handleChangeDate);
-            this.listenTo(app.Events, 'change:mark', this.handleMarkDateRange);
-            //this.listenTo(app.Events, 'clock:tick', this.handleClockTick); // broken?
-            this.listenTo(app.Events, 'api:data', this.handleApiData);
+            this.listenTo(App.Events, 'change:date', this.handleChangeDate);
+            this.listenTo(App.Events, 'change:mark', this.handleMarkDateRange);
+            this.listenTo(App.Events, 'clock:tick', this.handleClockTick);
+            this.listenTo(App.Events, 'api:data', this.handleApiData);
         },
 
 
@@ -1179,10 +1184,10 @@ var app = app || {};
         renderDayLabels: function () {
             var self = this;
 
-            _.each(app.Methods.labels.week, function (day, i) {
+            _.each(App.Labels.week, function (day, i) {
                 var data = {
-                    'label': app.Methods.labels.week[i],
-                    'initial': app.Methods.labels.week[i].slice(0, 1)
+                    'label': App.Labels.week[i],
+                    'initial': App.Labels.week[i].slice(0, 1)
                 };
                 self.$labels.append(self.titleTemplate(data));
             });
@@ -1190,7 +1195,7 @@ var app = app || {};
 
         // flagged for removal? depends if switching to table layout
         setRowsInMonth: function () {
-            this.rowsInMonth = app.Methods.getRowsInMonth(this.selfMonth);
+            this.rowsInMonth = App.Methods.getRowsInMonth(this.selfMonth);
             this.$el.attr('data-cal-rows', this.rowsInMonth);
         },
 
@@ -1217,13 +1222,13 @@ var app = app || {};
         },
 
         renderWeekFragment: function (x) {
-            var startPos = app.constants.DAYS_IN_WEEK * x;
-            var endPos = startPos + app.constants.DAYS_IN_WEEK;
+            var startPos = App.constants.DAYS_IN_WEEK * x;
+            var endPos = startPos + App.constants.DAYS_IN_WEEK;
             var weekData = this.monthData.slice(startPos, endPos);
 
             var weekFragment = document.createDocumentFragment();
 
-            var monthRowView = new app.Views.row({
+            var monthRowView = new App.Views.row({
                 collection: weekData,
                 dayView: this.customDayView
             });
@@ -1238,7 +1243,7 @@ var app = app || {};
 
         markDateRange: function (dateFrom, dateTo, attr) {
             this.monthData.each(function (day) {
-                var date = app.Methods.newDate(day.get('date'));
+                var date = App.Methods.newDate(day.get('date'));
                 var prop = {};
                 if (date >= dateFrom && date <= dateTo) {
                     prop[attr] = true;
@@ -1266,14 +1271,14 @@ var app = app || {};
 
         // used to a fuller extend by child prototypes - monthSummaryView / monthMainView
         gotoMonth: function (params) {
-            var date = app.Methods.newDate();
+            var date = App.Methods.newDate();
 
             if (params.type) {
                 if (params.type === 'next') {
-                    date = app.Methods.getNextMonth(params.month);
+                    date = App.Methods.getNextMonth(params.month);
 
                 } else if (params.type === 'previous') {
-                    date = app.Methods.getPrevMonth(params.month);
+                    date = App.Methods.getPrevMonth(params.month);
                 }
             }
 
@@ -1290,13 +1295,13 @@ var app = app || {};
         setMonthData: function () {
             if (this.monthData) { this.monthData.reset(); }
 
-            this.monthData = new app.dateCollection();
+            this.monthData = new App.Collections.dates();
             this.addMonthDataToCollection();
         },
 
         addMonthDataToCollection: function () {
             // load data
-            var data = app.Methods.getMonthGridData(this.selfMonth);
+            var data = App.Methods.getMonthGridData(this.selfMonth);
 
             data.map(function (d) {
                 this.monthData.add(d);
@@ -1320,13 +1325,13 @@ var app = app || {};
 
         // broken?
         handleClockTick: function () {
-            if (!app.State.isDragging && !app.State.hasSelection) {
-                var now = app.Methods.newDate();
+            if (!App.State.isDragging && !App.State.hasSelection) {
+                var now = App.Methods.newDate();
 
-                if (app.State.today.getTime() !== now.getTime()) {
+                if (App.State.today.getTime() !== now.getTime()) {
                     this.selfMonth = now;
-                    app.Events.trigger('change:date', now);
-                    app.State.today = now;
+                    App.Events.trigger('change:date', now);
+                    App.State.today = now;
                 }
             }
         },
@@ -1355,18 +1360,18 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
     // The Application
     // ---------------
-    // extending app.Views.month
-    app.Views.monthInSummary = app.Views.month.extend({
+    // extending App.Views.month
+    App.Views.monthInSummary = App.Views.month.extend({
         template: _.template($('#month-summary-template').html()),
 
-        customDayView: app.Views.dayInSummary,
+        customDayView: App.Views.dayInSummary,
 
         events: {
             'click .prev-self': 'gotoPrevMonth',
@@ -1379,7 +1384,7 @@ var app = app || {};
 
         render: function () {
             // call the render method of super class, before running our extension code
-            app.Views.month.prototype.render.apply(this);
+            App.Views.month.prototype.render.apply(this);
 
             this.renderMonthName(this.$('.cal-title'));
 
@@ -1391,7 +1396,7 @@ var app = app || {};
         renderMonthName: function ($elem) {
             var d = this.selfMonth;
 
-            $elem.text(app.Methods.getMonthName(d) + ' ' + app.Methods.getYear(d));
+            $elem.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
 
@@ -1402,7 +1407,7 @@ var app = app || {};
 
             var date = $(e.currentTarget).data('date');
 
-            app.Events.trigger('goto:date', app.Methods.newDate(date));
+            App.Events.trigger('goto:date', App.Methods.newDate(date));
         },
 
         gotoNextMonth: function (e) {
@@ -1427,19 +1432,19 @@ var app = app || {};
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
     // The Application
     // ---------------
-    // extending app.Views.month
-    app.Views.monthInFull = app.Views.month.extend({
+    // extending App.Views.month
+    App.Views.monthInFull = App.Views.month.extend({
         //
         dayTemplate: _.template($('#day-main-template').html()),
 
-        customDayView: app.Views.day,
+        customDayView: App.Views.day,
 
         events: {
             'mousedown': 'handleMouseDown',
@@ -1453,9 +1458,9 @@ var app = app || {};
         initialize: function (params) {
 
             // call the initialize method of parent/super class (as we want to add more init methods)
-            app.Views.month.prototype.initialize.apply(this, [params]);
+            App.Views.month.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.Events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(App.Events, 'clear:selection', this.handleClearSelection);
         },
 
 
@@ -1465,7 +1470,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                app.State.isDragging = true;
+                App.State.isDragging = true;
                 this.setDragDateStart($el, $el.data('date'));
             }
         },
@@ -1474,23 +1479,23 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                var endDateCorrected = app.Methods.getDateTomorrow(this.dragDateEnd);
-                app.State.isDragging = false;
+                var endDateCorrected = App.Methods.getDateTomorrow(this.dragDateEnd);
+                App.State.isDragging = false;
 
-                app.Events.trigger('add:event', {
+                App.Events.trigger('add:event', {
                     'from': this.dragDateStart,
                     'to': endDateCorrected,
                     'fullday': true
                 });
 
-                app.State.hasSelection = true;
+                App.State.hasSelection = true;
             }
         },
 
         handleMouseOver: function (e) {
             var $el = $(e.target);
 
-            if (app.State.isDragging) {
+            if (App.State.isDragging) {
                 this.setDragDateEnd($el, $el.data('date'));
             }
         },
@@ -1503,13 +1508,13 @@ var app = app || {};
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setDragDateStart: function ($el, date) {
-            this.dragDateStart = app.Methods.newDate(date);
+            this.dragDateStart = App.Methods.newDate(date);
 
             this.setDragDateEnd($el, date);
         },
 
         setDragDateEnd: function ($el, date) {
-            this.dragDateEnd = app.Methods.newDate(date);
+            this.dragDateEnd = App.Methods.newDate(date);
 
             if (this.dragDateStart < this.dragDateEnd) {
                 this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
@@ -1525,14 +1530,14 @@ var app = app || {};
         clearDrag: function () {
             this.markDateRangeAsHighlight(null, null);
 
-            app.State.hasSelection = false;
+            App.State.hasSelection = false;
 
             this.renderDates();
         }
     });
 })(jQuery);
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -1541,7 +1546,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Calendar = Backbone.View.extend({
+    App.Calendar = Backbone.View.extend({
         el: '#app',
 
         // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1566,7 +1571,7 @@ var app = app || {};
 
             this.bindEvents();
 
-            this.setActiveDate(app.Methods.newDate());
+            this.setActiveDate(App.Methods.newDate());
 
             this.initializeSubViews();
 
@@ -1594,8 +1599,8 @@ var app = app || {};
             var self = this;
 
             // custom events
-            this.listenTo(app.Events, 'add:event', this.handleAddEvent);
-            this.listenTo(app.Events, 'goto:date', this.handleGotoDate);
+            this.listenTo(App.Events, 'add:event', this.handleAddEvent);
+            this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
             this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 50));
@@ -1606,7 +1611,7 @@ var app = app || {};
             // summary -- sidebar mini-calendar
             // always initialize this, as it is permanent. View used in main panel is changeable,
             // so this is handled in assignViews (called from .render())
-            this.summaryView = new app.Views.monthInSummary({
+            this.summaryView = new App.Views.monthInSummary({
                 dayTemplate: '#day-summary-template'
             });
         },
@@ -1635,13 +1640,13 @@ var app = app || {};
             }
 
             if (this.isViewModeWeek()) {
-                this.mainView = new app.Views.week({
+                this.mainView = new App.Views.week({
                     date: this.activeDate
                 });
             }
 
             if (this.isViewModeMonth()) {
-                this.mainView = new app.Views.monthInFull({
+                this.mainView = new App.Views.monthInFull({
                     dayTemplate: '#day-main-template',
                     date: this.activeDate
                 });
@@ -1657,21 +1662,21 @@ var app = app || {};
         },
 
         markDates: function () {
-            var d = app.Methods.getObjectFromDate(this.activeDate);
+            var d = App.Methods.getObjectFromDate(this.activeDate);
 
             // if viewing a week, highlight from the first to the last day of the current week
             if (this.isViewModeWeek()) {
-                app.Events.trigger('change:mark', {
-                    'from': app.Methods.getWeekStartDate(this.activeDate),
-                    'to': app.Methods.getWeekEndDate(this.activeDate)
+                App.Events.trigger('change:mark', {
+                    'from': App.Methods.getWeekStartDate(this.activeDate),
+                    'to': App.Methods.getWeekEndDate(this.activeDate)
                 });
             }
 
             // if viewing a month, highlight from the first to the last day of the current month
             if (this.isViewModeMonth()) {
-                app.Events.trigger('change:mark', {
-                    'from': app.Methods.newDate(d.year, d.month, 1),
-                    'to': app.Methods.newDate(d.year, d.month, app.Methods.getDaysInMonth(this.activeDate))
+                App.Events.trigger('change:mark', {
+                    'from': App.Methods.newDate(d.year, d.month, 1),
+                    'to': App.Methods.newDate(d.year, d.month, App.Methods.getDaysInMonth(this.activeDate))
                 });
             }
         },
@@ -1679,14 +1684,14 @@ var app = app || {};
         updateMonthTitle: function () {
             var d = this.activeDate;
 
-            this.$title.text(app.Methods.getMonthName(d) + ' ' + app.Methods.getYear(d));
+            this.$title.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
 
         // View mode ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setViewMode: function (mode) {
-            app.State.viewMode = mode;
+            App.State.viewMode = mode;
 
             this.setActiveDate(this.activeDate);
 
@@ -1696,7 +1701,7 @@ var app = app || {};
         setViewModeWeek: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.constants.WEEK);
+            this.setViewMode(App.constants.WEEK);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -1704,7 +1709,7 @@ var app = app || {};
         setViewModeMonth: function (e) {
             if (e) { e.preventDefault(); }
 
-            this.setViewMode(app.constants.MONTH);
+            this.setViewMode(App.constants.MONTH);
 
             this.highlightActiveViewModeLink($(e.currentTarget));
         },
@@ -1725,21 +1730,21 @@ var app = app || {};
         },
 
         isViewModeWeek: function () {
-            return app.State.viewMode === app.constants.WEEK;
+            return App.State.viewMode === App.constants.WEEK;
         },
 
         isViewModeMonth: function () {
-            return app.State.viewMode === app.constants.MONTH;
+            return App.State.viewMode === App.constants.MONTH;
         },
 
         isCurrentMonthActive: function (date) {
             var d = date || this.activeDate;
 
-            var now = app.Methods.getObjectFromDate(app.Methods.newDate());
-            var active = app.Methods.getObjectFromDate(d);
+            var now = App.Methods.getObjectFromDate(App.Methods.newDate());
+            var active = App.Methods.getObjectFromDate(d);
 
-            var nowMonth = app.Methods.newDate(now.year, now.month, 1);
-            var activeMonth = app.Methods.newDate(active.year, active.month, 1);
+            var nowMonth = App.Methods.newDate(now.year, now.month, 1);
+            var activeMonth = App.Methods.newDate(active.year, active.month, 1);
 
             return nowMonth.getTime() === activeMonth.getTime();
         },
@@ -1751,7 +1756,7 @@ var app = app || {};
         startClock: function () {
             var self = this;
             var newDate = new Date();
-            var d = app.Methods.getObjectFromDate(newDate);
+            var d = App.Methods.getObjectFromDate(newDate);
             var endOfCurrentMinute = new Date(d.year, d.month, d.day, d.hour, d.minute + 1);
             var diff = endOfCurrentMinute.getTime() - newDate.getTime();
 
@@ -1760,13 +1765,13 @@ var app = app || {};
             // timeout to the end of the minute
             this.clockTimeout = setTimeout(function () {
                 // tick now, at the top of the minute - then once every minute from now
-                app.Events.trigger('clock:tick');
+                App.Events.trigger('clock:tick');
 
                 // interval for every minute
                 self.minuteInterval = setInterval(function () {
-                    app.Events.trigger('clock:tick');
+                    App.Events.trigger('clock:tick');
 
-                }, 10000); //app.constants.MS_IN_MINUTE
+                }, 10000); //App.constants.MS_IN_MINUTE
             }, diff);
         },
 
@@ -1798,7 +1803,7 @@ var app = app || {};
             if (e) { e.preventDefault(); }
 
             this.gotoDate({
-                'newDate': app.Methods.newDate()
+                'newDate': App.Methods.newDate()
             });
         },
 
@@ -1807,10 +1812,10 @@ var app = app || {};
 
             if (params.increment) {
                 if (params.increment === 'next') {
-                    date = app.Methods.getNextDateRange(this.activeDate, app.State.viewMode);
+                    date = App.Methods.getNextDateRange(this.activeDate, App.State.viewMode);
 
                 } else if (params.increment === 'prev') {
-                    date = app.Methods.getPrevDateRange(this.activeDate, app.State.viewMode);
+                    date = App.Methods.getPrevDateRange(this.activeDate, App.State.viewMode);
                 }
 
             } else if (params.newDate) {
@@ -1824,11 +1829,11 @@ var app = app || {};
 
         setActiveDate: function (date) {
             var d;
-            var newDate = app.Methods.newDate();
+            var newDate = App.Methods.newDate();
 
             if (this.isViewModeWeek()) {
                 // normalise date so we're always dealing with the first day of the week
-                newDate = app.Methods.getWeekStartDate(date);
+                newDate = App.Methods.getWeekStartDate(date);
             }
 
             // set the currentDate to the first of the month, only if
@@ -1836,8 +1841,8 @@ var app = app || {};
             // (if the latter, we want to keep today as the active date, so if
             // we switch to week mode, it highlights the correct week)
             if (this.isViewModeMonth() && !this.isCurrentMonthActive(date)) {
-                d = app.Methods.getObjectFromDate(date);
-                newDate = app.Methods.newDate(d.year, d.month, 1);
+                d = App.Methods.getObjectFromDate(date);
+                newDate = App.Methods.newDate(d.year, d.month, 1);
             }
 
             this.activeDate = newDate;
@@ -1850,19 +1855,19 @@ var app = app || {};
         updateAllCalendars: function () {
             // this event is listened to in the week and month views, so by
             // triggering this, we prompt the calendar views to update themselves
-            app.Events.trigger('change:date', this.activeDate);
+            App.Events.trigger('change:date', this.activeDate);
         },
 
 
         // Calendar API access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         loadApiData: function () {
-            app.apiData = new app.eventCollection();
+            App.apiData = new App.Collections.events();
 
-            var req = app.apiData.fetch();
+            var req = App.apiData.fetch();
 
             req.success(function(data) {
-                app.Events.trigger('api:data', app.apiData);
+                App.Events.trigger('api:data', App.apiData);
             });
 
             req.error(function(data, othera, otherb) {
@@ -1877,8 +1882,8 @@ var app = app || {};
             var code = e.keyCode || e.which;
 
             // escape key
-            if (code === app.constants.ESC_KEY) {
-                app.Events.trigger('clear:selection');
+            if (code === App.constants.ESC_KEY) {
+                App.Events.trigger('clear:selection');
             }
         },
 
@@ -1896,11 +1901,11 @@ var app = app || {};
         handleMouseUp: function (e) {
             if (e) { e.preventDefault(); }
 
-            app.Events.trigger('mouse:up');
+            App.Events.trigger('mouse:up');
         },
 
 
-        // custom app events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // custom App events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleGotoDate: function (date) {
             this.gotoDate({'newDate': date});
@@ -1914,12 +1919,12 @@ var app = app || {};
         }
     });
 })(jQuery);
-var app = app || {};
+var App = App || {};
 
 $(function () {
 	'use strict';
 
 	// kick things off by creating the `App` ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	var calApp = new app.Calendar(); // self-rendering in initialize()
+	var calApp = new App.Calendar(); // self-rendering in initialize()
 });

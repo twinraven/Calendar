@@ -1,16 +1,16 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
     // The Application
     // ---------------
-    // extending app.Views.month
-    app.Views.monthInSummary = app.Views.month.extend({
+    // extending App.Views.month
+    App.Views.monthInSummary = App.Views.month.extend({
         template: _.template($('#month-summary-template').html()),
 
-        customDayView: app.Views.dayInSummary,
+        customDayView: App.Views.dayInSummary,
 
         events: {
             'click .prev-self': 'gotoPrevMonth',
@@ -23,7 +23,7 @@ var app = app || {};
 
         render: function () {
             // call the render method of super class, before running our extension code
-            app.Views.month.prototype.render.apply(this);
+            App.Views.month.prototype.render.apply(this);
 
             this.renderMonthName(this.$('.cal-title'));
 
@@ -35,7 +35,7 @@ var app = app || {};
         renderMonthName: function ($elem) {
             var d = this.selfMonth;
 
-            $elem.text(app.Methods.getMonthName(d) + ' ' + app.Methods.getYear(d));
+            $elem.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
 
@@ -46,7 +46,7 @@ var app = app || {};
 
             var date = $(e.currentTarget).data('date');
 
-            app.Events.trigger('goto:date', app.Methods.newDate(date));
+            App.Events.trigger('goto:date', App.Methods.newDate(date));
         },
 
         gotoNextMonth: function (e) {

@@ -1,5 +1,5 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -8,7 +8,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.Views.dayInSummary = app.Views.day.extend({
+    App.Views.dayInSummary = App.Views.day.extend({
         template: _.template($('#day-summary-template').html())
     });
 })(jQuery);

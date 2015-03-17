@@ -1,17 +1,17 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
     // The Application
     // ---------------
-    // extending app.Views.month
-    app.Views.monthInFull = app.Views.month.extend({
+    // extending App.Views.month
+    App.Views.monthInFull = App.Views.month.extend({
         //
         dayTemplate: _.template($('#day-main-template').html()),
 
-        customDayView: app.Views.day,
+        customDayView: App.Views.day,
 
         events: {
             'mousedown': 'handleMouseDown',
@@ -25,9 +25,9 @@ var app = app || {};
         initialize: function (params) {
 
             // call the initialize method of parent/super class (as we want to add more init methods)
-            app.Views.month.prototype.initialize.apply(this, [params]);
+            App.Views.month.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.Events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(App.Events, 'clear:selection', this.handleClearSelection);
         },
 
 
@@ -37,7 +37,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                app.State.isDragging = true;
+                App.State.isDragging = true;
                 this.setDragDateStart($el, $el.data('date'));
             }
         },
@@ -46,23 +46,23 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                var endDateCorrected = app.Methods.getDateTomorrow(this.dragDateEnd);
-                app.State.isDragging = false;
+                var endDateCorrected = App.Methods.getDateTomorrow(this.dragDateEnd);
+                App.State.isDragging = false;
 
-                app.Events.trigger('add:event', {
+                App.Events.trigger('add:event', {
                     'from': this.dragDateStart,
                     'to': endDateCorrected,
                     'fullday': true
                 });
 
-                app.State.hasSelection = true;
+                App.State.hasSelection = true;
             }
         },
 
         handleMouseOver: function (e) {
             var $el = $(e.target);
 
-            if (app.State.isDragging) {
+            if (App.State.isDragging) {
                 this.setDragDateEnd($el, $el.data('date'));
             }
         },
@@ -75,13 +75,13 @@ var app = app || {};
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setDragDateStart: function ($el, date) {
-            this.dragDateStart = app.Methods.newDate(date);
+            this.dragDateStart = App.Methods.newDate(date);
 
             this.setDragDateEnd($el, date);
         },
 
         setDragDateEnd: function ($el, date) {
-            this.dragDateEnd = app.Methods.newDate(date);
+            this.dragDateEnd = App.Methods.newDate(date);
 
             if (this.dragDateStart < this.dragDateEnd) {
                 this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
@@ -97,7 +97,7 @@ var app = app || {};
         clearDrag: function () {
             this.markDateRangeAsHighlight(null, null);
 
-            app.State.hasSelection = false;
+            App.State.hasSelection = false;
 
             this.renderDates();
         }

@@ -1,5 +1,5 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -7,14 +7,14 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.Views.row = Backbone.View.extend({
+    App.Views.row = Backbone.View.extend({
         tagName: 'li',
         className: 'week-row',
 
         // templating and setup
         template: _.template($('#week-month-template').html()), // for containing elem & markup
 
-        collection: app.dateCollection,
+        collection: App.Collections.dates,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

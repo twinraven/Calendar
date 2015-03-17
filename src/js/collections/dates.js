@@ -1,5 +1,5 @@
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
 	'use strict';
@@ -9,10 +9,10 @@ var app = app || {};
 
 	// The collection of todos is backed by *localStorage* instead of a remote
 	// server.
-	app.dateCollection = Backbone.Collection.extend({
+	App.Collections.dates = Backbone.Collection.extend({
 		url: '/',
 		// Reference to this collection's model.
-		model: app.dayModel,
+		model: App.Models.date,
 
 		// Save all of the todo items under the `"calendar"` namespace.
 		localStorage: new Backbone.LocalStorage('calendar-backbone')

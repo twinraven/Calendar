@@ -1,5 +1,5 @@
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
 	'use strict';
@@ -12,12 +12,12 @@ var app = app || {};
 			"WEEK" : "weekCalendar"
 		},
 		monthCalendar : function () {
-			this.loadView(new app.Views.monthInFull(({
+			this.loadView(new App.Views.monthInFull(({
 		        dayTemplate: '#day-main-template'
 		    })));
 		},
 		weekCalendar : function () {
-			this.loadView(new app.Views.week());
+			this.loadView(new App.Views.week());
 		},
 		loadView : function (view) {
 			this.view && (this.view.close ? this.view.close() : this.view.remove());
@@ -27,6 +27,6 @@ var app = app || {};
 		}
 	});
 
-	app.router = new Router();
+	App.router = new Router();
 	Backbone.history.start();*/
 })();

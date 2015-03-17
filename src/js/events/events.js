@@ -1,9 +1,9 @@
 /* global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
 
-	_.extend(app.Events, Backbone.Events);
+	_.extend(App.Events, Backbone.Events);
 
 })(jQuery);

@@ -1,13 +1,13 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
 	'use strict';
 
 	// Settings ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-	// immutable app-wide properties
-	app.constants = {
+	// immutable App-wide properties
+	App.constants = {
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
 	    ESC_KEY : 27,
@@ -19,16 +19,16 @@ var app = app || {};
 	    HRS_IN_DAY: 24
 	};
 
-	// mutable app-wide properties
-	app.State = {
-		today: app.Methods.newDate(),
+	// mutable App-wide properties
+	App.State = {
+		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: app.constants.MONTH
+		viewMode: App.constants.MONTH
 	};
 
-	app.Models = {};
-	app.Collections = {};
-	app.Views = {};
-	app.Events = {};
+	App.Models = {};
+	App.Collections = {};
+	App.Views = {};
+	App.Events = {};
 
 })(jQuery);

@@ -1,5 +1,5 @@
 /*global Backbone */
-var app = app || {};
+var App = App || {};
 
 (function () {
     'use strict';
@@ -7,7 +7,7 @@ var app = app || {};
     // Model
     // ----------
 
-    app.dayModel = Backbone.Model.extend({
+    App.Models.date = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
             isActive: false,

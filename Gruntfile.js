@@ -4,6 +4,8 @@ module.exports = function ( grunt ) {
 
 	// Array of Script files to include into build
 	var APP_SCRIPTS = [
+		'src/js/labels.js',
+
 		'src/js/methods.js',
 
 		'src/js/config.js',

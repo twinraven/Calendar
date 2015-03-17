@@ -1,5 +1,5 @@
 /* global Backbone, jQuery, _ */
-var app = app || {};
+var App = App || {};
 
 (function ($) {
     'use strict';
@@ -7,24 +7,24 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.Views.week = Backbone.View.extend({
+    App.Views.week = Backbone.View.extend({
 
         // templating and setup
         template: _.template($('#week-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
         timeLabelTemplate: _.template($('#time-label-template').html()),
 
-        collection: app.dateCollection,
+        collection: App.Collections.dates,
 
 
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
 
-            // keep track of own date, irrespective of app-wide state
-            this.selfWeek = (params && params.date) || app.Methods.newDate();
+            // keep track of own date, irrespective of App-wide state
+            this.selfWeek = (params && params.date) || App.Methods.newDate();
 
-            this.listenTo(app.Events, 'change:date', this.handleChangeDate);
+            this.listenTo(App.Events, 'change:date', this.handleChangeDate);
         },
 
 
@@ -59,16 +59,16 @@ var app = app || {};
 
         renderDayLabels: function () {
             var self = this;
-            var d = app.Methods.getObjectFromDate(self.selfWeek);
+            var d = App.Methods.getObjectFromDate(self.selfWeek);
 
-            _.each(app.Methods.labels.week, function (day, i) {
-                var newDate = app.Methods.newDate(d.year, d.month, d.day + i);
-                var newDateObj = app.Methods.getObjectFromDate(newDate);
+            _.each(App.Labels.week, function (day, i) {
+                var newDate = App.Methods.newDate(d.year, d.month, d.day + i);
+                var newDateObj = App.Methods.getObjectFromDate(newDate);
 
                 var data = {
                     'date': newDateObj.day + '/' + newDateObj.month,
-                    'label': app.Methods.labels.week[i].slice(0, 3),
-                    'initial': app.Methods.labels.week[i].slice(0, 1)
+                    'label': App.Labels.week[i].slice(0, 3),
+                    'initial': App.Labels.week[i].slice(0, 1)
                 };
 
                 self.$labels.append(self.titleTemplate(data));
@@ -79,8 +79,8 @@ var app = app || {};
             var x = 0;
             var data = {};
 
-            while (x < app.constants.HRS_IN_DAY) {
-                data = { 'hour': app.Methods.getTimeAs12HourFormat(x) };
+            while (x < App.constants.HRS_IN_DAY) {
+                data = { 'hour': App.Methods.getTimeAs12HourFormat(x) };
 
                 this.$timeLabels.append(this.timeLabelTemplate(data));
 
@@ -91,7 +91,7 @@ var app = app || {};
         setWeekData: function () {
             if (this.weekData) { this.weekData.reset(); }
 
-            this.weekData = new app.dateCollection();
+            this.weekData = new App.Collections.dates();
             this.addWeekDataToCollection();
         },
 
@@ -99,7 +99,7 @@ var app = app || {};
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.weekData.map(function (day) {
-                var view = new app.Views.dayInWeek({
+                var view = new App.Views.dayInWeek({
                     model: day
                 });
 
@@ -115,7 +115,7 @@ var app = app || {};
         scrollTimeIntoView: function () {
             var now = new Date();
 
-            if (now.getHours() >= 12 && app.Methods.isCurrentWeek(this.selfWeek)) {
+            if (now.getHours() >= 12 && App.Methods.isCurrentWeek(this.selfWeek)) {
                 this.$grid.scrollTop(500);
             }
         },
@@ -125,7 +125,7 @@ var app = app || {};
 
         addWeekDataToCollection: function () {
             // load data
-            var data = app.Methods.getWeekData(this.selfWeek);
+            var data = App.Methods.getWeekData(this.selfWeek);
 
             data.map(function (d) {
                 this.weekData.add(d);
@@ -137,7 +137,7 @@ var app = app || {};
 
         handleChangeDate: function (date) {
             // normalise date so we're always dealing with the first day of the week
-            var newDate = app.Methods.getWeekStartDate(date);
+            var newDate = App.Methods.getWeekStartDate(date);
 
             this.selfWeek = newDate;
 

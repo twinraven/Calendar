@@ -8,6 +8,8 @@ var app = app || {};
     // ---------------
 
     app.weekMonthView = Backbone.View.extend({
+        tagName: 'li',
+        className: 'week-row',
 
         // templating and setup
         template: _.template($('#week-month-template').html()), // for containing elem & markup
@@ -35,6 +37,8 @@ var app = app || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderDates: function () {
+            var $weekDays = this.$('.week-row-days');
+            var $weekEvents = this.$('.week-row-events');
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.collection.map(function (day) {
@@ -46,8 +50,8 @@ var app = app || {};
                 return view;
             }, this);
 
-            this.$el.empty();
-            this.$el.append(fragment);
+            $weekDays.empty();
+            $weekDays.append(fragment);
         },
 
 

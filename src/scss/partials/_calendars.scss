@@ -28,8 +28,8 @@
 .day {
     box-sizing: border-box;
     float: left;
+    height: 100%;
     list-style: none;
-    min-height: 14%;
     position: relative;
     text-align: center;
     align-items: stretch;
@@ -133,6 +133,23 @@
     width: 100%;
 }
 
+.week-row {
+    display: block;
+    position: relative;
+    width: 100%;
+}
+
+.week-row-days {
+    width: 100%;
+    height: 100%;
+}
+
+.cal-main .week-row-days {
+    left: 0;
+    position: absolute;
+    top: 0;
+}
+
 .week-days .day {
     background: #fff;
     height: 100%;
@@ -140,16 +157,15 @@
 
 .cal-main .day {
     line-height: 1.1;
-    min-height: calc(100% / 6);
 }
 
 .day--title {
     margin: 0.5rem 0;
 }
 
-[data-cal-rows="4"].cal-main .day { min-height: calc(100% / 4); }
-[data-cal-rows="5"].cal-main .day { min-height: calc(100% / 5); }
-[data-cal-rows="6"].cal-main .day { min-height: calc(100% / 6); }
+[data-cal-rows="4"].cal-main .week-row { min-height: calc(100% / 4); }
+[data-cal-rows="5"].cal-main .week-row { min-height: calc(100% / 5); }
+[data-cal-rows="6"].cal-main .week-row { min-height: calc(100% / 6); }
 
 .day-inner {
     border: 1px solid #ccc;

@@ -87,52 +87,52 @@ var app = app || {};
             }
         },
 
-        renderDays: function () {
-            var self = this;
+        /*renderDays: function () {
             // using documentFragment to minimise DOM contact
             var fragment = document.createDocumentFragment();
 
             // keep a cache of all sub-views created, so we can unbind them properly later
             this.dayViews = this.monthData.map(function (day) {
-                var view = new self.customDayView({
+                var view = new this.customDayView({
                     model: day
                 });
                 fragment.appendChild(view.render());
 
                 return view;
-            });
+            }, this);
 
             this.$month.empty();
             this.$month.append(fragment);
-        },
+        },*/
 
         renderDates: function () {
-            var fragment;
+            var monthFragment = document.createDocumentFragment();
+            var weekFragment;
             var x, y;
             var startPos;
             var endPos;
             var weekData;
-            var weekView;
+            var weekMonthView;
 
-            /*for (x = 0, y = this.rowsInMonth; x < y; x++) {
+            for (x = 0, y = this.rowsInMonth; x < y; x++) {
                 startPos = app.constants.DAYS_IN_WEEK * x;
-                endPos = startPos + app.constants.DAYS_IN_WEEK - 1;
+                endPos = startPos + app.constants.DAYS_IN_WEEK;
 
                 weekData = this.monthData.slice(startPos, endPos);
 
-                fragment = document.createDocumentFragment();
+                weekFragment = document.createDocumentFragment();
 
-                weekView = new app.weekMonthView({
+                weekMonthView = new app.weekMonthView({
                     collection: weekData,
                     dayView: this.customDayView
                 });
+                weekFragment.appendChild(weekMonthView.render());
 
-                fragment.appendChild(weekView.render());
+                monthFragment.appendChild(weekFragment);
+            }
 
-                this.$month.append(fragment);
-            }*/
-
-            console.log(this.rowsInMonth);
+            this.$month.empty();
+            this.$month.append(monthFragment);
         },
 
 

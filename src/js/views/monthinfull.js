@@ -6,12 +6,12 @@ var app = app || {};
 
     // The Application
     // ---------------
-    // extending app.monthView
-    app.monthMainView = app.monthView.extend({
+    // extending app.Views.month
+    app.Views.monthInFull = app.Views.month.extend({
         //
         dayTemplate: _.template($('#day-main-template').html()),
 
-        customDayView: app.dayView,
+        customDayView: app.Views.day,
 
         events: {
             'mousedown': 'handleMouseDown',
@@ -25,9 +25,9 @@ var app = app || {};
         initialize: function (params) {
 
             // call the initialize method of parent/super class (as we want to add more init methods)
-            app.monthView.prototype.initialize.apply(this, [params]);
+            app.Views.month.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(app.Events, 'clear:selection', this.handleClearSelection);
         },
 
 
@@ -37,7 +37,7 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                app.state.isDragging = true;
+                app.State.isDragging = true;
                 this.setDragDateStart($el, $el.data('date'));
             }
         },
@@ -46,23 +46,23 @@ var app = app || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                var endDateCorrected = app.cal.getDateTomorrow(this.dragDateEnd);
-                app.state.isDragging = false;
+                var endDateCorrected = app.Methods.getDateTomorrow(this.dragDateEnd);
+                app.State.isDragging = false;
 
-                app.events.trigger('add:event', {
+                app.Events.trigger('add:event', {
                     'from': this.dragDateStart,
                     'to': endDateCorrected,
                     'fullday': true
                 });
 
-                app.state.hasSelection = true;
+                app.State.hasSelection = true;
             }
         },
 
         handleMouseOver: function (e) {
             var $el = $(e.target);
 
-            if (app.state.isDragging) {
+            if (app.State.isDragging) {
                 this.setDragDateEnd($el, $el.data('date'));
             }
         },
@@ -75,13 +75,13 @@ var app = app || {};
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setDragDateStart: function ($el, date) {
-            this.dragDateStart = app.cal.newDate(date);
+            this.dragDateStart = app.Methods.newDate(date);
 
             this.setDragDateEnd($el, date);
         },
 
         setDragDateEnd: function ($el, date) {
-            this.dragDateEnd = app.cal.newDate(date);
+            this.dragDateEnd = app.Methods.newDate(date);
 
             if (this.dragDateStart < this.dragDateEnd) {
                 this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
@@ -97,7 +97,7 @@ var app = app || {};
         clearDrag: function () {
             this.markDateRangeAsHighlight(null, null);
 
-            app.state.hasSelection = false;
+            app.State.hasSelection = false;
 
             this.renderDates();
         }

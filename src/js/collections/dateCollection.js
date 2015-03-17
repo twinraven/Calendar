@@ -12,7 +12,7 @@ var app = app || {};
 	app.dateCollection = Backbone.Collection.extend({
 		url: '/',
 		// Reference to this collection's model.
-		model: app.day,
+		model: app.dayModel,
 
 		// Save all of the todo items under the `"calendar"` namespace.
 		localStorage: new Backbone.LocalStorage('calendar-backbone')

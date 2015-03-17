@@ -7,14 +7,14 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.monthView = Backbone.View.extend({
+    app.Views.month = Backbone.View.extend({
 
         // templating and setup
         template: _.template($('#month-template').html()), // for containing elem & markup
         titleTemplate: _.template($('#day-title-template').html()), // for containing elem & markup
 
         // allows for sub-class overriding
-        customDayView: app.dayView,
+        customDayView: app.Views.day,
 
         //collection: app.dateCollection,
 
@@ -24,12 +24,12 @@ var app = app || {};
         initialize: function (params) {
 
             // keep track of own date, irrespective of app-wide state - but init with external val
-            this.selfMonth = (params && params.date) || app.cal.newDate();
+            this.selfMonth = (params && params.date) || app.Methods.newDate();
 
-            this.listenTo(app.events, 'change:date', this.handleChangeDate);
-            this.listenTo(app.events, 'change:mark', this.handleMarkDateRange);
-            //this.listenTo(app.events, 'clock:tick', this.handleClockTick); // broken?
-            this.listenTo(app.events, 'api:data', this.handleApiData);
+            this.listenTo(app.Events, 'change:date', this.handleChangeDate);
+            this.listenTo(app.Events, 'change:mark', this.handleMarkDateRange);
+            //this.listenTo(app.Events, 'clock:tick', this.handleClockTick); // broken?
+            this.listenTo(app.Events, 'api:data', this.handleApiData);
         },
 
 
@@ -64,10 +64,10 @@ var app = app || {};
         renderDayLabels: function () {
             var self = this;
 
-            _.each(app.cal.labels.week, function (day, i) {
+            _.each(app.Methods.labels.week, function (day, i) {
                 var data = {
-                    'label': app.cal.labels.week[i],
-                    'initial': app.cal.labels.week[i].slice(0, 1)
+                    'label': app.Methods.labels.week[i],
+                    'initial': app.Methods.labels.week[i].slice(0, 1)
                 };
                 self.$labels.append(self.titleTemplate(data));
             });
@@ -75,7 +75,7 @@ var app = app || {};
 
         // flagged for removal? depends if switching to table layout
         setRowsInMonth: function () {
-            this.rowsInMonth = app.cal.getRowsInMonth(this.selfMonth);
+            this.rowsInMonth = app.Methods.getRowsInMonth(this.selfMonth);
             this.$el.attr('data-cal-rows', this.rowsInMonth);
         },
 
@@ -86,24 +86,6 @@ var app = app || {};
                 this.markDateRangeAsActive(this.markedDates.from, this.markedDates.to);
             }
         },
-
-        /*renderDays: function () {
-            // using documentFragment to minimise DOM contact
-            var fragment = document.createDocumentFragment();
-
-            // keep a cache of all sub-views created, so we can unbind them properly later
-            this.dayViews = this.monthData.map(function (day) {
-                var view = new this.customDayView({
-                    model: day
-                });
-                fragment.appendChild(view.render());
-
-                return view;
-            }, this);
-
-            this.$month.empty();
-            this.$month.append(fragment);
-        },*/
 
         renderDates: function () {
             var weekFragment;
@@ -126,7 +108,7 @@ var app = app || {};
 
             var weekFragment = document.createDocumentFragment();
 
-            var monthRowView = new app.monthRowView({
+            var monthRowView = new app.Views.row({
                 collection: weekData,
                 dayView: this.customDayView
             });
@@ -141,7 +123,7 @@ var app = app || {};
 
         markDateRange: function (dateFrom, dateTo, attr) {
             this.monthData.each(function (day) {
-                var date = app.cal.newDate(day.get('date'));
+                var date = app.Methods.newDate(day.get('date'));
                 var prop = {};
                 if (date >= dateFrom && date <= dateTo) {
                     prop[attr] = true;
@@ -169,14 +151,14 @@ var app = app || {};
 
         // used to a fuller extend by child prototypes - monthSummaryView / monthMainView
         gotoMonth: function (params) {
-            var date = app.cal.newDate();
+            var date = app.Methods.newDate();
 
             if (params.type) {
                 if (params.type === 'next') {
-                    date = app.cal.getNextMonth(params.month);
+                    date = app.Methods.getNextMonth(params.month);
 
                 } else if (params.type === 'previous') {
-                    date = app.cal.getPrevMonth(params.month);
+                    date = app.Methods.getPrevMonth(params.month);
                 }
             }
 
@@ -199,7 +181,7 @@ var app = app || {};
 
         addMonthDataToCollection: function () {
             // load data
-            var data = app.cal.getMonthGridData(this.selfMonth);
+            var data = app.Methods.getMonthGridData(this.selfMonth);
 
             data.map(function (d) {
                 this.monthData.add(d);
@@ -223,13 +205,13 @@ var app = app || {};
 
         // broken?
         handleClockTick: function () {
-            if (!app.state.isDragging && !app.state.hasSelection) {
-                var now = app.cal.newDate();
+            if (!app.State.isDragging && !app.State.hasSelection) {
+                var now = app.Methods.newDate();
 
-                if (app.state.today.getTime() !== now.getTime()) {
+                if (app.State.today.getTime() !== now.getTime()) {
                     this.selfMonth = now;
-                    app.events.trigger('change:date', now);
-                    app.state.today = now;
+                    app.Events.trigger('change:date', now);
+                    app.State.today = now;
                 }
             }
         },

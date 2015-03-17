@@ -8,7 +8,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.dayWeekView = app.dayView.extend({
+    app.Views.dayInWeek = app.Views.day.extend({
         template: _.template($('#day-week-template').html()),
         timeTemplate: _.template($('#time-template').html()),
 
@@ -23,17 +23,17 @@ var app = app || {};
         initialize: function (params) {
             var self = this;
 
-            app.dayView.prototype.initialize.apply(this, [params]);
+            app.Views.day.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(app.events, 'mouse:up', function () { self.handleMouseUp(null, true); });
-            this.listenTo(app.events, 'clear:selection', this.handleClearSelection);
-            //this.listenTo(app.events, 'clock:tick', this.handleClockTick); // broken?
+            this.listenTo(app.Events, 'mouse:up', function () { self.handleMouseUp(null, true); });
+            this.listenTo(app.Events, 'clear:selection', this.handleClearSelection);
+            //this.listenTo(app.Events, 'clock:tick', this.handleClockTick); // broken?
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            app.dayView.prototype.render.apply(this);
+            app.Views.day.prototype.render.apply(this);
 
             this.cacheSelectors();
 
@@ -56,7 +56,7 @@ var app = app || {};
         },
 
         renderTime: function () {
-            var timeData = app.cal.getTimeData(this.day);
+            var timeData = app.Methods.getTimeData(this.day);
 
             var fragment = document.createDocumentFragment();
 
@@ -79,14 +79,14 @@ var app = app || {};
 
             // if we've walked into tomorrow (by staying on the page long enough),
             // fire the event to update the date to today
-            /*if (app.state.today.getTime() !== now.getTime()) {
-                app.events.trigger('change:date', now);
-                app.state.today = now;
+            /*if (app.State.today.getTime() !== now.getTime()) {
+                app.Events.trigger('change:date', now);
+                app.State.today = now;
             }*/
 
-            var percentDayComplete = app.cal.getPercentDayComplete(now);
+            var percentDayComplete = app.Methods.getPercentDayComplete(now);
 
-            $time.attr('datetime', app.cal.getNewDateId(now));
+            $time.attr('datetime', app.Methods.getNewDateId(now));
             $time.text(now.toString());
 
             if ($time.length) {
@@ -100,7 +100,7 @@ var app = app || {};
         handleMouseDown: function (e) {
             var $el = $(e.target);
 
-            app.events.trigger('clear:selection');
+            app.Events.trigger('clear:selection');
 
             if ($el.is('.time-link')) {
                 this.isDragging = true;
@@ -186,14 +186,14 @@ var app = app || {};
 
         createNewEvent: function () {
             var data = this.getStartEndData();
-            var endTimeCorrected = app.cal.getTimeMinsLater(30, data.endTime);
+            var endTimeCorrected = app.Methods.getTimeMinsLater(30, data.endTime);
 
             this.markTimeRangeAsHighlight(data.startId, data.endId);
 
-            app.events.trigger('add:event', {
+            app.Events.trigger('add:event', {
                 'from': data.startTime,
                 'to': endTimeCorrected,
-                'fullday': app.cal.isFullDay(data.startTime, endTimeCorrected)
+                'fullday': app.Methods.isFullDay(data.startTime, endTimeCorrected)
             });
         },
 

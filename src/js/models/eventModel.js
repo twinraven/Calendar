@@ -7,5 +7,5 @@ var app = app || {};
     // Model
     // ----------
 
-    app.gApi = Backbone.Model.extend({});
+    app.eventModel = Backbone.Model.extend({});
 })();

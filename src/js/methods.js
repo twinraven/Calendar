@@ -4,7 +4,7 @@ var app = app || {};
 (function ($) {
     'use strict';
 
-    app.cal = {
+    app.Methods = {
         labels : {
             week : [
                 'Monday',
@@ -77,7 +77,7 @@ var app = app || {};
 
 
         getMonthName : function (date) {
-            return app.cal.labels.month[date.getMonth()];
+            return this.labels.month[date.getMonth()];
         },
 
 
@@ -148,14 +148,14 @@ var app = app || {};
         },
 
         getDayOfWeekName : function (num) {
-            return app.cal.labels.week[num];
+            return this.labels.week[num];
         },
 
 
         getDayOfWeekNum : function (year, month, day) {
             var num = new Date(year, month, day).getDay();
 
-            if (app.state.startDay === 'mon') {
+            if (app.State.startDay === 'mon') {
                  // JS getDay() returns a sunday-0-indexed value
                 num = (num + (app.constants.DAYS_IN_WEEK - 1)) % app.constants.DAYS_IN_WEEK;
             }
@@ -202,8 +202,8 @@ var app = app || {};
         },
 
         getPercentDayComplete : function (date) {
-            var d = app.cal.getObjectFromDate(date);
-            var dayStart = app.cal.newDate(d.year, d.month, d.day);
+            var d = this.getObjectFromDate(date);
+            var dayStart = this.newDate(d.year, d.month, d.day);
             var msSinceDayStart = date.getTime() - dayStart.getTime();
             var percentComplete = (msSinceDayStart / app.constants.MS_IN_DAY) * 100;
 
@@ -234,7 +234,7 @@ var app = app || {};
         },
 
         isDateToday : function (date) {
-            var now = new Date(); // not app.cal.newDate as that creates a new data at 00:00am
+            var now = new Date(); // not this.newDate as that creates a new data at 00:00am
             var active = new Date(date);
             var nowDate = now.getDate();
             var activeDate = active.getDate();

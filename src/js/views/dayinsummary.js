@@ -8,7 +8,7 @@ var app = app || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    app.daySummaryView = app.dayView.extend({
+    app.Views.dayInSummary = app.Views.day.extend({
         template: _.template($('#day-summary-template').html())
     });
 })(jQuery);

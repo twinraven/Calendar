@@ -6,11 +6,11 @@ var app = app || {};
 
     // The Application
     // ---------------
-    // extending app.monthView
-    app.monthSummaryView = app.monthView.extend({
+    // extending app.Views.month
+    app.Views.monthInSummary = app.Views.month.extend({
         template: _.template($('#month-summary-template').html()),
 
-        customDayView: app.daySummaryView,
+        customDayView: app.Views.dayInSummary,
 
         events: {
             'click .prev-self': 'gotoPrevMonth',
@@ -23,7 +23,7 @@ var app = app || {};
 
         render: function () {
             // call the render method of super class, before running our extension code
-            app.monthView.prototype.render.apply(this);
+            app.Views.month.prototype.render.apply(this);
 
             this.renderMonthName(this.$('.cal-title'));
 
@@ -35,7 +35,7 @@ var app = app || {};
         renderMonthName: function ($elem) {
             var d = this.selfMonth;
 
-            $elem.text(app.cal.getMonthName(d) + ' ' + app.cal.getYear(d));
+            $elem.text(app.Methods.getMonthName(d) + ' ' + app.Methods.getYear(d));
         },
 
 
@@ -46,7 +46,7 @@ var app = app || {};
 
             var date = $(e.currentTarget).data('date');
 
-            app.events.trigger('goto:date', app.cal.newDate(date));
+            app.Events.trigger('goto:date', app.Methods.newDate(date));
         },
 
         gotoNextMonth: function (e) {

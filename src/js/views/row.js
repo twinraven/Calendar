@@ -7,7 +7,7 @@ var app = app || {};
     // The Application
     // ---------------
 
-    app.monthRowView = Backbone.View.extend({
+    app.Views.row = Backbone.View.extend({
         tagName: 'li',
         className: 'week-row',
 

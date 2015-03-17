@@ -7,7 +7,7 @@ var app = app || {};
     // Model
     // ----------
 
-    app.day = Backbone.Model.extend({
+    app.dayModel = Backbone.Model.extend({
         // Default attributes for the model
         defaults: {
             isActive: false,

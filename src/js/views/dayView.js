@@ -22,7 +22,6 @@ var app = app || {};
             this.day = (params && params.model && params.model.id) || app.cal.newDate();
             this.day = new Date(this.day);
 
-            this.listenTo(this.model, 'change', this.render);
             this.listenTo(this.model, 'destroy', this.close);
         },
 

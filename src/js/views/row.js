@@ -13,7 +13,7 @@ var App = App || {};
 
         attributes: function () {
             return {
-                'data-row': this.model.weekNum
+                'data-row': this.model.weekNum // this is only for debugging
             };
         },
 
@@ -41,7 +41,9 @@ var App = App || {};
 
             this.renderDays();
 
-            this.renderEvents();
+            if (App.eventData && App.eventData.models) {
+                this.renderEvents(App.eventData.toJSON());
+            }
 
             return this.el;
         },
@@ -77,18 +79,25 @@ var App = App || {};
             this.$weekDays.append(fragment);
         },
 
-        renderEvents: function () {
-            this.$weekEvents = 'some events';
+        renderEvents: function (data) {
+            var fragment = document.createDocumentFragment();
+
+            data.map(function (event) {
+                if (event.weekNum === this.model.weekNum) {
+                    var markup = $('<p class="event">' + event.summary + '</p>')[0];
+                    fragment.appendChild(markup);
+                }
+            }, this);
+
+            this.$weekEvents.empty();
+            this.$weekEvents.append(fragment);
         },
 
 
         // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleEventData: function (data) {
-            debugger;
-            this.collection.map(function (month) {
-            });
-            //this.renderEvents();
+            this.renderEvents(data);
         },
 
 

@@ -31,6 +31,42 @@ var App = App || {};
         },
 
 
+        // render method overrides ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        renderDates: function () {
+            var weekFragment;
+            var monthFragment = document.createDocumentFragment();
+            var x, y;
+
+            for (x = 0, y = this.rowsInMonth; x < y; x++) {
+                weekFragment = this.renderWeekFragment(x);
+                monthFragment.appendChild(weekFragment);
+            }
+
+            this.$month.empty();
+            this.$month.append(monthFragment);
+        },
+
+        renderWeekFragment: function (x) {
+            var startPos = App.Constants.DAYS_IN_WEEK * x;
+            var endPos = startPos + App.Constants.DAYS_IN_WEEK;
+            var weekData = this.monthData.slice(startPos, endPos);
+            var weekNum = App.Methods.getWeekNum(weekData[0].id);
+
+            var weekFragment = document.createDocumentFragment();
+
+            var monthRowView = new App.Views.row({
+                collection: weekData,
+                dayView: this.customDayView,
+                model: { weekNum: weekNum }
+            });
+
+            weekFragment.appendChild(monthRowView.render());
+
+            return weekFragment;
+        },
+
+
         // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleMouseDown: function (e) {
@@ -121,6 +157,7 @@ var App = App || {};
             this.markDateRangeAsHighlight(null, null);
 
             App.State.hasSelection = false;
+            App.State.isDragging = false;
 
             this.renderDates();
         }

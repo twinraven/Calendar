@@ -86,6 +86,8 @@ var App = App || {};
 
             this.markDates();
 
+            this.renderViews();
+
             this.updateMonthTitle();
 
             return this.el;
@@ -113,12 +115,14 @@ var App = App || {};
                     date: this.activeDate
                 });
             }
-
-            this.assign(this.summaryView, '#cal-summary');
-            this.assign(this.mainView, '#cal-main');
         },
 
-        assign: function (view, selector) {
+        renderViews: function () {
+            this.renderView(this.summaryView, '#cal-summary');
+            this.renderView(this.mainView, '#cal-full');
+        },
+
+        renderView: function (view, selector) {
             // using .setElement as it minimises DOM thrashing when re-rendering existing elements
             view.setElement(this.$(selector)).render();
         },
@@ -334,7 +338,7 @@ var App = App || {};
             var req = App.eventData.fetch();
 
             req.success(function(data) {
-                App.Events.trigger('api:data');
+                App.Events.trigger('event:data', data);
             });
 
             req.error(function(data, othera, otherb) {

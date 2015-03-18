@@ -20,9 +20,10 @@ var App = App || {};
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-
             // keep track of own date, irrespective of App-wide state - but init with external val
             this.selfMonth = (params && params.date) || App.Methods.newDate();
+
+            this.setMonthData();
 
             this.listenTo(App.Events, 'change:date', this.handleChangeDate);
             this.listenTo(App.Events, 'change:mark', this.handleMarkDateRange);
@@ -85,36 +86,21 @@ var App = App || {};
         },
 
         renderDates: function () {
-            var weekFragment;
-            var monthFragment = document.createDocumentFragment();
-            var x, y;
+            // using documentFragment to minimise DOM contact
+            var fragment = document.createDocumentFragment();
 
-            for (x = 0, y = this.rowsInMonth; x < y; x++) {
-                weekFragment = this.renderWeekFragment(x);
-                monthFragment.appendChild(weekFragment);
-            }
+            // keep a cache of all sub-views created, so we can unbind them properly later
+            this.dayViews = this.monthData.map(function (day) {
+                var view = new this.customDayView({
+                    model: day
+                });
+                fragment.appendChild(view.render());
+
+                return view;
+            }, this);
 
             this.$month.empty();
-            this.$month.append(monthFragment);
-        },
-
-        renderWeekFragment: function (x) {
-            var startPos = App.Constants.DAYS_IN_WEEK * x;
-            var endPos = startPos + App.Constants.DAYS_IN_WEEK;
-            var weekData = this.monthData.slice(startPos, endPos);
-            var weekNum = App.Methods.getWeekNum(weekData[0].id);
-
-            var weekFragment = document.createDocumentFragment();
-
-            var monthRowView = new App.Views.row({
-                collection: weekData,
-                dayView: this.customDayView,
-                model: { weekNum: weekNum }
-            });
-
-            weekFragment.appendChild(monthRowView.render());
-
-            return weekFragment;
+            this.$month.append(fragment);
         },
 
 
@@ -196,12 +182,16 @@ var App = App || {};
             this.gotoMonth({ 'newDate': date });
         },
 
-        handleMarkDateRange: function (dates) {
-            this.markDateRangeAsActive(dates.from, dates.to);
+        handleMarkDateRange: function (data) {
+            this.markDateRangeAsActive(data.from, data.to);
 
-            this.storeMarkedDates(dates);
+            this.storeMarkedDates(data);
 
-            this.renderDates();
+            // only re-render the calendar if we've got an element to put the elements in --
+            // i.e. we've already run render. We've split the date marking out from the date
+            // rendering, to reduce the number of times the DOM is redrawn, so this data is
+            // populated & modified before it's first rendered
+            if (this.$month) { this.renderDates();}
         },
 
         // broken?

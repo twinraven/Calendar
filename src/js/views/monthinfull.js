@@ -99,13 +99,15 @@ var App = App || {};
 
             this.dragDateEnd = dateEnd;
 
-            // if we're dragging backwards, swap the dates
+            // if we're dragging backwards, highlight the dates reversed
             if (dateStart > dateEnd) {
                 dateStart = App.Methods.getDateTomorrow(dateStart);
+
                 this.markDateRangeAsHighlight(dateEnd, dateStart);
 
             } else {
                 dateEnd = App.Methods.getDateTomorrow(dateEnd);
+
                 this.markDateRangeAsHighlight(dateStart, dateEnd);
             }
 

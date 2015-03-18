@@ -125,22 +125,25 @@ var App = App || {};
 
         markDates: function () {
             var d = App.Methods.getObjectFromDate(this.activeDate);
+            var dateFrom;
+            var dateTo;
 
             // if viewing a week, highlight from the first to the last day of the current week
             if (this.isViewModeWeek()) {
-                App.Events.trigger('change:mark', {
-                    'from': App.Methods.getWeekStartDate(this.activeDate),
-                    'to': App.Methods.getWeekEndDate(this.activeDate)
-                });
+                dateFrom = App.Methods.getWeekStartDate(this.activeDate);
+                dateTo = App.Methods.getWeekEndDate(this.activeDate);
             }
 
             // if viewing a month, highlight from the first to the last day of the current month
             if (this.isViewModeMonth()) {
-                App.Events.trigger('change:mark', {
-                    'from': App.Methods.newDate(d.year, d.month, 1),
-                    'to': App.Methods.newDate(d.year, d.month, App.Methods.getDaysInMonth(this.activeDate))
-                });
+                dateFrom = App.Methods.newDate(d.year, d.month, 1);
+                dateTo = App.Methods.newDate(d.year, d.month, App.Methods.getDaysInMonth(this.activeDate));
             }
+
+            App.Events.trigger('change:mark', {
+                'from': dateFrom,
+                'to': dateTo
+            });
         },
 
         updateMonthTitle: function () {
@@ -217,10 +220,10 @@ var App = App || {};
         // Once it does, start a once-a-minute timer to update the current time line
         startClock: function () {
             var self = this;
-            var newDate = new Date();
-            var d = App.Methods.getObjectFromDate(newDate);
+            var now = new Date();
+            var d = App.Methods.getObjectFromDate(now);
             var endOfCurrentMinute = new Date(d.year, d.month, d.day, d.hour, d.minute + 1);
-            var diff = endOfCurrentMinute.getTime() - newDate.getTime();
+            var diff = endOfCurrentMinute.getTime() - now.getTime();
 
             this.clockTimeout = this.minuteInterval = null;
 

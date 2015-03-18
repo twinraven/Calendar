@@ -123,11 +123,13 @@ var App = App || {};
             this.monthData.each(function (day) {
                 var date = App.Methods.newDate(day.get('date'));
                 var prop = {};
+
                 if (date >= dateFrom && date < dateTo) {
                     prop[attr] = true;
                 } else {
                     prop[attr] = false;
                 }
+
                 day.save(prop);
             });
         },
@@ -207,9 +209,9 @@ var App = App || {};
                 var now = App.Methods.newDate();
 
                 if (App.State.today.getTime() !== now.getTime()) {
-                    this.selfMonth = now;
+                    this.selfMonth = App.State.today = now;
+
                     App.Events.trigger('change:date', now);
-                    App.State.today = now;
                 }
             }
         },

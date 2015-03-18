@@ -1,5 +1,5 @@
 /**
- *   - v0.3.0 - 2015-03-17
+ *   - v0.3.0 - 2015-03-18
  *  (c) 2015 Tom Bran All Rights Reserved
  */ 
 
@@ -467,7 +467,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.Constants.WEEK
+		viewMode: App.Constants.MONTH
 	};
 
 	App.Models = {};
@@ -1482,12 +1482,13 @@ var App = App || {};
             var $el = $(e.target);
 
             if ($el.is('.day-inner')) {
-                var endDateCorrected = App.Methods.getDateTomorrow(this.dragDateEnd);
+                this.setDragDateEnd($el, $el.data('date'));
+
                 App.State.isDragging = false;
 
                 App.Events.trigger('add:event', {
                     'from': this.dragDateStart,
-                    'to': endDateCorrected,
+                    'to': this.dragDateEnd,
                     'fullday': true
                 });
 
@@ -1517,15 +1518,21 @@ var App = App || {};
         },
 
         setDragDateEnd: function ($el, date) {
-            this.dragDateEnd = App.Methods.newDate(date);
+            var dateStart = this.dragDateStart;
+            var dateEnd = App.Methods.newDate(date);
 
-            if (this.dragDateStart < this.dragDateEnd) {
-                this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
+            // if we're dragging backwards, swap the dates
+            if (dateStart > dateEnd) {
+                this.dragDateStart = dateEnd;
+                this.dragDateEnd = dateStart;
 
             } else {
-                // swap order if we're dragging backwards
-                this.markDateRangeAsHighlight(this.dragDateEnd, this.dragDateStart);
+                this.dragDateEnd = dateEnd;
             }
+
+            //this.dragDateEnd = App.Methods.getDateTomorrow(this.dragDateEnd);
+
+            this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
 
             this.renderDates();
         },

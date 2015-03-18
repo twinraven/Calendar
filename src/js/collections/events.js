@@ -18,8 +18,11 @@ var App = App || {};
 
 		parse: function (dates) {
 			dates.map(function (model) {
-				model.isFullDay = _.has(model.start.date);
-				model.weekNum = App.Methods.getWeekNum(model.start.date || model.start.dateTime);
+				var datetime = model.start.date || model.start.dateTime;
+
+				model.isFullDay = _.has(model.start, 'date');
+				model.weekNum = App.Methods.getWeekNum(datetime);
+				model.startTimeFormatted = model.isFullDay ? '' : App.Methods.getTimeFormatted(datetime) + ' ';
 
 				return model;
 			});

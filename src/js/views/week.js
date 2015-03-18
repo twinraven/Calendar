@@ -80,7 +80,7 @@ var App = App || {};
             var data = {};
 
             while (x < App.Constants.HRS_IN_DAY) {
-                data = { 'hour': App.Methods.getTimeAs12HourFormat(x) };
+                data = { 'hour': App.Methods.getHourAs12HourFormat(x) };
 
                 this.$timeLabels.append(this.timeLabelTemplate(data));
 

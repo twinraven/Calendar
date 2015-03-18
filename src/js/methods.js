@@ -180,7 +180,7 @@ var App = App || {};
             return this.newDate(d.year, d.month, d.day + (App.Constants.DAYS_IN_WEEK));
         },
 
-        getTimeAs12HourFormat : function (num) {
+        getHourAs12HourFormat : function (num) {
             var suffix = 'am';
 
             if (num === 0) {
@@ -193,6 +193,25 @@ var App = App || {};
 
             //return this.asTwoDigits(num) + suffix;
             return num + suffix;
+        },
+
+        getTimeFormatted : function (date) {
+            var dateStart = this.newDate(date);
+            var dateTime = new Date(date);
+            var timeAsMs = dateTime.getTime() - dateStart.getTime();
+
+            var time = timeAsMs / 1000;
+            var seconds = time % 60;
+            time = time / 60;
+            var minutes = time % 60;
+            time = time / 60;
+            var hours = time % 24;
+            var suffix = 'a';
+
+            if (hours >= 12) { suffix = 'p'; }
+            if (hours > 12) { hours = hours - 12; }
+
+            return hours + ':' + this.asTwoDigits(minutes) + suffix;
         },
 
         getPercentDayComplete : function (date) {

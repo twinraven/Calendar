@@ -84,7 +84,17 @@ var App = App || {};
 
             data.map(function (event) {
                 if (event.weekNum === this.model.weekNum) {
-                    var markup = $('<p class="event">' + event.summary + '</p>')[0];
+                    var date = new Date(event.start.date || event.start.dateTime);
+                    var d = App.Methods.getObjectFromDate(date);
+
+                    var classes = [];
+                    classes.push('start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
+
+                    if (event.isFullDay) {
+                        classes.push('is-fullday');
+                    }
+
+                    var markup = $('<a class="event ' + classes.join(' ') + '" href="javascript:;" title="' + event.summary + '">' + event.startTimeFormatted + event.summary + '</a>')[0];
                     fragment.appendChild(markup);
                 }
             }, this);

@@ -11,8 +11,14 @@ var App = App || {};
         tagName: 'li',
         className: 'week-row',
 
+        attributes: function () {
+            return {
+                'data-row': this.model.weekNum
+            };
+        },
+
         // templating and setup
-        template: _.template($('#week-month-template').html()), // for containing elem & markup
+        template: _.template($('#row-template').html()), // for containing elem & markup
 
         collection: App.Collections.dates,
 

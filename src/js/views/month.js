@@ -27,7 +27,6 @@ var App = App || {};
             this.listenTo(App.Events, 'change:date', this.handleChangeDate);
             this.listenTo(App.Events, 'change:mark', this.handleMarkDateRange);
             this.listenTo(App.Events, 'clock:tick', this.handleClockTick);
-            this.listenTo(App.Events, 'api:data', this.handleApiData);
         },
 
 
@@ -103,12 +102,14 @@ var App = App || {};
             var startPos = App.Constants.DAYS_IN_WEEK * x;
             var endPos = startPos + App.Constants.DAYS_IN_WEEK;
             var weekData = this.monthData.slice(startPos, endPos);
+            var weekNum = App.Methods.getWeekNum(weekData[0].id);
 
             var weekFragment = document.createDocumentFragment();
 
             var monthRowView = new App.Views.row({
                 collection: weekData,
-                dayView: this.customDayView
+                dayView: this.customDayView,
+                model: { weekNum: weekNum }
             });
 
             weekFragment.appendChild(monthRowView.render());
@@ -214,12 +215,6 @@ var App = App || {};
                     App.Events.trigger('change:date', now);
                 }
             }
-        },
-
-        handleApiData: function (data) {
-            this.monthData.map(function (month) {
-                //
-            });
         },
 
 

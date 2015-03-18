@@ -27,24 +27,41 @@ var App = App || {};
 
         initialize: function (params) {
             this.options = params;
+
+            this.listenTo(App.Events, 'event:data', this.handleEventData);
         },
 
 
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.$el.html(this.template({}));
+            this.renderElem();
 
-            this.renderDates();
+            this.cacheSelectors();
+
+            this.renderDays();
+
+            this.renderEvents();
 
             return this.el;
         },
 
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        renderDates: function () {
-            var $weekDays = this.$('.week-row-days');
-            var $weekEvents = this.$('.week-row-events');
+        renderElem: function () {
+            var data = {
+                weekNum: this.options.weekNum
+            };
+
+            this.$el.html(this.template(data));
+        },
+
+        cacheSelectors: function () {
+            this.$weekDays = this.$('.week-row-days');
+            this.$weekEvents = this.$('.week-row-events');
+        },
+
+        renderDays: function () {
             var fragment = document.createDocumentFragment();
 
             this.dayViews = this.collection.map(function (day) {
@@ -56,8 +73,22 @@ var App = App || {};
                 return view;
             }, this);
 
-            $weekDays.empty();
-            $weekDays.append(fragment);
+            this.$weekDays.empty();
+            this.$weekDays.append(fragment);
+        },
+
+        renderEvents: function () {
+            this.$weekEvents = 'some events';
+        },
+
+
+        // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        handleEventData: function (data) {
+            debugger;
+            this.collection.map(function (month) {
+            });
+            //this.renderEvents();
         },
 
 

@@ -43,7 +43,7 @@ var App = App || {};
 
             this.startClock();
 
-            this.loadApiData();
+            this.loadEventData();
         },
 
 
@@ -326,17 +326,19 @@ var App = App || {};
 
         // Calendar API access ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        loadApiData: function () {
-            App.apiData = new App.Collections.events();
+        loadEventData: function () {
+            var self = this;
 
-            var req = App.apiData.fetch();
+            App.eventData = new App.Collections.events();
+
+            var req = App.eventData.fetch();
 
             req.success(function(data) {
-                App.Events.trigger('api:data', App.apiData);
+                App.Events.trigger('api:data');
             });
 
             req.error(function(data, othera, otherb) {
-                // handle error
+                //TODO: handle error
             });
         },
 

@@ -17,10 +17,11 @@ var App = App || {};
 		comparator: 'etag',
 
 		parse: function (dates) {
-			dates.map(function (item) {
-				item.isFullDay = _.has(item.start.date);
+			dates.map(function (model) {
+				model.isFullDay = _.has(model.start.date);
+				model.weekNum = App.Methods.getWeekNum(model.start.date || model.start.dateTime);
 
-				return item;
+				return model;
 			});
 
 			return dates;

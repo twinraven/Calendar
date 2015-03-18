@@ -76,6 +76,9 @@ var App = App || {};
             this.clearDrag();
         },
 
+
+        // date modification ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
         swapDragStartEndDates: function () {
             var start = this.dragDateStart;
             var end = this.dragDateEnd;
@@ -85,7 +88,7 @@ var App = App || {};
         },
 
 
-        // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // date selection & highlighting ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         setDragDateStart: function ($el, date) {
             this.dragDateStart = App.Methods.newDate(date);

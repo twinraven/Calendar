@@ -1486,9 +1486,13 @@ var App = App || {};
 
                 App.State.isDragging = false;
 
+                if (this.dragDateStart > this.dragDateEnd) {
+                    this.swapDragStartEndDates();
+                }
+
                 App.Events.trigger('add:event', {
                     'from': this.dragDateStart,
-                    'to': this.dragDateEnd,
+                    'to': App.Methods.getDateTomorrow(this.dragDateEnd),
                     'fullday': true
                 });
 
@@ -1508,6 +1512,14 @@ var App = App || {};
             this.clearDrag();
         },
 
+        swapDragStartEndDates: function () {
+            var start = this.dragDateStart;
+            var end = this.dragDateEnd;
+
+            this.dragDateStart = end;
+            this.dragDateEnd = start;
+        },
+
 
         // date selection & highlighting~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1521,18 +1533,17 @@ var App = App || {};
             var dateStart = this.dragDateStart;
             var dateEnd = App.Methods.newDate(date);
 
+            this.dragDateEnd = dateEnd;
+
             // if we're dragging backwards, swap the dates
             if (dateStart > dateEnd) {
-                this.dragDateStart = dateEnd;
-                this.dragDateEnd = dateStart;
+                dateStart = App.Methods.getDateTomorrow(dateStart);
+                this.markDateRangeAsHighlight(dateEnd, dateStart);
 
             } else {
-                this.dragDateEnd = dateEnd;
+                dateEnd = App.Methods.getDateTomorrow(dateEnd);
+                this.markDateRangeAsHighlight(dateStart, dateEnd);
             }
-
-            //this.dragDateEnd = App.Methods.getDateTomorrow(this.dragDateEnd);
-
-            this.markDateRangeAsHighlight(this.dragDateStart, this.dragDateEnd);
 
             this.renderDates();
         },

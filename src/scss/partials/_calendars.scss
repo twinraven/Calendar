@@ -258,6 +258,14 @@
     background: yellow !important;
 }
 
+.is-not-range.is-highlight {
+    background: #eeee00 !important;
+}
+
+.is-today.is-highlight {
+    background: #dddd00 !important;
+}
+
 .visuallyhidden {
     position: absolute;
      overflow: hidden;

@@ -1,6 +1,7 @@
 node_modules
 .sass-cache
-_build.js
+build.js
+main.css
 *.sublime-project
 *.sublime-workspace
 /src/js/vendor/**/*

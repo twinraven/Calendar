@@ -196,7 +196,7 @@ module.exports = function ( grunt ) {
 				livereload: true
 			},
 			configuration: {
-				files: ['Gruntfile.js', 'src/images/**', 'src/js/**/*', 'src/scss/**/*.{scss,sass}', 'src/**/*.html', '!src/js/build.js'],
+				files: ['Gruntfile.js', APP_SCRIPTS, 'src/scss/**/*.scss'],
 				tasks: ['dev']
 			}
 		}

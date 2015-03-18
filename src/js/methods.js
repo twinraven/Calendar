@@ -352,7 +352,7 @@ var App = App || {};
             var output = [];
 
 
-            // refactor? - code duplication. Rework ~~~~~~~~~~~~~~~~~~~~~~~
+            // TODO: refactor? - code duplication. Rework ~~~~~~~~~~~~~~~~~~~~~~~
             daysMissingAtFront = this.getMonthStartDayNum(date);
 
             if (daysMissingAtFront > 0) {

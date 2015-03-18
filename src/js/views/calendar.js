@@ -137,7 +137,7 @@ var App = App || {};
             // if viewing a month, highlight from the first to the last day of the current month
             if (this.isViewModeMonth()) {
                 dateFrom = App.Methods.newDate(d.year, d.month, 1);
-                dateTo = App.Methods.newDate(d.year, d.month, App.Methods.getDaysInMonth(this.activeDate));
+                dateTo = App.Methods.newDate(d.year, d.month + 1, 1);
             }
 
             App.Events.trigger('change:mark', {

@@ -73,6 +73,9 @@ var App = App || {};
             return (this.model.get('date') === this.today);
         },
 
+
+        // TODO: rendering this elem should probably be a separate template/render cycle,
+        // with visible state/css-top set as model properties & passed through to template
         setTimeLinePosition: function () {
             var $time = this.$('.now');
             var now = new Date();
@@ -166,12 +169,10 @@ var App = App || {};
 
         markTimeRangeAsHighlight: function (elemFrom, elemTo) {
             if (elemFrom || elemTo) {
+                var blockHeight = App.Constants.WEEK_VIEW_GRID_HEIGHT;
 
-                var $topElem = this.$times.eq(elemFrom).parent();
-                var $bottomElem = this.$times.eq(elemTo).parent();
-
-                var top = $topElem.position().top + 1;
-                var height = $bottomElem.position().top + $bottomElem.height() - top;
+                var top = blockHeight * (elemFrom) + 1; // + 1 to avoid overlapping top border
+                var height = blockHeight * (elemTo - elemFrom + 1) - 1; // -1 to avoid overlapping bottom border
 
                 this.$newEvent
                     .removeClass('is-hidden')

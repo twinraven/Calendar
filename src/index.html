@@ -105,7 +105,7 @@
 			<time datetime="" class="now is-hidden"></time>
 			<span class="new-event is-hidden">New Event</span>
 
-			<ul class="cal-day-times"></ul>
+			<div class="cal-day-times"></div>
 
 			<ul class="cal-events">
 			<% _.each(events.time, function (event) { %>
@@ -116,9 +116,7 @@
 
 
 		<script type="text/template" id="time-template">
-			<li class="time">
-				<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
-			</li>
+			<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
 		</script>
 
 

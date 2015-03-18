@@ -1,12 +1,10 @@
 TODO:
 
-- bug with refreshing calendar when the day changes
 - Render events to month/week views
 
 
 TECH DEBT:
 
-- fix auto-updating views every minute (breaks when you're not viewing current week/month)
 
 
 LONG-TERM:

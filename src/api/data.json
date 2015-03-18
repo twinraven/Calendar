@@ -116,10 +116,10 @@
             "self": true
         },
         "start": {
-            "dateTime": "2015-5-08T19:00:00Z"
+            "dateTime": "2015-05-08T19:00:00Z"
         },
         "end": {
-            "dateTime": "2015-5-08T22:00:00Z"
+            "dateTime": "2015-05-08T22:00:00Z"
         },
         "iCalUID": "37160D7ADAFA4387AD402A7EF14B13C300000000000000000000000000000000",
         "sequence": 1,

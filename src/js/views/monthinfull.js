@@ -9,7 +9,7 @@ var App = App || {};
     // extending App.Views.month
     App.Views.monthInFull = App.Views.month.extend({
         //
-        dayTemplate: _.template($('#day-main-template').html()),
+        dayTemplate: _.template($('#day-full-template').html()),
 
         customDayView: App.Views.day,
 

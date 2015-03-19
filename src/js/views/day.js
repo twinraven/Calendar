@@ -9,7 +9,7 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.day = Backbone.View.extend({
-        template: _.template($('#day-main-template').html()),
+        template: _.template($('#day-full-template').html()),
 
         tagName: 'li',
         className: 'day',
@@ -49,10 +49,10 @@ var App = App || {};
 
             // highlight if this day is currently in our active range
             if (m.get('isActive') === true) {
-                classes.push('is-range');
+                classes.push('is-active');
 
             } else {
-                classes.push('is-not-range');
+                classes.push('is-inactive');
             }
 
             if (m.get('isHighlight') === true) {

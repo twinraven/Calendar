@@ -55,8 +55,8 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
-            this.$month = this.$('.month-days');
-            this.$labels = this.$('.cal-labels');
+            this.$month = this.$('.month');
+            this.$labels = this.$('.cal__labels');
         },
 
         renderDayLabels: function () {

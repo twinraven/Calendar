@@ -9,7 +9,7 @@ var App = App || {};
 
     App.Views.row = Backbone.View.extend({
         tagName: 'li',
-        className: 'week-row',
+        className: 'month__week',
 
         attributes: function () {
             return {
@@ -59,8 +59,8 @@ var App = App || {};
         },
 
         cacheSelectors: function () {
-            this.$weekDays = this.$('.week-row-days');
-            this.$weekEvents = this.$('.week-row-events');
+            this.$weekDays = this.$('.week');
+            this.$weekEvents = this.$('.events');
         },
 
         renderDays: function () {

@@ -52,8 +52,8 @@ var App = App || {};
 
         cacheSelectors: function () {
             this.$week = this.$('.week-days');
-            this.$labels = this.$('.cal-labels');
-            this.$grid = this.$('.cal-grid');
+            this.$labels = this.$('.cal__labels');
+            this.$grid = this.$('.cal__grid');
             this.$timeLabels = this.$('.day-time-labels');
         },
 

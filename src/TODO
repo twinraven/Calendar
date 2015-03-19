@@ -2,9 +2,9 @@ TODO:
 
 - Render events to month/week views
 
-
-TECH DEBT:
-
+- day-inner (day__inner?)
+- .date (day__title)
+- .day (week__day? split week and month days)
 
 
 LONG-TERM:

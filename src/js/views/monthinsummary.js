@@ -13,8 +13,8 @@ var App = App || {};
         customDayView: App.Views.dayInSummary,
 
         events: {
-            'click .prev-self': 'gotoPrevMonth',
-            'click .next-self': 'gotoNextMonth',
+            'click .cal__controls--prev': 'gotoPrevMonth',
+            'click .cal__controls--next': 'gotoNextMonth',
             'click .date': 'gotoDate'
         },
 
@@ -25,7 +25,7 @@ var App = App || {};
             // call the render method of super class, before running our extension code
             App.Views.month.prototype.render.apply(this);
 
-            this.renderMonthName(this.$('.cal-title'));
+            this.renderMonthName(this.$('.cal__title'));
 
             return this.el;
         },

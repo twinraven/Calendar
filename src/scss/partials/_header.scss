@@ -5,25 +5,78 @@
 .nav {
     background: #fff;
     border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
     display: flex;
     justify-content: flex-end;
     left: 0;
     line-height: 14px;
-    padding: 20px 0;
+    padding: 0;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 10;
+
+    a {
+        display: block;
+        line-height: 50px;
+        text-decoration: none;
+    }
 }
 
-.nav * {
-    margin: 0 20px;
+.control {
+    font-size: 0;
+    list-style: none;
+    padding: 0;
+
+    li {
+        display: inline-block;
+        font-size: 16px;
+        position: relative;
+        vertical-align: middle;
+    }
 }
 
-.cal-mode-last {
-    margin-right: auto;
+.control--mode {
+    margin: 0 auto 0 0;
 }
 
-.cal-mode-active {
-    font-weight: bold;
+.control__link {
+    display: block;
+    margin: 0 1px;
+    padding: 0 20px;
+
+    &:hover,
+    &:focus {
+        background: #eee;
+        color: #000;
+    }
+
+    &.control__link--active {
+        background: #eee;
+    }
+}
+
+.control__link--prev,
+.control__link--next,
+.control__link--add {
+    font-size: 24px;
+}
+
+.control__link--add {
+    background: #ccc;
+
+    &:hover,
+    &:focus {
+        background: #888;
+        color: #fff;
+    }
+}
+
+.nav__title {
+    left: 50%;
+    line-height: 50px;
+    margin: 0;
+    position: absolute;
+    transform: translateX(-50%);
+    white-space: nowrap;
 }

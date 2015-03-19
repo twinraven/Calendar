@@ -13,7 +13,7 @@ var App = App || {};
 		},
 		monthCalendar : function () {
 			this.loadView(new App.Views.monthInFull(({
-		        dayTemplate: '#day-main-template'
+		        dayTemplate: '#day-full-template'
 		    })));
 		},
 		weekCalendar : function () {

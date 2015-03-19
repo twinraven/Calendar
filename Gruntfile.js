@@ -206,7 +206,7 @@ module.exports = function ( grunt ) {
 
 	// development build - run 'grunt dev'
 	grunt.registerTask( 'dev', ['clean', 'build-dev'] );
-	grunt.registerTask( 'build-dev', ['sass:dev', /*'autoprefixer:dev', */'concat:dev'] );
+	grunt.registerTask( 'build-dev', ['sass:dev', 'autoprefixer:dev', 'concat:dev'] );
 
 	grunt.registerTask( 'dist', ['clean', 'build-dist'] );
 	grunt.registerTask( 'build-dist', ['sass:dist', 'autoprefixer:dist', 'copy', 'uglify'] );

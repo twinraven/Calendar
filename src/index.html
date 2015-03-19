@@ -8,22 +8,28 @@
 	<body>
 		<div class="container" id="app">
 			<nav class="nav">
-				<a class="cal-mode cal-mode-week" href="#">Week</a>
-				<a class="cal-mode cal-mode-month cal-mode-last" href="#">Month</a>
+				<ul class="control control--mode">
+					<li><a href="#" class="control__link control__link--week">Week</a></li>
+					<li><a href="#" class="control__link control__link--month">Month</a></li>
+				</ul>
 
-				<h1 class="title-all"></h1>
-				<a class="prev-all" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
-				<a class="next-all" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
-				<a class="home-all" href="#">today</a>
+				<h1 class="nav__title"></h1>
+
+				<ul class="control control--traverse">
+					<li><a class="control__link control__link--prev" href="#"><span class="visuallyhidden">Go to previous month </span>&lt;</a></li>
+					<li><a class="control__link control__link--next" href="#">&gt;<span class="visuallyhidden"> Go to next month</span></a></li>
+					<li><a class="control__link control__link--home" href="#">today</a></li>
+					<li><a class="control__link control__link--add" href="#">+ <span class="visuallyhidden">Add event</span></a></li>
+				</ul>
 			</nav>
 
-			<aside class="sidebar">
-				<div id="cal-summary" class="cal-summary"></div>
+			<aside class="summary">
+				<div id="cal--summary" class="cal cal--summary"></div>
 			</aside>
 
 			<main class="content">
-				<div class="cal-wrapper">
-					<div id="cal-full" class="cal-full"></div>
+				<div class="flex-wrapper">
+					<div id="cal--full" class="cal cal--full"></div>
 				</div>
 			</main>
 		</div>
@@ -32,34 +38,34 @@
 		<!-- Templates ~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 		<script type="text/template" id="month-template">
-			<ul class="cal-labels"></ul>
+			<ul class="cal__labels"></ul>
 
-			<div class="cal-grid cal-grid--month">
-				<ul class="month-days"></ul>
+			<div class="cal__grid cal__grid--month">
+				<ul class="month"></ul>
 			</div>
 		</script>
 
 		<script type="text/template" id="row-template">
-			<ul class="week-row-days"></ul>
+			<ul class="week"></ul>
 
-			<div class="week-row-events"></div>
+			<div class="events events--month"></div>
 		</script>
 
 
 		<script type="text/template" id="month-summary-template">
-			<h4 class="cal-title"></h4>
+			<h4 class="cal__title"></h4>
 
-			<div class="cal-controls">
-				<a class="prev-self" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
-				<a class="next-self" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
+			<div class="cal__controls">
+				<a class="cal__controls--prev" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
+				<a class="cal__controls--next" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
 			</div>
 
-			<ul class="cal-labels"></ul>
-			<ul class="month-days month-days--summary"></ul>
+			<ul class="cal__labels"></ul>
+			<ul class="month"></ul>
 		</script>
 
 
-		<script type="text/template" id="day-main-template">
+		<script type="text/template" id="day-full-template">
 			<div class="day-inner" data-date="<%= id %>">
 				<h3 class="date">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
@@ -85,16 +91,16 @@
 
 		<script type="text/template" id="week-template">
 			<div class="cal-week-header">
-				<ul class="cal-labels cal-labels--week"></ul>
+				<ul class="cal__labels cal__labels--week"></ul>
 
-				<div class="cal-events cal-events--fullday">
-					<div class="cal-event cal-event--fullday">
-						<p class="cal-event-title"></p>
+				<!--<div class="events events--week">
+					<div class="event event--fullday">
+						<p class="event__title"></p>
 					</div>
-				</div>
+				</div>-->
 			</div>
 
-			<div class="cal-grid">
+			<div class="cal__grid">
 				<ul class="day-time-labels"></ul>
 				<ul class="week-days"></ul>
 			</div>
@@ -107,9 +113,9 @@
 
 			<div class="cal-day-times"></div>
 
-			<ul class="cal-events">
+			<ul class="events events--day">
 			<% _.each(events.time, function (event) { %>
-				<li><%- event.title %></li>
+				<li class="event event--time"><%- event.title %></li>
 			<% }); %>
 			</ul>
 		</script>

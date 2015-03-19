@@ -14,12 +14,12 @@ var App = App || {};
         // Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         //
         events: {
-            'click .prev-all': 'gotoPrevDateRange',
-            'click .next-all': 'gotoNextDateRange',
-            'click .home-all': 'gotoToday',
+            'click .control__link--prev': 'gotoPrevDateRange',
+            'click .control__link--next': 'gotoNextDateRange',
+            'click .control__link--home': 'gotoToday',
 
-            'click .cal-mode-week': 'setViewModeWeek',
-            'click .cal-mode-month': 'setViewModeMonth',
+            'click .control__link--week': 'setViewModeWeek',
+            'click .control__link--month': 'setViewModeMonth',
 
             'mouseup': 'handleMouseUp'
         },
@@ -51,10 +51,10 @@ var App = App || {};
 
         cacheSelectors: function () {
             this.$body = $('body');
-            this.$title = this.$('.title-all');
-            this.$modeLinks = this.$('.cal-mode');
-            this.$modeLinkMonth = this.$('.cal-mode-month');
-            this.$modeLinkWeek = this.$('.cal-mode-week');
+            this.$title = this.$('.nav__title');
+            this.$modeLinks = this.$('.control--mode a');
+            this.$modeLinkMonth = this.$('.control__link--month');
+            this.$modeLinkWeek = this.$('.control__link--week');
         },
 
         bindEvents: function () {
@@ -111,15 +111,15 @@ var App = App || {};
 
             if (this.isViewModeMonth()) {
                 this.mainView = new App.Views.monthInFull({
-                    dayTemplate: '#day-main-template',
+                    dayTemplate: '#day-full-template',
                     date: this.activeDate
                 });
             }
         },
 
         renderViews: function () {
-            this.renderView(this.summaryView, '#cal-summary');
-            this.renderView(this.mainView, '#cal-full');
+            this.renderView(this.summaryView, '#cal--summary');
+            this.renderView(this.mainView, '#cal--full');
         },
 
         renderView: function (view, selector) {
@@ -186,7 +186,7 @@ var App = App || {};
         highlightActiveViewModeLink: function () {
             var $elem;
 
-            this.$modeLinks.removeClass('cal-mode-active');
+            this.$modeLinks.removeClass('control__link--active');
 
             if (this.isViewModeWeek()) {
                 $elem = this.$modeLinkWeek;
@@ -195,7 +195,7 @@ var App = App || {};
                 $elem = this.$modeLinkMonth;
             }
 
-            $elem.addClass('cal-mode-active');
+            $elem.addClass('control__link--active');
         },
 
         isViewModeWeek: function () {

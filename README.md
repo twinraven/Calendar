@@ -20,6 +20,7 @@ Build a full-featured, responsive calendar application in Backbone.js, storing d
 - Currently-viewed date range reflected in summary calendar
 - Current time shown in week view; updates automatically
 - Automatically changing day if calendar is open when date changes
+- Toggle-able side bar
 
 ### Future features
 

@@ -1,12 +1,19 @@
 TODO:
 
 - Render events to month/week views
-
+- iconography
+- responsive view: make it work on mobile
+	- hide summary bar entirely for now
+	- replace text in nav with icons
+	- font sizes
+	- stop auto-filling heights
 
 
 LONG-TERM:
 
+- fully responsive
 - google calendar api integration:
 	- key fields: start.date / start.dateTime, end.date / end.dateTime, summary, recurrence, reminders / reminders.overrides
-- skip links
 - full accessibility: ARIA roles etc
+	- skip links
+- searchable events

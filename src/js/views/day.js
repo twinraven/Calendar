@@ -51,8 +51,6 @@ var App = App || {};
             if (m.get('isActive') === true) {
                 classes.push('is-active');
 
-            } else {
-                classes.push('is-inactive');
             }
 
             if (m.get('isHighlight') === true) {

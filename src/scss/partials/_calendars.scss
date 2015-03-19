@@ -108,16 +108,46 @@
 
 
 .day {
+    background: #eee;
     align-items: stretch;
     box-sizing: border-box;
+    color: #888;
     float: left;
+    font-weight: normal;
     list-style: none;
     position: relative;
     text-align: center;
     user-select: none;
     width: 14.2857%;
+
+    &.is-active {
+        color: #000;
+        background: #fff;
+        font-weight: bold;
+
+        .day__date {
+            font-weight: bold;
+        }
+    }
+
+    &.is-today {
+        background: #bbb !important;
+    }
+
+    &.is-highlight {
+        background: #eeee00 !important;
+    }
+
+    &.is-active.is-highlight {
+        background: yellow !important;
+    }
+
+    &.is-today.is-highlight {
+        background: #dddd00 !important;
+    }
 }
 .day--title {
+    background: #fff;
     font-size: 12px;
     line-height: 1.2rem;
     margin: 0.5rem 0;
@@ -197,42 +227,6 @@
     width: 100%;
     z-index: 20;
 }
-
-
-// State ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.day {
-    &.is-active {
-        background: #fff;
-
-        .day__date {
-            font-weight: bold;
-        }
-    }
-
-    &.is-inactive {
-        background: #eee;
-        color: #888;
-        font-weight: normal;
-    }
-
-    &.is-today {
-        background: #bbb !important;
-    }
-
-    &.is-highlight {
-        background: yellow !important;
-    }
-
-    &.is-inactive.is-highlight {
-        background: #eeee00 !important;
-    }
-
-    &.is-today.is-highlight {
-        background: #dddd00 !important;
-    }
-}
-
 
 // Full ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

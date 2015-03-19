@@ -79,6 +79,7 @@ var App = App || {};
             this.$weekDays.append(fragment);
         },
 
+        // TODO: refactor heavily! move into separate collection/model/view
         renderEvents: function (data) {
             var fragment = document.createDocumentFragment();
 
@@ -88,7 +89,7 @@ var App = App || {};
                     var d = App.Methods.getObjectFromDate(date);
 
                     var classes = [];
-                    classes.push('start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
+                    classes.push('event--start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
 
                     if (event.isFullDay) {
                         classes.push('is-fullday');

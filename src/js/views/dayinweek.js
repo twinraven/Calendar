@@ -13,8 +13,8 @@ var App = App || {};
         timeTemplate: _.template($('#time-template').html()),
 
         events: {
-            'mousedown .time-link': 'handleMouseDown',
-            'mouseover .time-link': 'handleMouseOver',
+            'mousedown .time': 'handleMouseDown',
+            'mouseover .time': 'handleMouseOver',
             'mouseup': 'handleMouseUp'
         },
 
@@ -43,7 +43,7 @@ var App = App || {};
                 this.setTimeLinePosition();
             }
 
-            this.$times = this.$('.time-link');
+            this.$times = this.$('.time');
 
             return this.el;
         },
@@ -52,7 +52,8 @@ var App = App || {};
 
         cacheSelectors: function () {
             this.$newEvent = this.$('.new-event');
-            this.$dayTimes = this.$('.cal-day-times');
+            this.$dayTimes = this.$('.day__times');
+            this.$timeLine = this.$('.time-line');
         },
 
         renderTime: function () {
@@ -77,7 +78,6 @@ var App = App || {};
         // TODO: rendering this elem should probably be a separate template/render cycle,
         // with visible state/css-top set as model properties & passed through to template
         setTimeLinePosition: function () {
-            var $time = this.$('.now');
             var now = new Date();
             var day = App.Methods.newDate(now);
 
@@ -90,11 +90,11 @@ var App = App || {};
 
             var percentDayComplete = App.Methods.getPercentDayComplete(now);
 
-            $time.attr('datetime', App.Methods.getNewDateId(now));
-            $time.text(now.toString());
+            this.$timeLine.attr('datetime', App.Methods.getNewDateId(now));
+            this.$timeLine.text(now.toString());
 
-            if ($time.length) {
-                $time.removeClass('is-hidden').css('top', percentDayComplete + '%');
+            if (this.$timeLine.length) {
+                this.$timeLine.removeClass('is-hidden').css('top', percentDayComplete + '%');
             }
         },
 
@@ -106,7 +106,7 @@ var App = App || {};
 
             App.Events.trigger('clear:selection');
 
-            if ($el.is('.time-link')) {
+            if ($el.is('.time')) {
                 this.isDragging = true;
                 this.setDragStart($el, $el.attr('id'), $el.data('pos'));
             }
@@ -131,7 +131,7 @@ var App = App || {};
             if (this.isDragging) {
                 this.isDragging = false;
 
-                if (($el && $el.is('.time-link')) || externalEvent) {
+                if (($el && $el.is('.time')) || externalEvent) {
                     this.createNewEvent();
                 }
             }

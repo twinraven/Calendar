@@ -72,7 +72,7 @@ var App = App || {};
         handleMouseDown: function (e) {
             var $el = $(e.target);
 
-            if ($el.is('.day-inner')) {
+            if ($el.is('.day__inner')) {
                 App.State.isDragging = true;
                 this.setDragDateStart($el, $el.data('date'));
             }
@@ -81,7 +81,7 @@ var App = App || {};
         handleMouseUp: function (e) {
             var $el = $(e.target);
 
-            if ($el.is('.day-inner')) {
+            if ($el.is('.day__inner')) {
                 this.setDragDateEnd($el, $el.data('date'));
 
                 App.State.isDragging = false;

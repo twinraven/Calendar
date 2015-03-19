@@ -1,80 +1,50 @@
 /**
- * Calendars ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ * Calendars ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-.cal--full {
+// cal elements ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.cal__controls {
+    border-bottom: 1px solid #aaa;
     display: flex;
-    flex-direction: column;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
+    justify-content: space-between;
 
-    .day {
-        height: 100%;
-        line-height: 1.1;
-
-        &:hover {
-            .day-inner {
-                background: rgba(255,255,0,0.3);
-                border-width: 1px 0 0 1px;
-                z-index: 10;
-            }
-        }
-    }
-    .week {
-        left: 0;
-        position: absolute;
-        top: 0;
-    }
-
-    &[data-cal-rows="4"] .month__week { min-height: calc(100% / 4); }
-    &[data-cal-rows="5"] .month__week { min-height: calc(100% / 5); }
-    &[data-cal-rows="6"] .month__week { min-height: calc(100% / 6); }
-
-    .date {
-        left: 4px;
-        pointer-events: none;
-        position: absolute;
-        top: 4px;
-    }
 }
 
-// summary ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.cal--summary {
-    .date {
-        font-size: 11px;
-        line-height: 25px;
-        width: 100%;
-    }
-
-    .month {
-        position: static;
-    }
-}
-
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-.month {
-    display: block;
-    height: 100%;
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
-
-.day {
-    align-items: stretch;
+.cal__control,
+.cal__title {
     box-sizing: border-box;
-    float: left;
-    list-style: none;
-    position: relative;
+    font-size: 12px;
+    line-height: 1.2rem;
+    margin: 0;
+    padding: 0.5rem 10px;
     text-align: center;
-    user-select: none;
-    width: 14.2857%;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+.cal__control {
+    &:hover,
+    &:focus {
+        background-color: #eee;
+        color: #000;
+    }
+}
+
+.cal__title {
+    flex: 1;
+}
+
+.cal__labels {
+    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
+    z-index: 1000;
+}
+.cal__labels--week {
+    padding-left: 3rem;
+    padding-right: 18px;
 }
 
 .cal__grid {
@@ -86,68 +56,21 @@
     position: relative;
     width: 100%;
 }
-
 .cal__grid--month {
     overflow: hidden;
 }
 
-.cal-events {
-    left: 0;
-    position: absolute;
-    top: 0;
-    width: 100%;
-}
+// cal elements ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.day-time-labels {
-    box-sizing: border-box;
-    flex: 0 1 auto;
-    font-size: 12px;
-    font-weight: bold;
-    list-style: none;
-    left: 0;
-    padding: 0 5px;
-    position: absolute;
-    text-align: right;
-    top: 0;
-    width: 3rem;
-}
-
-.day-time-labels li {
-    height: 20px;
-    line-height: 20px;
-}
-
-.time:hover {
-    background: rgba(255,255,0,0.3);
-}
-
-.time-link {
-    box-sizing: border-box;
-    border-top: 1px solid #ccc;
-    border-left: 1px solid #ccc;
+.month {
     display: block;
-    height: 20px;
-    overflow: hidden;
-    position: relative;
-    user-select: none;
-    width: 100%;
-}
-
-.time-link:nth-child(even) {
-    border-top-style: dotted;
-}
-
-.week-days {
-    box-sizing: border-box;
-    flex: 1;
-    min-height: 800px;
-    left: 3rem;
-    margin-left: -3rem;
-    padding-left: 3rem;
+    height: 100%;
+    left: 0;
     position: absolute;
     top: 0;
     width: 100%;
 }
+
 
 .month__week {
     display: block;
@@ -162,54 +85,42 @@
     z-index: 1;
 }
 
-.events {
+.week-days {
+    box-sizing: border-box;
+    flex: 1;
+    min-height: 800px;
+    left: 3rem;
+    margin-left: -3rem;
+    padding-left: 3rem;
     position: absolute;
-    left: 0;
-    top: 1.5rem;
+    top: 0;
     width: 100%;
-    z-index: 2;
 
-    .event {
-        box-sizing: border-box;
-        color: blue;
-        font-size: 11px;
-        display: block;
-        left: 0;
-        margin: 0 0 1px;
-        overflow: hidden;
-        padding: 0 5px;
-        position: absolute;
-        text-decoration: none;
-        text-overflow: ellipsis;
-        top: 0;
-        user-select: none;
-        white-space: nowrap;
-        width: calc(100% / 7);
-    }
-
-    .event.is-fullday {
-        background: blue;
-        color: white;
+    .day {
+        background: #fff;
+        height: 100%;
     }
 }
 
-.event.start-1 {left: calc(100% / 7);}
-.event.start-2 {left: calc(100% / 7 * 2);}
-.event.start-3 {left: calc(100% / 7 * 3);}
-.event.start-4 {left: calc(100% / 7 * 4);}
-.event.start-5 {left: calc(100% / 7 * 5);}
-.event.start-6 {left: calc(100% / 7 * 6);}
 
-.week-days .day {
-    background: #fff;
-    height: 100%;
+.day {
+    align-items: stretch;
+    box-sizing: border-box;
+    float: left;
+    list-style: none;
+    position: relative;
+    text-align: center;
+    user-select: none;
+    width: 14.2857%;
 }
-
 .day--title {
+    font-size: 12px;
+    line-height: 1.2rem;
     margin: 0.5rem 0;
+    padding: 0 5px;
 }
 
-.day-inner {
+.day__inner {
     border: 1px solid #ccc;
     height: 100%;
     left: 0;
@@ -218,27 +129,7 @@
     width: 100%;
 }
 
-.cal__labels {
-    box-shadow: 0 2px 2px rgba(0,0,0,0.1);
-    box-sizing: border-box;
-    overflow: hidden;
-    position: relative;
-    z-index: 1000;
-}
-
-.cal__labels--week {
-    padding-left: 3rem;
-    padding-right: 18px;
-}
-
-
-
-.day--title {
-    font-size: 12px;
-    padding: 0 5px;
-}
-
-.date {
+.day__date {
     cursor: pointer;
     display: block;
     font-size: 14px;
@@ -251,18 +142,66 @@
     display: none;
 }
 
-.summary .day__initial {
+.time-labels {
+    box-sizing: border-box;
+    flex: 0 1 auto;
+    font-size: 12px;
+    font-weight: bold;
+    list-style: none;
+    left: 0;
+    padding: 0 5px;
+    position: absolute;
+    text-align: right;
+    top: 0;
+    width: 3rem;
+}
+
+.time-labels__row {
+    height: 20px;
+    line-height: 20px;
+}
+
+.time {
+    box-sizing: border-box;
+    border-top: 1px solid #ccc;
+    border-left: 1px solid #ccc;
     display: block;
+    height: 20px;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    width: 100%;
+
+    &:hover {
+        background: rgba(255,255,0,0.3);
+    }
+
+    &:nth-child(even) {
+        border-top-style: dotted;
+    }
 }
-.summary .day__name {
-    display: none;
+
+.time-line {
+    border-top: 2px solid red;
+    height: 0;
+    left: 0;
+    margin-top: -1px;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    text-indent: -9999px;
+    width: 100%;
+    z-index: 20;
 }
+
+
+// State ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .is-active {
     background: #fff;
 }
 
-.is-active .date {
+.is-active .day__date {
     font-weight: bold;
 }
 
@@ -292,42 +231,58 @@
     background: #dddd00 !important;
 }
 
-.visuallyhidden {
+// Full ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.cal--full {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     position: absolute;
-     overflow: hidden;
-     clip: rect(0 0 0 0);
-     height: 1px; width: 1px;
-     margin: -1px; padding: 0; border: 0;
-}
-
-.is-hidden {
-    display: none;
-}
-
-.now {
-    border-top: 2px solid red;
-    height: 0;
     left: 0;
-    margin-top: -1px;
-    overflow: hidden;
-    pointer-events: none;
-    position: absolute;
-    text-indent: -9999px;
+    top: 0;
     width: 100%;
-    z-index: 20;
+
+    .day {
+        height: 100%;
+
+        &:hover {
+            .day__inner {
+                background: rgba(255,255,0,0.3);
+                border-width: 1px 0 0 1px;
+                z-index: 10;
+            }
+        }
+    }
+    .week {
+        left: 0;
+        position: absolute;
+        top: 0;
+    }
+
+    &[data-cal-rows="4"] .month__week { min-height: calc(100% / 4); }
+    &[data-cal-rows="5"] .month__week { min-height: calc(100% / 5); }
+    &[data-cal-rows="6"] .month__week { min-height: calc(100% / 6); }
+
+    .day__date {
+        left: 4px;
+        pointer-events: none;
+        position: absolute;
+        top: 4px;
+    }
 }
 
-.new-event {
-    box-sizing: border-box;
-    background: yellow;
-    box-shadow: 0 0 14px rgba(0,0,0,0.17);
-    height: 0;
-    font-size: 12px;
-    left: 1px;
-    line-height: 20px;
-    overflow: hidden;
-    pointer-events: none;
-    position: absolute;
-    width: 99%;
-    z-index: 15;
+// summary ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.cal--summary {
+    height: 25%;
+
+    .day__date {
+        font-size: 11px;
+        line-height: 25px;
+        width: 100%;
+    }
+
+    .month {
+        position: static;
+    }
 }

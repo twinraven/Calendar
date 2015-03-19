@@ -13,7 +13,7 @@ html, body {
 }
 
 html {
-    padding: 55px 0 0;
+    padding: 50px 0 0;
 }
 
 ul {
@@ -38,4 +38,16 @@ ul {
 .flex-wrapper {
     flex: 1;
     position: relative;
+}
+
+.visuallyhidden {
+    position: absolute;
+     overflow: hidden;
+     clip: rect(0 0 0 0);
+     height: 1px; width: 1px;
+     margin: -1px; padding: 0; border: 0;
+}
+
+.is-hidden {
+    display: none;
 }

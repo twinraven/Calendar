@@ -54,7 +54,7 @@ var App = App || {};
             this.$week = this.$('.week-days');
             this.$labels = this.$('.cal__labels');
             this.$grid = this.$('.cal__grid');
-            this.$timeLabels = this.$('.day-time-labels');
+            this.$timeLabels = this.$('.time-labels');
         },
 
         renderDayLabels: function () {

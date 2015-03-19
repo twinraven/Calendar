@@ -9,19 +9,12 @@
     max-width: 220px;
     min-width: 170px;
     width: 20%;
-}
 
-.cal--summary {
-    height: 25%;
-}
+    .day__initial {
+        display: block;
+    }
 
-.cal__controls {
-    margin: 0 0 10px;
-}
-
-.cal__title {
-    flex: 1;
-    font-size: 16px;
-    margin: 7px 0 10px;
-    line-height: 20px;
+    .day__name {
+        display: none;
+    }
 }

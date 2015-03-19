@@ -53,11 +53,11 @@
 
 
 		<script type="text/template" id="month-summary-template">
-			<h4 class="cal__title"></h4>
 
 			<div class="cal__controls">
-				<a class="cal__controls--prev" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
-				<a class="cal__controls--next" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
+				<a class="cal__control cal__control--prev" href="#"><span class="visuallyhidden">Go to previous month</span>&lt;</a>
+				<h4 class="cal__title"></h4>
+				<a class="cal__control cal__control--next" href="#">&gt;<span class="visuallyhidden">Go to next month</span></a>
 			</div>
 
 			<ul class="cal__labels"></ul>
@@ -66,8 +66,8 @@
 
 
 		<script type="text/template" id="day-full-template">
-			<div class="day-inner" data-date="<%= id %>">
-				<h3 class="date">
+			<div class="day__inner" data-date="<%= id %>">
+				<h3 class="day__date">
 					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 				</h3>
 			</div>
@@ -75,7 +75,7 @@
 
 
 		<script type="text/template" id="day-summary-template">
-			<h3 class="date" data-date="<%= id %>">
+			<h3 class="day__date" data-date="<%= id %>">
 				<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
 			</h3>
 		</script>
@@ -100,18 +100,18 @@
 				</div>-->
 			</div>
 
-			<div class="cal__grid">
-				<ul class="day-time-labels"></ul>
+			<div class="cal__grid cal__grid--week">
+				<ul class="time-labels"></ul>
 				<ul class="week-days"></ul>
 			</div>
 		</script>
 
 
 		<script type="text/template" id="day-week-template">
-			<time datetime="" class="now is-hidden"></time>
+			<time datetime="" class="time-line is-hidden"></time>
 			<span class="new-event is-hidden">New Event</span>
 
-			<div class="cal-day-times"></div>
+			<div class="day__times"></div>
 
 			<ul class="events events--day">
 			<% _.each(events.time, function (event) { %>
@@ -122,13 +122,13 @@
 
 
 		<script type="text/template" id="time-template">
-			<a href="#" class="time-link" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
+			<a href="#" class="time" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
 		</script>
 
 
 		<script type="text/template" id="time-label-template">
-			<li><%- hour %></li>
-			<li></li>
+			<li class="time-labels__row"><%- hour %></li>
+			<li class="time-labels__row"></li>
 		</script>
 
 
@@ -136,7 +136,7 @@
 			<li class="day day--title">
 				<span class="day__initial"><%= initial %></span>
 				<span class="day__name"><%= label %></span>
-				<span class="day__date"><%= date %></span>
+				<span class="day__shortdate"><%= date %></span>
 			</li>
 		</script>
 

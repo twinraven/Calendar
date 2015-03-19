@@ -13,9 +13,9 @@ var App = App || {};
         customDayView: App.Views.dayInSummary,
 
         events: {
-            'click .cal__controls--prev': 'gotoPrevMonth',
-            'click .cal__controls--next': 'gotoNextMonth',
-            'click .date': 'gotoDate'
+            'click .cal__control--prev': 'gotoPrevMonth',
+            'click .cal__control--next': 'gotoNextMonth',
+            'click .day__date': 'gotoDate'
         },
 
 

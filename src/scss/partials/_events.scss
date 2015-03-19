@@ -1,0 +1,57 @@
+/**
+ * Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+.events {
+    position: absolute;
+    left: 0;
+    top: 1.5rem;
+    width: 100%;
+    z-index: 2;
+}
+
+.event {
+    box-sizing: border-box;
+    color: blue;
+    font-size: 11px;
+    display: block;
+    left: 0;
+    margin: 0 0 1px;
+    overflow: hidden;
+    padding: 0 5px;
+    position: absolute;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    top: 0;
+    user-select: none;
+    white-space: nowrap;
+    width: calc(100% / 7);
+
+    &.is-fullday {
+        background: blue;
+        color: white;
+    }
+
+    &.start-1 {left: calc(100% / 7);}
+    &.start-2 {left: calc(100% / 7 * 2);}
+    &.start-3 {left: calc(100% / 7 * 3);}
+    &.start-4 {left: calc(100% / 7 * 4);}
+    &.start-5 {left: calc(100% / 7 * 5);}
+    &.start-6 {left: calc(100% / 7 * 8);}
+}
+
+
+.new-event {
+    box-sizing: border-box;
+    background: yellow;
+    box-shadow: 0 0 14px rgba(0,0,0,0.17);
+    height: 0;
+    font-size: 12px;
+    left: 1px;
+    line-height: 20px;
+    overflow: hidden;
+    pointer-events: none;
+    position: absolute;
+    width: 99%;
+    z-index: 15;
+}

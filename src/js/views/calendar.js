@@ -18,6 +18,7 @@ var App = App || {};
             'click .control__link--next': 'gotoNextDateRange',
             'click .control__link--home': 'gotoToday',
 
+            'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',
             'click .control__link--month': 'setViewModeMonth',
 
@@ -53,8 +54,10 @@ var App = App || {};
             this.$body = $('body');
             this.$title = this.$('.nav__title');
             this.$modeLinks = this.$('.control--mode a');
-            this.$modeLinkMonth = this.$('.control__link--month');
-            this.$modeLinkWeek = this.$('.control__link--week');
+            this.$setModeMonth = this.$('.control__link--month');
+            this.$setModeWeek = this.$('.control__link--week');
+            this.$toggleSummary = this.$('.control__link--summary');
+            this.$summary = this.$('.summary');
         },
 
         bindEvents: function () {
@@ -186,16 +189,16 @@ var App = App || {};
         highlightActiveViewModeLink: function () {
             var $elem;
 
-            this.$modeLinks.removeClass('control__link--active');
+            this.$modeLinks.removeClass('is-active');
 
             if (this.isViewModeWeek()) {
-                $elem = this.$modeLinkWeek;
+                $elem = this.$setModeWeek;
             }
             if (this.isViewModeMonth()) {
-                $elem = this.$modeLinkMonth;
+                $elem = this.$setModeMonth;
             }
 
-            $elem.addClass('control__link--active');
+            $elem.addClass('is-active');
         },
 
         isViewModeWeek: function () {
@@ -217,6 +220,12 @@ var App = App || {};
 
             return nowMonth.getTime() === activeMonth.getTime();
         },
+
+        toggleSummaryDisplay: function () {
+            this.$summary.toggleClass('is-hidden');
+            this.$toggleSummary.toggleClass('is-active');
+        },
+
 
         // Time-based eventing ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

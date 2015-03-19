@@ -45,13 +45,12 @@
     margin: 0 1px 0 0;
     padding: 0 21px;
 
-    &:hover,
-    &:focus {
+    &:hover {
         background: #eee;
         color: #000;
     }
 
-    &.control__link--active {
+    &.is-active {
         background: #eee;
     }
 }
@@ -60,6 +59,11 @@
 .control__link--next,
 .control__link--add {
     font-size: 24px;
+}
+
+.control__link--summary {
+    border-right: 1px solid #eee;
+    padding: 0 14px;
 }
 
 .control__link--add {

@@ -100,6 +100,10 @@
         background: #fff;
         height: 100%;
     }
+
+    .day.is-today {
+        background: #eee !important;
+    }
 }
 
 
@@ -197,39 +201,38 @@
 
 // State ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.is-active {
-    background: #fff;
+.day {
+    &.is-active {
+        background: #fff;
+
+        .day__date {
+            font-weight: bold;
+        }
+    }
+
+    &.is-inactive {
+        background: #eee;
+        color: #888;
+        font-weight: normal;
+    }
+
+    &.is-today {
+        background: #bbb !important;
+    }
+
+    &.is-highlight {
+        background: yellow !important;
+    }
+
+    &.is-inactive.is-highlight {
+        background: #eeee00 !important;
+    }
+
+    &.is-today.is-highlight {
+        background: #dddd00 !important;
+    }
 }
 
-.is-active .day__date {
-    font-weight: bold;
-}
-
-.is-inactive {
-    background: #eee;
-    color: #888;
-    font-weight: normal;
-}
-
-.is-today {
-    background: #bbb !important;
-}
-
-.week-days .is-today {
-    background: #eee !important;
-}
-
-.is-highlight {
-    background: yellow !important;
-}
-
-.is-inactive.is-highlight {
-    background: #eeee00 !important;
-}
-
-.is-today.is-highlight {
-    background: #dddd00 !important;
-}
 
 // Full ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

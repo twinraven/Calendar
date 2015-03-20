@@ -70,6 +70,7 @@ var App = App || {};
                 var view = new this.options.dayView({
                     model: day
                 });
+
                 fragment.appendChild(view.render());
 
                 return view;
@@ -80,23 +81,28 @@ var App = App || {};
         },
 
         // TODO: refactor heavily! move into separate collection/model/view
-        renderEvents: function (data) {
+        renderEvents: function () {
             var fragment = document.createDocumentFragment();
-
-            data.map(function (event) {
-                if (event.weekNum === this.model.weekNum) {
-                    var date = new Date(event.start.date || event.start.dateTime);
+            this.eventViews = App.eventData.map(function (event) {
+                if (event.get('weekNum') === this.model.weekNum) {
+                    /*var date = new Date(event.start.date || event.start.dateTime);
                     var d = App.Methods.getObjectFromDate(date);
+                    var eventData = event;
 
-                    var classes = [];
-                    classes.push('event--start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
+                    eventData.classes = [];
+                    eventData.classes.push('event--start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
 
                     if (event.isFullDay) {
-                        classes.push('is-fullday');
-                    }
+                        eventData.classes.push('is-fullday');
+                    }*/
 
-                    var markup = $('<a class="event ' + classes.join(' ') + '" href="javascript:;" title="' + event.summary + '">' + event.startTimeFormatted + event.summary + '</a>')[0];
-                    fragment.appendChild(markup);
+                    var view = new App.Views.event({
+                        model: event
+                    });
+
+                    fragment.appendChild(view.render());
+
+                    return view;
                 }
             }, this);
 
@@ -107,8 +113,8 @@ var App = App || {};
 
         // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleEventData: function (data) {
-            this.renderEvents(data);
+        handleEventData: function () {
+            this.renderEvents();
         },
 
 

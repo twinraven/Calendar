@@ -19,6 +19,7 @@ module.exports = function ( grunt ) {
 		'src/js/views/day.js',
 		'src/js/views/dayinsummary.js',
 		'src/js/views/dayinweek.js',
+		'src/js/views/event.js',
 		'src/js/views/week.js',
 		'src/js/views/row.js',
 		'src/js/views/month.js',

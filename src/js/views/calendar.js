@@ -347,7 +347,7 @@ var App = App || {};
             var req = App.eventData.fetch();
 
             req.success(function(data) {
-                App.Events.trigger('event:data', data);
+                App.Events.trigger('event:data');
             });
 
             req.error(function(data, othera, otherb) {

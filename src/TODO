@@ -1,12 +1,6 @@
 TODO:
 
 - Render events to month/week views
-- iconography
-- responsive view: make it work on mobile
-	- hide summary bar entirely for now
-	- replace text in nav with icons
-	- font sizes
-	- stop auto-filling heights
 
 
 LONG-TERM:

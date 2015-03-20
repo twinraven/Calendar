@@ -39,6 +39,8 @@ var App = App || {};
 
             this.cacheSelectors();
 
+            this.renderMonthName();
+
             this.renderDayLabels();
 
             this.setMonthData();
@@ -55,8 +57,15 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
+            this.$title = this.$('.cal__title')
             this.$month = this.$('.month');
             this.$labels = this.$('.cal__labels');
+        },
+
+        renderMonthName: function () {
+            var d = this.selfMonth;
+
+            this.$title.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
         renderDayLabels: function () {

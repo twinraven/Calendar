@@ -16,7 +16,7 @@ var App = App || {};
         events: {
             'click .control__link--prev': 'gotoPrevDateRange',
             'click .control__link--next': 'gotoNextDateRange',
-            'click .control__link--home': 'gotoToday',
+            'click .control__link--today': 'gotoToday',
 
             'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',

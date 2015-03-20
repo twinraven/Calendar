@@ -1,0 +1,48 @@
+/*
+    Mixins: commonly-used functions.
+ */
+
+ // USAGE: @include respond-min($mobile-480) {...}
+ @mixin respond-min($width) {
+     // If we're outputting for a fixed media query set...
+     @media screen and (min-width: ($width) / 16 + em) {
+         @content;
+     }
+ }
+
+ // USAGE: @include respond-max($desktop-960) {...}
+ @mixin respond-max($width) {
+     @media screen and (max-width: ($width - 1) / 16 + em) {
+         @content;
+     }
+ }
+
+
+ // USAGE: @include respond-range($tablet-568, $desktop-960) {...}
+ @mixin respond-range($from, $to) {
+    @media only screen and (min-width: ($from) / 16 + em) and (max-width: ($to - 1) / 16 + em) { @content; }
+ }
+
+
+ @mixin retina ($ratio: 1.5) {
+     @media only screen and (-webkit-min-device-pixel-ratio: $ratio),
+     only screen and (min--moz-device-pixel-ratio: $ratio),
+     only screen and (-o-min-device-pixel-ratio: $ratio/1),
+     only screen and (min-resolution: (96 * $ratio) + dpi),
+     only screen and (min-resolution: $ratio + dppx) {
+       @content;
+     }
+ }
+
+@mixin font-size($sizeValue: $base-font-size){
+    font-size: $sizeValue + px;
+    font-size: ($sizeValue * 0.625 / 10)  + rem;
+}
+
+@mixin clearfix {
+    &:after {
+        clear: both;
+        content: "";
+        display: table;
+    }
+}

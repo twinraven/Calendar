@@ -25,17 +25,7 @@ var App = App || {};
             // call the render method of super class, before running our extension code
             App.Views.month.prototype.render.apply(this);
 
-            this.renderMonthName(this.$('.cal__title'));
-
             return this.el;
-        },
-
-        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        renderMonthName: function ($elem) {
-            var d = this.selfMonth;
-
-            $elem.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
 

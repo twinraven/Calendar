@@ -2,27 +2,30 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
 		<title>Calendar</title>
+
 		<link rel="stylesheet" href="css/main.css">
 	</head>
 	<body>
 		<div class="container" id="app">
 			<nav class="nav">
-				<ul class="control">
-					<li><a href="#" class="control__link control__link--summary is-active"><span class="icon icon--summary"></span><span class="visuallyhidden">Go to previous month </span></a></li>
+				<ul class="control control--summary">
+					<li><a href="#" class="control__link control__link--summary is-active"><span class="icon icon--menu"></span><span class="visuallyhidden">Go to previous month </span></a></li>
 				</ul>
 				<ul class="control control--mode">
-					<li><a href="#" class="control__link control__link--week">Week</a></li>
-					<li><a href="#" class="control__link control__link--month">Month</a></li>
+					<li><a href="#" class="control__link control__link--week"><span class="icon icon--view-week"></span> <span class="label">Week</span></a></li>
+					<li><a href="#" class="control__link control__link--month"><span class="icon icon--view-module"></span> <span class="label">Month</span></a></li>
 				</ul>
 
 				<h1 class="nav__title"></h1>
 
 				<ul class="control control--traverse">
-					<li><a class="control__link control__link--prev" href="#"><span class="visuallyhidden">Go to previous month </span>&lt;</a></li>
-					<li><a class="control__link control__link--next" href="#">&gt;<span class="visuallyhidden"> Go to next month</span></a></li>
-					<li><a class="control__link control__link--home" href="#">today</a></li>
-					<li><a class="control__link control__link--add" href="#">+ <span class="visuallyhidden">Add event</span></a></li>
+					<li><a class="control__link control__link--prev" href="#"><span class="visuallyhidden">Go to previous month </span><span class="icon icon--chevron-left"></span></a></li>
+					<li><a class="control__link control__link--next" href="#"><span class="icon icon--chevron-right"></span><span class="visuallyhidden"> Go to next month</span></a></li>
+					<li><a class="control__link control__link--today" href="#"><span class="icon icon--today"></span> <span class="label">today</span></a></li>
+					<li><a class="control__link control__link--add" href="#"><span class="icon icon--add"></span> <span class="visuallyhidden">Add event</span></a></li>
 				</ul>
 			</nav>
 
@@ -41,6 +44,7 @@
 		<!-- Templates ~~~~~~~~~~~~~~~~~~~~~~~ -->
 
 		<script type="text/template" id="month-template">
+			<h4 class="cal__title"></h4>
 			<ul class="cal__labels"></ul>
 
 			<div class="cal__grid cal__grid--month">

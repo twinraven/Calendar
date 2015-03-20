@@ -3,10 +3,139 @@
  */
 
 .icon {
-	background: blue;
 	display: inline-block;
-	height: 20px;
+	font-family: 'Cal';
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: normal;
+	line-height: 1;
 	position: relative;
+	speak: none;
+	text-transform: none;
 	vertical-align: middle;
-	width: 20px;
+
+	/* Better Font Rendering =========== */
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+
+	&:before {
+		display: inline-block;
+		height: 1.25em;
+		position: relative;
+		vertical-align: middle;
+	}
 }
+
+.icon--alarm:before {
+	content: "\e600";
+}
+
+.icon--alarm-add:before {
+	content: "\e601";
+}
+
+.icon--alarm-off:before {
+	content: "\e602";
+}
+
+.icon--alarm-on:before {
+	content: "\e603";
+}
+
+.icon--query-builder:before {
+	content: "\e604";
+}
+
+.icon--room:before {
+	content: "\e605";
+}
+
+.icon--settings:before {
+	content: "\e606";
+}
+
+.icon--view-module:before {
+	content: "\e607";
+}
+
+.icon--view-week:before {
+	content: "\e608";
+}
+
+.icon--add:before {
+	content: "\e61a";
+}
+
+.icon--today:before {
+	content: "\e61b";
+}
+
+.icon--cloud-done:before {
+	content: "\e609";
+}
+
+.icon--cloud-download:before {
+	content: "\e60a";
+}
+
+.icon--cloud-upload:before {
+	content: "\e60b";
+}
+
+.icon--filter-none:before {
+	content: "\e60c";
+}
+
+.icon--hdr-strong:before {
+	content: "\e60d";
+}
+
+.icon--hdr-weak:before {
+	content: "\e60e";
+}
+
+.icon--arrow-back:before {
+	content: "\e60f";
+}
+
+.icon--arrow-drop-down:before {
+	content: "\e610";
+}
+
+.icon--arrow-drop-up:before {
+	content: "\e611";
+}
+
+.icon--arrow-forward:before {
+	content: "\e612";
+}
+
+.icon--check:before {
+	content: "\e613";
+}
+
+.icon--chevron-left:before {
+	content: "\e614";
+}
+
+.icon--chevron-right:before {
+	content: "\e615";
+}
+
+.icon--close:before {
+	content: "\e616";
+}
+
+.icon--menu:before {
+	content: "\e617";
+}
+
+.icon--check-box:before {
+	content: "\e618";
+}
+
+.icon--check-box-outline-blank:before {
+	content: "\e619";
+}
+

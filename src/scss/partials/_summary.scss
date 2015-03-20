@@ -17,4 +17,16 @@
     .day__name {
         display: none;
     }
+
+    .cal__title {
+        display: block;
+    }
+
+    @include respond-max($tablet-wide) {
+        display: none;
+    }
+
+    @include respond-min($tablet-wide) {
+        display: block;
+    }
 }

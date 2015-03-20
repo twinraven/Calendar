@@ -50,6 +50,7 @@
     display: block;
     margin: 0 1px 0 0;
     padding: 0 14px;
+    transition: all 0.15s;
 
     &:hover {
         background: #eee;
@@ -57,10 +58,10 @@
     }
 
     &.is-active {
-        background: #eee;
+        background: #aaa;
+        color: #fff;
     }
 }
-
 .control__link--week,
 .control__link--month,
 .control__link--today {
@@ -82,19 +83,16 @@
         }
     }
 }
-
 .control__link--prev,
 .control__link--next,
 .control__link--add {
     font-size: 24px;
 }
-
 .control__link--summary {
     border-right: 1px solid #eee;
 }
-
 .control__link--add {
-    background: #ccc;
+    background: #eee;
 
     &:hover,
     &:focus {

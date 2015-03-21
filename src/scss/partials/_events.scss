@@ -27,17 +27,23 @@
     white-space: nowrap;
     width: calc(100% / 7);
 
-    &.is-fullday {
+    &[data-fullday="true"] {
         background: blue;
         color: white;
     }
 
-    &.event--start-1 {left: calc(100% / 7);}
-    &.event--start-2 {left: calc(100% / 7 * 2);}
-    &.event--start-3 {left: calc(100% / 7 * 3);}
-    &.event--start-4 {left: calc(100% / 7 * 4);}
-    &.event--start-5 {left: calc(100% / 7 * 5);}
-    &.event--start-6 {left: calc(100% / 7 * 8);}
+    &[data-pos="1"] {left: calc(100% / 7);}
+    &[data-pos="2"] {left: calc(100% / 7 * 2);}
+    &[data-pos="3"] {left: calc(100% / 7 * 3);}
+    &[data-pos="4"] {left: calc(100% / 7 * 4);}
+    &[data-pos="5"] {left: calc(100% / 7 * 5);}
+    &[data-pos="6"] {left: calc(100% / 7 * 6);}
+
+    &[data-span="2"] {width: calc(100% / 7 * 2);}
+    &[data-span="3"] {width: calc(100% / 7 * 3);}
+    &[data-span="4"] {width: calc(100% / 7 * 4);}
+    &[data-span="5"] {width: calc(100% / 7 * 5);}
+    &[data-span="6"] {width: calc(100% / 7 * 6);}
 }
 
 

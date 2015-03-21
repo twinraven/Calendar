@@ -237,6 +237,13 @@ var App = App || {};
             return tomorrow;
         },
 
+        getDaysInRangeNum : function (dateFrom, dateTo) {
+            var dFrom = this.newDate(dateFrom);
+            var dTo = this.newDate(dateTo);
+
+            return Math.round((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
+        },
+
         isCurrentWeek : function (date) {
             var d = this.newDate(date);
             var weekStartDate = this.getWeekStartDate(d);
@@ -316,16 +323,8 @@ var App = App || {};
             return new Date(d.year, d.month - 1);
         },
 
+
         // Return array-based date collections ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-        getDaysInRangeNum : function (dateFrom, dateTo) {
-            var dFrom = this.newDate(dateFrom);
-            var dTo = this.newDate(dateTo);
-
-            return Math.round((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
-        },
-
 
         getDateRangeData : function (dateFrom, dateTo) {
             var dateFromObj = this.getObjectFromDate(dateFrom);

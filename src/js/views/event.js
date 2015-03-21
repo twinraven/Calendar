@@ -9,10 +9,20 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.event = Backbone.View.extend({
-        template: _.template($('#event-template').html()),
 
         tagName: 'a',
-        className: 'event',
+
+        attributes: function () {
+            var customData = this.model.get('custom');
+
+            return {
+                'class': 'event',
+                'title': customData.title,
+                'data-pos': customData.pos,
+                'data-fullday': customData.isFullDay,
+                'data-span': customData.span
+            };
+        },
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -25,7 +35,7 @@ var App = App || {};
         render: function () {
             this.setState();
 
-            this.$el.html(this.template({}));
+            this.renderElem();
 
             return this.el;
         },
@@ -34,13 +44,10 @@ var App = App || {};
 
         setState: function () {
             var m = this.model;
+        },
 
-            //if (this.model.isFullDay) {
-
-            //}
-
-            //this.$el.text(this.model.description);
-            //this.$el.addClass(this.model.classes.join(' '));
+        renderElem: function () {
+            this.$el.text(this.model.get('custom').title);
         },
 
 

@@ -57,7 +57,7 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
-            this.$title = this.$('.cal__title')
+            this.$title = this.$('.cal__title');
             this.$month = this.$('.month');
             this.$labels = this.$('.cal__labels');
         },

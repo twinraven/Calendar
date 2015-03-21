@@ -83,18 +83,9 @@ var App = App || {};
         // TODO: refactor heavily! move into separate collection/model/view
         renderEvents: function () {
             var fragment = document.createDocumentFragment();
+
             this.eventViews = App.eventData.map(function (event) {
-                if (event.get('weekNum') === this.model.weekNum) {
-                    /*var date = new Date(event.start.date || event.start.dateTime);
-                    var d = App.Methods.getObjectFromDate(date);
-                    var eventData = event;
-
-                    eventData.classes = [];
-                    eventData.classes.push('event--start-' + App.Methods.getDayOfWeekNum(d.year, d.month, d.day));
-
-                    if (event.isFullDay) {
-                        eventData.classes.push('is-fullday');
-                    }*/
+                if (event.get('custom').weekNum === this.model.weekNum) {
 
                     var view = new App.Views.event({
                         model: event

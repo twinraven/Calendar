@@ -35,6 +35,8 @@ var App = App || {};
 
             this.cacheSelectors();
 
+            this.renderMonthName();
+
             this.renderDayLabels();
 
             this.renderTimeLabels();
@@ -51,10 +53,17 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         cacheSelectors: function () {
+            this.$title = this.$('.cal__title');
             this.$week = this.$('.week-days');
             this.$labels = this.$('.cal__labels');
             this.$grid = this.$('.cal__grid');
             this.$timeLabels = this.$('.time-labels');
+        },
+
+        renderMonthName: function () {
+            var d = this.selfWeek;
+
+            this.$title.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
         },
 
         renderDayLabels: function () {

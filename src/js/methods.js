@@ -76,9 +76,11 @@ var App = App || {};
 
             // January 4 is always in week 1.
             var week1 = new Date(date.getFullYear(), 0, 4);
+            var week = Math.round(((date.getTime() - week1.getTime()) / App.Constants.MS_IN_DAY - 3 + (week1.getDay() + 6) % 7) / 7);
+            var year = date.getFullYear();
 
             // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-            return Math.round(((date.getTime() - week1.getTime()) / App.Constants.MS_IN_DAY - 3 + (week1.getDay() + 6) % 7) / 7);
+            return Number(year + '.' + week); // results in number with decimal: e.g. 2015.43
         },
 
 
@@ -195,6 +197,14 @@ var App = App || {};
             return num + suffix;
         },
 
+        getHrsBetween : function (dateFrom, dateTo) {
+            var from = new Date(dateFrom);
+            var to = new Date(dateTo);
+            var difference = to - from;
+
+            return difference / App.Constants.MS_IN_HR;
+        },
+
         getTimeFormatted : function (date) {
             var dateStart = this.newDate(date);
             var dateTime = new Date(date);
@@ -209,9 +219,9 @@ var App = App || {};
             var suffix = 'a';
 
             if (hours >= 12) { suffix = 'p'; }
-            if (hours > 12) { hours = hours - 12; }
+            if (Math.floor(hours) > 12) { hours = hours - 12; }
 
-            return hours + ':' + this.asTwoDigits(minutes) + suffix;
+            return Math.floor(hours) + ':' + this.asTwoDigits(minutes) + suffix;
         },
 
         getPercentDayComplete : function (date) {

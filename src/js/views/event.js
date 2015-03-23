@@ -33,8 +33,6 @@ var App = App || {};
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.setState();
-
             this.renderElem();
 
             return this.el;
@@ -42,12 +40,9 @@ var App = App || {};
 
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        setState: function () {
-            var m = this.model;
-        },
-
         renderElem: function () {
-            this.$el.text(this.model.get('custom').title);
+            //this.$el.text(this.model.get('custom').title);
+            this.$el.text(this.model.get('summary'));
         },
 
 

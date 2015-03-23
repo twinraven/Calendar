@@ -23,7 +23,6 @@ var App = App || {};
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-
             // call the initialize method of parent/super class (as we want to add more init methods)
             App.Views.month.prototype.initialize.apply(this, [params]);
 

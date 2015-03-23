@@ -101,33 +101,24 @@
 			<div class="cal-week-header">
 				<ul class="cal__labels cal__labels--week"></ul>
 
-				<!--<div class="events events--week">
-					<div class="event event--fullday">
-						<p class="event__title"></p>
-					</div>
-				</div>-->
+				<div class="events events--week events--fullday">
+					<div  class="events__inner"></div>
+				</div>
 			</div>
 
 			<div class="cal__grid cal__grid--week">
 				<ul class="time-labels"></ul>
 				<ul class="week-days"></ul>
+				<ul class="week-events"></ul>
 			</div>
 		</script>
-
 
 		<script type="text/template" id="day-week-template">
 			<time datetime="" class="time-line is-hidden"></time>
 			<span class="new-event is-hidden">New Event</span>
 
 			<div class="day__times"></div>
-
-			<ul class="events events--day">
-			<% _.each(events.time, function (event) { %>
-				<li class="event event--time"><%- event.title %></li>
-			<% }); %>
-			</ul>
 		</script>
-
 
 		<script type="text/template" id="time-template">
 			<a href="#" class="time" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>

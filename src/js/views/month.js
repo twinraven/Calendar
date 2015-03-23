@@ -25,9 +25,12 @@ var App = App || {};
 
             this.setMonthData();
 
+            this.getEventData();
+
             this.listenTo(App.Events, 'change:date', this.handleChangeDate);
             this.listenTo(App.Events, 'change:mark', this.handleMarkDateRange);
             this.listenTo(App.Events, 'clock:tick', this.handleClockTick);
+            this.listenTo(App.Events, 'event:data', this.handleEventData);
         },
 
 
@@ -184,11 +187,27 @@ var App = App || {};
             }, this);
         },
 
+        getEventData: function () {
+            if (App.eventData) {
+                var d = App.Methods.getObjectFromDate(this.selfMonth);
+                var firstDay = this.selfMonth;
+                var lastDay = App.Methods.newDate(d.year, d.month + 1, 1);
+
+                App.activeDatesEventData = App.eventData.filter(function (event) {
+                    var data = event.get('custom');
+
+                    return (data.startDateTime < firstDay && data.endDateTime > firstDay)
+                        || (data.startDateTime > firstDay && data.startDateTime < lastDay);
+                });
+            }
+        },
+
 
         // event handler ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleChangeDate: function (date) {
             this.gotoMonth({ 'newDate': date });
+            this.getEventData();
         },
 
         handleMarkDateRange: function (data) {
@@ -214,6 +233,12 @@ var App = App || {};
                     App.Events.trigger('change:date', now);
                 }
             }
+        },
+
+        handleEventData: function () {
+            this.getEventData();
+
+            this.render();
         },
 
 

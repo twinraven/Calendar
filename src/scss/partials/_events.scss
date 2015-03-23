@@ -9,22 +9,40 @@
     width: 100%;
     z-index: 2;
 }
+.events--week {
+    background: #fafafa;
+    border-left: 1px solid #ccc;
+    box-sizing: border-box;
+    left: 3rem;
+    min-height: 42px;
+    overflow-y: scroll;
+    position: relative;
+    top: 0;
+    width: calc(100% - 3rem);
+    z-index: 5;
+}
+
+.events__inner {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
 
 .event {
     box-sizing: border-box;
     color: blue;
+    cursor: pointer;
     font-size: 11px;
     display: block;
     left: 0;
     margin: 0 0 1px;
-    overflow: hidden;
     padding: 0 5px;
     position: absolute;
     text-decoration: none;
-    text-overflow: ellipsis;
     top: 0;
     user-select: none;
-    white-space: nowrap;
     width: calc(100% / 7);
 
     &[data-fullday="true"] {
@@ -44,8 +62,29 @@
     &[data-span="4"] {width: calc(100% / 7 * 4);}
     &[data-span="5"] {width: calc(100% / 7 * 5);}
     &[data-span="6"] {width: calc(100% / 7 * 6);}
+
+    &.event--single-line {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
 }
 
+.week-events {
+    @extend .week-days;
+    margin-left: 0;
+    padding: 0;
+    pointer-events: none;
+    width: calc(100% - 3rem);
+
+    .event {
+        background: #55c;
+        color: #fff;
+        height: auto;
+        padding: 3px 5px;
+        pointer-events: auto;
+    }
+}
 
 .new-event {
     box-sizing: border-box;

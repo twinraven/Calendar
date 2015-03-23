@@ -113,6 +113,13 @@
 }
 
 
+.cal-week-header {
+    border-bottom: 1px solid #ccc;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+    position: relative;
+    z-index: 5;
+}
+
 .day {
     background: #eee;
     align-items: stretch;
@@ -216,7 +223,7 @@
 
 .time {
     box-sizing: border-box;
-    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
     border-left: 1px solid #ccc;
     display: block;
     height: 20px;
@@ -229,8 +236,8 @@
         background: rgba(255,255,0,0.3);
     }
 
-    &:nth-child(even) {
-        border-top-style: dotted;
+    &:nth-child(odd) {
+        border-bottom-style: dotted;
     }
 }
 

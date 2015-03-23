@@ -39,11 +39,7 @@ var App = App || {};
 
             this.renderTime();
 
-            if (this.isToday()) {
-                this.setTimeLinePosition();
-            }
-
-            this.$times = this.$('.time');
+            this.setTimeLinePosition();
 
             return this.el;
         },
@@ -78,23 +74,25 @@ var App = App || {};
         // TODO: rendering this elem should probably be a separate template/render cycle,
         // with visible state/css-top set as model properties & passed through to template
         setTimeLinePosition: function () {
-            var now = new Date();
-            var day = App.Methods.newDate(now);
+            if (this.isToday()) {
+                var now = new Date();
+                var day = App.Methods.newDate(now);
 
-            // if we've walked into tomorrow (by staying on the page long enough),
-            // fire the event to update the date to today
-            if (App.State.today.getTime() !== day.getTime()) {
-                App.Events.trigger('change:date', day);
-                App.State.today = day;
-            }
+                // if we've walked into tomorrow (by staying on the page long enough),
+                // fire the event to update the date to today
+                if (App.State.today.getTime() !== day.getTime()) {
+                    App.Events.trigger('change:date', day);
+                    App.State.today = day;
+                }
 
-            var percentDayComplete = App.Methods.getPercentDayComplete(now);
+                var percentDayComplete = App.Methods.getPercentDayComplete(now);
 
-            this.$timeLine.attr('datetime', App.Methods.getNewDateId(now));
-            this.$timeLine.text(now.toString());
+                this.$timeLine.attr('datetime', App.Methods.getNewDateId(now));
+                this.$timeLine.text(now.toString());
 
-            if (this.$timeLine.length) {
-                this.$timeLine.removeClass('is-hidden').css('top', percentDayComplete + '%');
+                if (this.$timeLine.length) {
+                    this.$timeLine.removeClass('is-hidden').css('top', percentDayComplete + '%');
+                }
             }
         },
 
@@ -143,9 +141,7 @@ var App = App || {};
 
         // broken?
         handleClockTick: function () {
-            if (this.isToday()) {
-                this.setTimeLinePosition();
-            }
+            this.setTimeLinePosition();
         },
 
 
@@ -171,8 +167,8 @@ var App = App || {};
             if (elemFrom || elemTo) {
                 var blockHeight = App.Constants.WEEK_VIEW_GRID_HEIGHT;
 
-                var top = blockHeight * (elemFrom) + 1; // + 1 to avoid overlapping top border
-                var height = blockHeight * (elemTo - elemFrom + 1) - 1; // -1 to avoid overlapping bottom border
+                var top = blockHeight * (elemFrom);
+                var height = blockHeight * (elemTo - elemFrom + 1) - 1; // to avoid 0-height blocks
 
                 this.$newEvent
                     .removeClass('is-hidden')

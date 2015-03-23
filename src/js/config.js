@@ -15,6 +15,7 @@ var App = App || {};
 	    WEEK : 'WEEK',
 	    MONTH : 'MONTH',
 	    MS_IN_DAY : 86400000,
+	    MS_IN_HR : 3600000,
 	    MS_IN_MINUTE : 60000,
 	    MINS_IN_DAY: 1440,
 	    HRS_IN_DAY: 24
@@ -24,7 +25,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.Constants.MONTH
+		viewMode: App.Constants.WEEK
 	};
 
 	App.Models = {};

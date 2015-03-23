@@ -16,15 +16,16 @@ var App = App || {};
 
         collection: App.Collections.dates,
 
-
         // initialize ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-
             // keep track of own date, irrespective of App-wide state
             this.selfWeek = (params && params.date) || App.Methods.newDate();
 
+            this.getEventData();
+
             this.listenTo(App.Events, 'change:date', this.handleChangeDate);
+            this.listenTo(App.Events, 'event:data', this.handleEventData);
         },
 
 
@@ -45,6 +46,10 @@ var App = App || {};
 
             this.renderDates();
 
+            this.renderAllDayEvents();
+
+            this.renderTimedEvents();
+
             this.scrollTimeIntoView();
 
             return this.el;
@@ -58,6 +63,8 @@ var App = App || {};
             this.$labels = this.$('.cal__labels');
             this.$grid = this.$('.cal__grid');
             this.$timeLabels = this.$('.time-labels');
+            this.$allDayEvents = this.$('.events--fullday .events__inner');
+            this.$events = this.$('.week-events');
         },
 
         renderMonthName: function () {
@@ -75,7 +82,7 @@ var App = App || {};
                 var newDateObj = App.Methods.getObjectFromDate(newDate);
 
                 var data = {
-                    'date': newDateObj.day + '/' + newDateObj.month,
+                    'date': newDateObj.day + '/' + (newDateObj.month + 1),
                     'label': App.Labels.week[i].slice(0, 3),
                     'initial': App.Labels.week[i].slice(0, 1)
                 };
@@ -121,6 +128,48 @@ var App = App || {};
             this.$week.append(fragment);
         },
 
+        renderAllDayEvents: function () {
+            if (App.activeDatesEventData) {
+                var fragment = document.createDocumentFragment();
+
+                var allDayEvents = _.filter(App.activeDatesEventData, function (event) {
+                    return event.get('custom').isFullDay;
+                });
+
+                _.each(allDayEvents, function (event) {
+                    var view = new App.Views.event({
+                        model: event
+                    });
+
+                    fragment.appendChild(view.render());
+                });
+
+                this.$allDayEvents.empty();
+                this.$allDayEvents.append(fragment);
+            }
+        },
+
+        renderTimedEvents: function () {
+            if (App.activeDatesEventData) {
+                var fragment = document.createDocumentFragment();
+
+                var timedEvents = _.filter(App.activeDatesEventData, function (event) {
+                    return !event.get('custom').isFullDay;
+                });
+
+                _.each(timedEvents, function (event) {
+                    var view = new App.Views.eventInWeek({
+                        model: event
+                    });
+
+                    fragment.appendChild(view.render());
+                });
+
+                this.$events.empty();
+                this.$events.append(fragment);
+            }
+        },
+
         scrollTimeIntoView: function () {
             var now = new Date();
 
@@ -141,6 +190,24 @@ var App = App || {};
             }, this);
         },
 
+        getEventData: function () {
+            if (App.eventData) {
+                var d = App.Methods.getObjectFromDate(this.selfWeek);
+                var firstDay = this.selfWeek;
+                var lastDay = App.Methods.getWeekEndDate(this.selfWeek);
+
+                App.activeDatesEventData = App.eventData.filter(function (event) {
+                    var data = event.get('custom');
+                    var boop = false;
+                    if ((data.startDateTime < firstDay && data.endDateTime > firstDay)
+                        || (data.startDateTime > firstDay && data.startDateTime < lastDay)) {
+                        boop = true;
+                    }
+                    return boop;
+                });
+            }
+        },
+
 
         // event handling ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -149,6 +216,14 @@ var App = App || {};
             var newDate = App.Methods.getWeekStartDate(date);
 
             this.selfWeek = newDate;
+
+            this.getEventData();
+
+            this.render();
+        },
+
+        handleEventData: function () {
+            this.getEventData();
 
             this.render();
         },

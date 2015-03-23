@@ -45,6 +45,11 @@ var App = App || {};
             this.startClock();
 
             this.loadEventData();
+
+
+            // DEBUG
+            this.setActiveDate(App.Methods.newDate(2014, 1, 18));
+            this.markDates();
         },
 
 

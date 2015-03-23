@@ -1,6 +1,13 @@
 TODO:
 
-- Render events to month/week views
+- Render events to month/week views:
+	- fix event spanning in fullday/week view
+	- multiple dates on any one day - stacking/sorting?
+	- wrapping long events from one week to next
+	- moveable dates in month view
+	- resizeable dates in week view
+
+ -date bug when switching between month/week view; e.g. viewing august 2014 in month view, switch to week, goes to july; back to month, stays on July.
 
 
 LONG-TERM:

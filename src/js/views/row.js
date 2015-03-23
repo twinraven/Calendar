@@ -80,14 +80,13 @@ var App = App || {};
             this.$weekDays.append(fragment);
         },
 
-        // TODO: refactor heavily! move into separate collection/model/view
         renderEvents: function () {
             var fragment = document.createDocumentFragment();
 
-            this.eventViews = App.eventData.map(function (event) {
+            this.eventViews = App.activeDatesEventData.map(function (event) {
                 if (event.get('custom').weekNum === this.model.weekNum) {
 
-                    var view = new App.Views.event({
+                    var view = new App.Views.eventInMonth({
                         model: event
                     });
 

@@ -14,6 +14,10 @@ var App = App || {};
         tagName: 'li',
         className: 'day',
 
+        events: {
+            'click .day__inner': 'handleDayClick'
+        },
+
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
@@ -64,6 +68,11 @@ var App = App || {};
             this.$el.html(this.template(this.model.toJSON()));
         },
 
+
+        handleDayClick: function (e) {
+            console.log('yess')
+            var date = App.Events.trigger('goto:date', this.day);
+        },
 
         // Kill switch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

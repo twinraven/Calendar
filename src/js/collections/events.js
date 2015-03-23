@@ -16,15 +16,23 @@ var App = App || {};
 
 		comparator: 'etag',
 
-		parse: function (dates) {
-			dates.map(function (model) {
+		parse: function (data) {
+			var events = data.items;
+
+			events.map(function (model) {
+				var isFullDay = _.has(model.start, 'date');
+
 				var startDateTime = new Date(model.start.date || model.start.dateTime);
 				var endDateTime = new Date(model.end.date || model.end.dateTime);
 
+				// to avoid any 1am weirdness
+				if (isFullDay) {
+					startDateTime = App.Methods.newDate(startDateTime);
+					endDateTime = App.Methods.newDate(endDateTime);
+				}
+
 				var d = App.Methods.getObjectFromDate(startDateTime);
 				var pos = App.Methods.getDayOfWeekNum(d.year, d.month, d.day);
-
-				var isFullDay = _.has(model.start, 'date');
 
 				var startTime = isFullDay ? '' : App.Methods.getTimeFormatted(startDateTime) + ' ';
 
@@ -49,7 +57,7 @@ var App = App || {};
 				return model;
 			});
 
-			return dates;
+			return events;
 		}
 	});
 })();

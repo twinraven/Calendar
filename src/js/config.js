@@ -26,7 +26,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.Constants.WEEK
+		viewMode: App.Constants.MONTH
 	};
 
 	App.Models = {};

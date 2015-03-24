@@ -69,6 +69,7 @@ var App = App || {};
             this.$events = this.$('.week-events');
         },
 
+        // use template engine for this?
         renderMonthName: function () {
             var d = this.selfWeek;
 
@@ -130,30 +131,41 @@ var App = App || {};
             this.$week.append(fragment);
         },
 
-        // TODO: refactor. Getting too long & complicated for 1 function
         renderAllDayEvents: function () {
+            this.renderEvents('event', this.$allDayEvents, function (event) {
+                return event.get('custom').isFullDay;
+            });
+
+            this.resizeAllDayEventsContainer();
+        },
+
+        renderTimedEvents: function () {
+            this.renderEvents('eventInWeek', this.$events, function (event) {
+                return !event.get('custom').isFullDay;
+            });
+        },
+
+        renderEvents: function (eventView, $eventsElem, filterFn) {
             if (App.activeDatesEventData) {
                 var fragment = document.createDocumentFragment();
 
-                var allDayEvents = _.filter(App.activeDatesEventData, function (event) {
-                    return event.get('custom').isFullDay;
-                });
+                var events = _.filter(App.activeDatesEventData, filterFn);
 
-                if (allDayEvents) {
-                    allDayEvents.forEach(function (event) {
+                if (events) {
+                    events.forEach(function (event) {
                         event.attributes.custom.parentWeekNum = this.weekNum;
+                        event.attributes.custom.parentWeekStartDate = this.selfWeek;
+                        event.attributes.custom.parentWeekEndDate = App.Methods.getWeekEndDate(this.selfWeek);
 
-                        var view = new App.Views.event({
+                        var view = new App.Views[eventView]({
                             model: event
                         });
 
                         fragment.appendChild(view.render());
                     }, this);
 
-                    this.$allDayEvents.empty();
-                    this.$allDayEvents.append(fragment);
-
-                    this.resizeAllDayEventsContainer();
+                    $eventsElem.empty();
+                    $eventsElem.append(fragment);
                 }
             }
         },
@@ -175,29 +187,6 @@ var App = App || {};
 
             if (eventsHeight > containerHeight) {
                 this.$allDayEvents.parent().height(eventsHeight + 1);
-            }
-        },
-
-        renderTimedEvents: function () {
-            if (App.activeDatesEventData) {
-                var fragment = document.createDocumentFragment();
-
-                var timedEvents = _.filter(App.activeDatesEventData, function (event) {
-                    return !event.get('custom').isFullDay;
-                });
-
-                _.each(timedEvents, function (event) {
-                    event.attributes.custom.parentWeekNum = this.weekNum;
-
-                    var view = new App.Views.eventInWeek({
-                        model: event
-                    });
-
-                    fragment.appendChild(view.render());
-                }, this);
-
-                this.$events.empty();
-                this.$events.append(fragment);
             }
         },
 
@@ -223,7 +212,6 @@ var App = App || {};
 
         getEventData: function () {
             if (App.eventData) {
-                var d = App.Methods.getObjectFromDate(this.selfWeek);
                 var firstDay = this.selfWeek;
                 var lastDay = App.Methods.getWeekEndDate(this.selfWeek);
 

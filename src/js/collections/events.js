@@ -32,8 +32,7 @@ var App = App || {};
 					endDateTime = App.Methods.newDate(endDateTime);
 				}
 
-				var d = App.Methods.getObjectFromDate(startDateTime);
-				var pos = App.Methods.getDayOfWeekNum(d.year, d.month, d.day);
+				var pos = App.Methods.getDayOfWeekNum(startDateTime);
 
 				var startTime = isFullDay ? '' : App.Methods.getTimeFormatted(startDateTime) + ' ';
 

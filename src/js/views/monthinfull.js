@@ -57,6 +57,7 @@ var App = App || {};
             var monthRowView = new App.Views.row({
                 collection: weekData,
                 dayView: this.customDayView,
+                weekStartDate: weekData[0].id,
                 model: { weekNum: weekNum }
             });
 

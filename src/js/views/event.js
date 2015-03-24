@@ -18,13 +18,14 @@ var App = App || {};
 
         attributes: function () {
             var customData = this.model.get('custom');
+            var position = this.getEventPosition();
 
             return {
                 'class': 'event',
                 'title': customData.title,
-                'data-pos': this.calcStartPos(),
-                'data-fullday': customData.isFullDay,
-                'data-span': customData.span
+                'data-pos':position.pos,
+                'data-span': position.span,
+                'data-fullday': customData.isFullDay
             };
         },
 
@@ -48,19 +49,24 @@ var App = App || {};
             this.$el.text(this.model.get('summary'));
         },
 
-        calcStartPos: function () {
+        getEventPosition: function () {
             var customData = this.model.get('custom');
-            var startPos = customData.pos;
+            var output = {
+                pos: customData.pos,
+                span: customData.span
+            };
 
-            if (customData.weekNum === customData.parentWeekNum) {
-                console.log('current');
+            if (customData.weekNum < customData.parentWeekNum) {
+                output.pos = 0;
 
-            } else if (customData.weekNum < customData.parentWeekNum) {
-                console.log('less');
-                startPos = 0;
+                if (customData.endDateTime < customData.parentWeekEndDate) {
+                    output.span = App.Methods.getDayOfWeekNum(customData.endDateTime);
+                } else {
+                    output.span = App.Constants.DAYS_IN_WEEK;
+                }
             }
 
-            return startPos;
+            return output;
         },
 
 

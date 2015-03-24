@@ -68,6 +68,10 @@
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+
+        //DEBUG
+        border: 1px solid white;
+        opacity: 0.5;
     }
 }
 

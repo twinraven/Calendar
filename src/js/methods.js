@@ -148,8 +148,15 @@ var App = App || {};
         },
 
 
-        getDayOfWeekNum : function (year, month, day) {
-            var num = new Date(year, month, day).getDay();
+        getDayOfWeekNum : function (date, year, month, day) {
+            var num;
+
+            // allows us to either pass in a date object as-is, or specify an exact date
+            if (date) {
+                num = date.getDay();
+            } else {
+                num = new Date(year, month, day).getDay();
+            }
 
             if (App.State.startDay === 'mon') {
                  // JS getDay() returns a sunday-0-indexed value
@@ -163,13 +170,13 @@ var App = App || {};
         getMonthStartDayNum : function (date) {
             var d = this.getObjectFromDate(date);
 
-            return this.getDayOfWeekNum(d.year, d.month, 1);
+            return this.getDayOfWeekNum(null, d.year, d.month, 1);
         },
 
 
         getWeekStartDate : function (date) {
             var d = this.getObjectFromDate(date);
-            var dayNum = this.getDayOfWeekNum(d.year, d.month, d.day);
+            var dayNum = this.getDayOfWeekNum(date);
 
             return this.newDate(d.year, d.month, d.day - dayNum);
         },
@@ -431,7 +438,7 @@ var App = App || {};
                 year: d.year.toString(),
                 date: newDate.toDateString(),
                 suffix: this.getOrdinalSuffix(d.day),
-                weekday : this.getDayOfWeekName(this.getDayOfWeekNum(d.year, d.month, d.day))
+                weekday : this.getDayOfWeekName(this.getDayOfWeekNum(newDate))
             };
         },
 

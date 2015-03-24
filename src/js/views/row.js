@@ -11,12 +11,6 @@ var App = App || {};
         tagName: 'li',
         className: 'month__week',
 
-        attributes: function () {
-            return {
-                'data-row': this.model.weekNum // this is only for debugging
-            };
-        },
-
         // templating and setup
         template: _.template($('#row-template').html()), // for containing elem & markup
 
@@ -27,6 +21,10 @@ var App = App || {};
 
         initialize: function (params) {
             this.options = params;
+
+            this.selfWeek = App.Methods.newDate(this.options.weekStartDate);
+
+            this.getEventData();
 
             this.listenTo(App.Events, 'event:data', this.handleEventData);
         },
@@ -84,18 +82,17 @@ var App = App || {};
             var fragment = document.createDocumentFragment();
 
             this.eventViews = App.activeDatesEventData.map(function (event) {
-                if (event.get('custom').weekNum === this.model.weekNum) {
+                event.attributes.custom.parentWeekNum = this.model.weekNum;
+                event.attributes.custom.parentWeekStartDate = this.selfWeek;
+                event.attributes.custom.parentWeekEndDate = App.Methods.getWeekEndDate(this.selfWeek);
 
-                    event.attributes.custom.parentWeekNum = this.model.weekNum;
+                var view = new App.Views.eventInMonth({
+                    model: event
+                });
 
-                    var view = new App.Views.eventInMonth({
-                        model: event
-                    });
+                fragment.appendChild(view.render());
 
-                    fragment.appendChild(view.render());
-
-                    return view;
-                }
+                return view;
             }, this);
 
             this.$weekEvents.empty();
@@ -103,9 +100,28 @@ var App = App || {};
         },
 
 
+        // Data manipulation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        getEventData: function () {
+            if (App.eventData) {
+                var firstDay = this.selfWeek;
+                var lastDay = App.Methods.getWeekEndDate(this.selfWeek);
+
+                App.activeDatesEventData = App.eventData.filter(function (event) {
+                    var data = event.get('custom');
+
+                    return (data.startDateTime <= firstDay && data.endDateTime > firstDay)
+                        || (data.startDateTime >= firstDay && data.startDateTime < lastDay);
+                });
+            }
+        },
+
+
         // Handle events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleEventData: function () {
+            this.getEventData();
+
             this.renderEvents();
         },
 

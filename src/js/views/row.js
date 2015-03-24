@@ -86,6 +86,8 @@ var App = App || {};
             this.eventViews = App.activeDatesEventData.map(function (event) {
                 if (event.get('custom').weekNum === this.model.weekNum) {
 
+                    event.attributes.custom.parentWeekNum = this.model.weekNum;
+
                     var view = new App.Views.eventInMonth({
                         model: event
                     });

@@ -48,7 +48,7 @@ var App = App || {};
 
 
             // DEBUG
-            this.setActiveDate(App.Methods.newDate(2014, 1, 18));
+            this.setActiveDate(App.Methods.newDate(2013, 11, 18));
             this.markDates();
         },
 
@@ -316,7 +316,11 @@ var App = App || {};
 
             if (this.isViewModeWeek()) {
                 // normalise date so we're always dealing with the first day of the week
-                newDate = App.Methods.getWeekStartDate(date);
+                var weekStart = App.Methods.getWeekStartDate(date);
+                var d = App.Methods.getObjectFromDate(weekStart);
+                // set the date as a few days into the month, so we don't march backwards in time
+                // whenever we switch between week/month views repeatedly
+                newDate = App.Methods.newDate(d.year, d.month, d.day + 3);
             }
 
             // set the currentDate to the first of the month, only if
@@ -325,7 +329,9 @@ var App = App || {};
             // we switch to week mode, it highlights the correct week)
             if (this.isViewModeMonth() && !this.isCurrentMonthActive(date)) {
                 d = App.Methods.getObjectFromDate(date);
-                newDate = App.Methods.newDate(d.year, d.month, 1);
+                // set the date as a few days into the month, so we don't march backwards in time
+                // whenever we switch between week/month views repeatedly
+                newDate = App.Methods.newDate(d.year, d.month, 4);
             }
 
             this.activeDate = newDate;

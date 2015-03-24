@@ -12,13 +12,17 @@ var App = App || {};
 
         tagName: 'a',
 
+        events: {
+            'click': 'handleEventClick'
+        },
+
         attributes: function () {
             var customData = this.model.get('custom');
 
             return {
                 'class': 'event',
                 'title': customData.title,
-                'data-pos': customData.pos,
+                'data-pos': this.calcStartPos(),
                 'data-fullday': customData.isFullDay,
                 'data-span': customData.span
             };
@@ -41,8 +45,29 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            //this.$el.text(this.model.get('custom').title);
             this.$el.text(this.model.get('summary'));
+        },
+
+        calcStartPos: function () {
+            var customData = this.model.get('custom');
+            var startPos = customData.pos;
+
+            if (customData.weekNum === customData.parentWeekNum) {
+                console.log('current');
+
+            } else if (customData.weekNum < customData.parentWeekNum) {
+                console.log('less');
+                startPos = 0;
+            }
+
+            return startPos;
+        },
+
+
+        // handle Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        handleEventClick: function (e) {
+            console.log(this.model.get('custom'));
         },
 
 

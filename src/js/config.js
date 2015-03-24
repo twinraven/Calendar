@@ -8,6 +8,7 @@ var App = App || {};
 
 	// immutable App-wide properties
 	App.Constants = {
+		MAX_ALL_DAY_EVENTS_HEIGHT: 84,
 		WEEK_VIEW_GRID_HEIGHT: 20,
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,

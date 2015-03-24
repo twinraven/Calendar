@@ -21,6 +21,8 @@ var App = App || {};
         initialize: function (params) {
             // keep track of own date, irrespective of App-wide state
             this.selfWeek = (params && params.date) || App.Methods.newDate();
+            this.selfWeek = App.Methods.getWeekStartDate(this.selfWeek);
+            this.weekNum = App.Methods.getWeekNum(this.selfWeek);
 
             this.getEventData();
 
@@ -128,6 +130,7 @@ var App = App || {};
             this.$week.append(fragment);
         },
 
+        // TODO: refactor. Getting too long & complicated for 1 function
         renderAllDayEvents: function () {
             if (App.activeDatesEventData) {
                 var fragment = document.createDocumentFragment();
@@ -136,16 +139,42 @@ var App = App || {};
                     return event.get('custom').isFullDay;
                 });
 
-                _.each(allDayEvents, function (event) {
-                    var view = new App.Views.event({
-                        model: event
-                    });
+                if (allDayEvents) {
+                    allDayEvents.forEach(function (event) {
+                        event.attributes.custom.parentWeekNum = this.weekNum;
 
-                    fragment.appendChild(view.render());
-                });
+                        var view = new App.Views.event({
+                            model: event
+                        });
 
-                this.$allDayEvents.empty();
-                this.$allDayEvents.append(fragment);
+                        fragment.appendChild(view.render());
+                    }, this);
+
+                    this.$allDayEvents.empty();
+                    this.$allDayEvents.append(fragment);
+
+                    this.resizeAllDayEventsContainer();
+                }
+            }
+        },
+
+        resizeAllDayEventsContainer: function () {
+            var containerHeight = this.$allDayEvents.height();
+            var maxHeight = App.Constants.MAX_ALL_DAY_EVENTS_HEIGHT;
+            var eventsHeight;
+
+            this.$allDayEvents.find('.event').each(function () {
+                var thisHeight = $(this).outerHeight();
+
+                if (thisHeight > containerHeight) {
+                    eventsHeight = thisHeight;
+                }
+            });
+
+            eventsHeight = (eventsHeight > maxHeight) ? maxHeight : eventsHeight;
+
+            if (eventsHeight > containerHeight) {
+                this.$allDayEvents.parent().height(eventsHeight + 1);
             }
         },
 
@@ -158,12 +187,14 @@ var App = App || {};
                 });
 
                 _.each(timedEvents, function (event) {
+                    event.attributes.custom.parentWeekNum = this.weekNum;
+
                     var view = new App.Views.eventInWeek({
                         model: event
                     });
 
                     fragment.appendChild(view.render());
-                });
+                }, this);
 
                 this.$events.empty();
                 this.$events.append(fragment);
@@ -198,12 +229,9 @@ var App = App || {};
 
                 App.activeDatesEventData = App.eventData.filter(function (event) {
                     var data = event.get('custom');
-                    var boop = false;
-                    if ((data.startDateTime < firstDay && data.endDateTime > firstDay)
-                        || (data.startDateTime > firstDay && data.startDateTime < lastDay)) {
-                        boop = true;
-                    }
-                    return boop;
+
+                    return ((data.startDateTime < firstDay && data.endDateTime > firstDay)
+                        || (data.startDateTime > firstDay && data.startDateTime < lastDay));
                 });
             }
         },
@@ -215,7 +243,9 @@ var App = App || {};
             // normalise date so we're always dealing with the first day of the week
             var newDate = App.Methods.getWeekStartDate(date);
 
-            this.selfWeek = newDate;
+            this.selfWeek = App.Methods.getWeekStartDate(newDate);
+
+            this.weekNum = App.Methods.getWeekNum(this.selfWeek);
 
             this.getEventData();
 

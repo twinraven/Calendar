@@ -8,6 +8,7 @@ var App = App || {};
     // ---------------
 
     App.Views.row = Backbone.View.extend({
+
         tagName: 'li',
         className: 'month__week',
 
@@ -40,7 +41,7 @@ var App = App || {};
             this.renderDays();
 
             if (App.eventData && App.eventData.models) {
-                this.renderEvents(App.eventData.toJSON());
+                this.renderEvents();
             }
 
             return this.el;
@@ -78,10 +79,60 @@ var App = App || {};
             this.$weekDays.append(fragment);
         },
 
-        renderEvents: function () {
-            var fragment = document.createDocumentFragment();
 
-            this.eventViews = App.activeDatesEventData.map(function (event) {
+
+
+        createRowAry: function () {
+            var x, y;
+
+            this.rowAry = [];
+
+            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
+                this.rowAry[x] = [];
+            }
+        },
+
+        setRowFill: function (pos, span, row) {
+            var x, y;
+
+            for (x = pos, y = (pos + span); x < y; x++) {
+                this.rowAry[x][row] = true;
+            }
+        },
+
+        hasSpaceInRow: function (pos, span, row) {
+            var x, y;
+            var output = true;
+
+            for (x = pos, y = (pos + span); x < y; x++) {
+                if (this.rowAry[x][row]) {
+                    output = false;
+                }
+            }
+
+            return output;
+        },
+
+        findSpaceForEvent: function (pos, span) {
+            var row = 0;
+
+            while (!this.hasSpaceInRow(pos, span, row)) {
+              row++;
+            }
+
+            this.setRowFill(pos, span, row);
+
+            return row;
+        },
+
+
+        // TODO: refactor, getting too large
+        parseEvents: function () {
+            this.createRowAry();
+
+            var events = _.clone(this.activeDatesEventData);
+
+            this.eventViews = events.map(function (event) {
                 event.attributes.custom.parentWeekNum = this.model.weekNum;
                 event.attributes.custom.parentWeekStartDate = this.selfWeek;
                 event.attributes.custom.parentWeekEndDate = App.Methods.getWeekEndDate(this.selfWeek);
@@ -90,9 +141,35 @@ var App = App || {};
                     model: event
                 });
 
-                fragment.appendChild(view.render());
-
                 return view;
+            }, this);
+
+            if (this.eventViews.length) {
+                // position the longer-running events first
+                this.eventViews.sort(function (a, b) {
+                    return b.model.attributes.custom.span - a.model.attributes.custom.span;
+                });
+
+                // always full-day events first
+                this.eventViews.sort(function (a, b) {
+                    return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
+                });
+
+                this.eventViews.forEach(function (event) {
+                    var customData = event.model.attributes.custom;
+
+                    customData.row = this.findSpaceForEvent(customData.pos, customData.span);
+                }, this);
+            }
+        },
+
+        renderEvents: function () {
+            this.parseEvents();
+
+            var fragment = document.createDocumentFragment();
+
+            this.eventViews.forEach(function (view) {
+                fragment.appendChild(view.render());
             }, this);
 
             this.$weekEvents.empty();
@@ -107,12 +184,15 @@ var App = App || {};
                 var firstDay = this.selfWeek;
                 var lastDay = App.Methods.getWeekEndDate(this.selfWeek);
 
-                App.activeDatesEventData = App.eventData.filter(function (event) {
+                this.activeDatesEventData = App.eventData.filter(function (event) {
                     var data = event.get('custom');
 
                     return (data.startDateTime <= firstDay && data.endDateTime > firstDay)
                         || (data.startDateTime >= firstDay && data.startDateTime < lastDay);
                 });
+
+                //console.log(this.activeDatesEventData);
+                //debugger;
             }
         },
 

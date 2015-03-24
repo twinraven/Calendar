@@ -145,11 +145,12 @@ var App = App || {};
             });
         },
 
+
         renderEvents: function (eventView, $eventsElem, filterFn) {
-            if (App.activeDatesEventData) {
+            if (this.activeDatesEventData) {
                 var fragment = document.createDocumentFragment();
 
-                var events = _.filter(App.activeDatesEventData, filterFn);
+                var events = _.filter(this.activeDatesEventData, filterFn);
 
                 if (events) {
                     events.forEach(function (event) {
@@ -215,11 +216,11 @@ var App = App || {};
                 var firstDay = this.selfWeek;
                 var lastDay = App.Methods.getWeekEndDate(this.selfWeek);
 
-                App.activeDatesEventData = App.eventData.filter(function (event) {
+                this.activeDatesEventData = App.eventData.filter(function (event) {
                     var data = event.get('custom');
 
-                    return ((data.startDateTime < firstDay && data.endDateTime > firstDay)
-                        || (data.startDateTime > firstDay && data.startDateTime < lastDay));
+                    return ((data.startDateTime <= firstDay && data.endDateTime > firstDay)
+                        || (data.startDateTime >= firstDay && data.startDateTime < lastDay));
                 });
             }
         },

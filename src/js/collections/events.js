@@ -39,7 +39,9 @@ var App = App || {};
 				var spanMax = App.Constants.DAYS_IN_WEEK - pos;
 				var span = App.Methods.getDaysInRangeNum(startDateTime, endDateTime);
 
+				// make sure span is within bounds
 				span = span > spanMax ? spanMax : span;
+				span = span < 1 ? 1 : span;
 
 				// namespace our custom properties
 				var customData = {

@@ -18,14 +18,16 @@ var App = App || {};
 
         attributes: function () {
             var customData = this.model.get('custom');
-            var position = this.getEventPosition();
+
+            this.setEventPosition();
 
             return {
                 'class': 'event',
                 'title': customData.title,
-                'data-pos':position.pos,
-                'data-span': position.span,
-                'data-fullday': customData.isFullDay
+                'data-pos':customData.pos,
+                'data-span': customData.span,
+                'data-fullday': customData.isFullDay,
+                'data-row': customData.row
             };
         },
 
@@ -49,24 +51,19 @@ var App = App || {};
             this.$el.text(this.model.get('summary'));
         },
 
-        getEventPosition: function () {
+        setEventPosition: function () {
             var customData = this.model.get('custom');
-            var output = {
-                pos: customData.pos,
-                span: customData.span
-            };
 
             if (customData.weekNum < customData.parentWeekNum) {
-                output.pos = 0;
+                customData.pos = 0;
 
                 if (customData.endDateTime < customData.parentWeekEndDate) {
-                    output.span = App.Methods.getDayOfWeekNum(customData.endDateTime);
+                    customData.span = App.Methods.getDayOfWeekNum(customData.endDateTime);
+
                 } else {
-                    output.span = App.Constants.DAYS_IN_WEEK;
+                    customData.span = App.Constants.DAYS_IN_WEEK;
                 }
             }
-
-            return output;
         },
 
 

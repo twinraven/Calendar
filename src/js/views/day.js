@@ -70,7 +70,6 @@ var App = App || {};
 
 
         handleDayClick: function (e) {
-            console.log('yess')
             var date = App.Events.trigger('goto:date', this.day);
         },
 

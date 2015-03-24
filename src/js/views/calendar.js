@@ -48,7 +48,7 @@ var App = App || {};
 
 
             // DEBUG
-            this.setActiveDate(App.Methods.newDate(2013, 11, 18));
+            this.setActiveDate(App.Methods.newDate(2013, 11, 28));
             this.markDates();
         },
 
@@ -73,7 +73,7 @@ var App = App || {};
             this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
-            this.$body.on('DOMMouseScroll mousewheel', _.debounce(function(e) { self.handleScroll(e); }, 50));
+            this.$body.on('DOMMouseScroll mousewheel', _.debounce(function (e) { self.handleScroll(e); }, 50));
             this.$body.on('keydown', function (e) { self.handleKeyPress.call(self, e); });
         },
 
@@ -357,11 +357,11 @@ var App = App || {};
 
             var req = App.eventData.fetch();
 
-            req.success(function(data) {
+            req.success(function (data) {
                 App.Events.trigger('event:data');
             });
 
-            req.error(function(data, othera, otherb) {
+            req.error(function (data, othera, otherb) {
                 //TODO: handle error
             });
         },

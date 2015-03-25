@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -10,8 +10,8 @@ var App = App || {};
     App.Views.month = Backbone.View.extend({
 
         // templating and setup
-        template: _.template($('#month-template').html()), // for containing elem & markup
-        titleTemplate: _.template($('#day-title-template').html()), // for containing elem & markup
+        template: Handlebars.compile($('#month-template').html()), // for containing elem & markup
+        titleTemplate: Handlebars.compile($('#day-title-template').html()), // for containing elem & markup
 
         // allows for sub-class overriding
         customDayView: App.Views.day,

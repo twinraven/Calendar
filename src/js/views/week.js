@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -10,9 +10,9 @@ var App = App || {};
     App.Views.week = Backbone.View.extend({
 
         // templating and setup
-        template: _.template($('#week-template').html()), // for containing elem & markup
-        titleTemplate: _.template($('#day-week-title-template').html()), // for mon/tue/wed labels
-        timeLabelTemplate: _.template($('#time-label-template').html()),
+        template: Handlebars.compile($('#week-template').html()), // for containing elem & markup
+        titleTemplate: Handlebars.compile($('#day-week-title-template').html()), // for mon/tue/wed labels
+        timeLabelTemplate: Handlebars.compile($('#time-label-template').html()),
 
         collection: App.Collections.dates,
 

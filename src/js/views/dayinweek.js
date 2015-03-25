@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -9,8 +9,8 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.dayInWeek = App.Views.day.extend({
-        template: _.template($('#day-week-template').html()),
-        timeTemplate: _.template($('#time-template').html()),
+        template: Handlebars.compile($('#day-week-template').html()),
+        timeTemplate: Handlebars.compile($('#time-template').html()),
 
         events: {
             'mousedown .time': 'handleMouseDown',

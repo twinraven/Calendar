@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -8,7 +8,7 @@ var App = App || {};
     // ---------------
     // extending App.Views.month
     App.Views.monthInSummary = App.Views.month.extend({
-        template: _.template($('#month-summary-template').html()),
+        template: Handlebars.compile($('#month-summary-template').html()),
 
         customDayView: App.Views.dayInSummary,
 

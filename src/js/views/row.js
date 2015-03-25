@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -13,7 +13,7 @@ var App = App || {};
         className: 'month__week',
 
         // templating and setup
-        template: _.template($('#row-template').html()), // for containing elem & markup
+        template: Handlebars.compile($('#row-template').html()), // for containing elem & markup
 
         collection: App.Collections.dates,
 

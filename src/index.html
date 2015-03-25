@@ -46,24 +46,24 @@
 		<script type="text/template" id="event-template">
 			<a href="#"
 				class="event"
-				data-row="<%= custom.row %>"
-				data-pos="<%= custom.pos %>"
-				data-span="<%= custom.span %>"
-				data-fullday="<%= custom.isFullDay %>"
-				title="<% summary %>">
-					<%= summary %>
+				data-row="{{ custom.row }}"
+				data-pos="{{ custom.pos }}"
+				data-span="{{ custom.span }}"
+				data-fullday="{{ custom.isFullDay }}"
+				title="<% summary }}">
+					{{ summary }}
 			</a>
 		</script>
 
 		<script type="text/template" id="event-month-template">
 			<a href="#"
 				class="event event--single-line"
-				data-row="<%= custom.row %>"
-				data-pos="<%= custom.pos %>"
-				data-span="<%= custom.span %>"
-				data-fullday="<%= custom.isFullDay %>"
-				title="<% summary %>">
-					<%= summary %>
+				data-row="{{ custom.row }}"
+				data-pos="{{ custom.pos }}"
+				data-span="{{ custom.span }}"
+				data-fullday="{{ custom.isFullDay }}"
+				title="<% summary }}">
+					{{ summary }}
 			</a>
 		</script>
 
@@ -96,25 +96,25 @@
 
 
 		<script type="text/template" id="day-full-template">
-			<div class="day__inner" data-date="<%= id %>">
+			<div class="day__inner" data-date="{{ id }}">
 				<h3 class="day__date">
-					<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
+					<span class="visuallyhidden">{{ weekday }}</span> {{ day }}<span class="visuallyhidden">{{ suffix }} {{ monthName }}</span>
 				</h3>
 			</div>
 		</script>
 
 
 		<script type="text/template" id="day-summary-template">
-			<h3 class="day__date" data-date="<%= id %>">
-				<span class="visuallyhidden"><%= weekday %></span> <%= day %><span class="visuallyhidden"><%= suffix %> <%= monthName %></span>
+			<h3 class="day__date" data-date="{{ id }}">
+				<span class="visuallyhidden">{{ weekday }}</span> {{ day }}<span class="visuallyhidden">{{ suffix }} {{ monthName }}</span>
 			</h3>
 		</script>
 
 
 		<script type="text/template" id="day-title-template">
 			<li class="day day--title">
-				<span class="day__initial"><%= initial %></span>
-				<span class="day__name"><%= label %></span>
+				<span class="day__initial">{{ initial }}</span>
+				<span class="day__name">{{ label }}</span>
 			</li>
 		</script>
 
@@ -145,21 +145,21 @@
 		</script>
 
 		<script type="text/template" id="time-template">
-			<a href="#" class="time" id="<%= id %>" data-pos="<%= position %>" draggable="false"></a>
+			<a href="#" class="time" id="{{ id }}" data-pos="{{ position }}" draggable="false"></a>
 		</script>
 
 
 		<script type="text/template" id="time-label-template">
-			<li class="time-labels__row"><%- hour %></li>
+			<li class="time-labels__row">{{ hour }}</li>
 			<li class="time-labels__row"></li>
 		</script>
 
 
 		<script type="text/template" id="day-week-title-template">
 			<li class="day day--title">
-				<span class="day__initial"><%= initial %></span>
-				<span class="day__name"><%= label %></span>
-				<span class="day__shortdate"><%= date %></span>
+				<span class="day__initial">{{ initial }}</span>
+				<span class="day__name">{{ label }}</span>
+				<span class="day__shortdate">{{ date }}</span>
 			</li>
 		</script>
 
@@ -167,6 +167,7 @@
 
 		<script src="js/vendor/jquery.js"></script>
 		<script src="js/vendor/underscore.js"></script>
+		<script src="js/vendor/handlebars-v3.0.0.js"></script>
 		<script src="js/vendor/backbone.js"></script>
 		<script src="js/vendor/backbone.localStorage.js"></script>
 

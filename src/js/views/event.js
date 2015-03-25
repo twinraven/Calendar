@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -10,7 +10,7 @@ var App = App || {};
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.event = Backbone.View.extend({
 
-        template: _.template($('#event-template').html()),
+        template: Handlebars.compile($('#event-template').html()),
 
         events: {
             'click': 'handleEventClick'
@@ -23,8 +23,7 @@ var App = App || {};
             this.options = params;
 
             this.adjustedModel = _.clone(this.model.attributes);
-            debugger;
-            this.setEventPosition();
+            //this.setEventPosition();
 
             this.listenTo(this.model, 'destroy', this.close);
         },
@@ -60,7 +59,7 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            this.$el.html(this.template(JSON.stringify(this.adjustedModel)));
+            this.$el.html(this.template(this.adjustedModel));
         },
 
 

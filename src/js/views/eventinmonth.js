@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -9,6 +9,6 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.eventInMonth = App.Views.event.extend({
-        template: _.template($('#event-month-template').html())
+        template: Handlebars.compile($('#event-month-template').html())
     });
 })(jQuery);

@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -9,7 +9,7 @@ var App = App || {};
     // extending App.Views.month
     App.Views.monthInFull = App.Views.month.extend({
         //
-        dayTemplate: _.template($('#day-full-template').html()),
+        dayTemplate: Handlebars.compile($('#day-full-template').html()),
 
         customDayView: App.Views.day,
 

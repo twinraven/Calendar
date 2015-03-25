@@ -1,4 +1,4 @@
-/* global Backbone, jQuery, _ */
+/* global Backbone, jQuery, _, Handlebars */
 var App = App || {};
 
 (function ($) {
@@ -9,7 +9,7 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.day = Backbone.View.extend({
-        template: _.template($('#day-full-template').html()),
+        template: Handlebars.compile($('#day-full-template').html()),
 
         tagName: 'li',
         className: 'day',
@@ -34,7 +34,7 @@ var App = App || {};
         render: function () {
             this.setState();
 
-            this.addElem();
+            this.renderElem();
 
             return this.el;
         },
@@ -64,7 +64,7 @@ var App = App || {};
             this.$el.addClass(classes.join(' '));
         },
 
-        addElem: function () {
+        renderElem: function () {
             this.$el.html(this.template(this.model.toJSON()));
         },
 

@@ -34,6 +34,15 @@
     width: 100%;
 }
 
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
 .event {
     box-sizing: border-box;
     color: blue;
@@ -53,6 +62,8 @@
         background: blue;
         color: white;
     }
+
+    animation: fadein 0.19s linear;
 
     &[data-pos="1"] {left: calc((100% / 7) + 2px);}
     &[data-pos="2"] {left: calc((100% / 7 * 2) + 2px);}

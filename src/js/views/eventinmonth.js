@@ -9,6 +9,6 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.eventInMonth = App.Views.event.extend({
-        className: 'event event--single-line'
+        template: _.template($('#event-month-template').html())
     });
 })(jQuery);

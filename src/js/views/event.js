@@ -10,32 +10,43 @@ var App = App || {};
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.event = Backbone.View.extend({
 
-        tagName: 'a',
+        template: _.template($('#event-template').html()),
 
         events: {
             'click': 'handleEventClick'
         },
 
-        attributes: function () {
-            var customData = this.model.get('custom');
-
-            this.setEventPosition();
-
-            return {
-                'class': 'event',
-                'title': customData.title,
-                'data-pos':customData.pos,
-                'data-span': customData.span,
-                'data-fullday': customData.isFullDay,
-                'data-row': customData.row
-            };
-        },
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function () {
+        initialize: function (params) {
+            this.options = params;
+
+            this.adjustedModel = _.clone(this.model.attributes);
+            debugger;
+            this.setEventPosition();
+
             this.listenTo(this.model, 'destroy', this.close);
         },
+
+
+        // Init methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        setEventPosition: function () {
+            this.adjustedModel.custom.row = 0;
+
+            if (this.adjustedModel.custom.weekNum < this.options.context.weekNum) {
+                this.adjustedModel.custom.pos = 0;
+
+                if (this.adjustedModel.custom.endDateTime < this.options.context.weekEndDate) {
+                    this.adjustedModel.custom.span = App.Methods.getDayOfWeekNum(this.adjustedModel.custom.endDateTime);
+
+                } else {
+                    this.adjustedModel.custom.span = App.Constants.DAYS_IN_WEEK;
+                }
+            }
+        },
+
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -45,25 +56,11 @@ var App = App || {};
             return this.el;
         },
 
+
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            this.$el.text(this.model.get('summary'));
-        },
-
-        setEventPosition: function () {
-            var customData = this.model.get('custom');
-
-            if (customData.weekNum < customData.parentWeekNum) {
-                customData.pos = 0;
-
-                if (customData.endDateTime < customData.parentWeekEndDate) {
-                    customData.span = App.Methods.getDayOfWeekNum(customData.endDateTime);
-
-                } else {
-                    customData.span = App.Constants.DAYS_IN_WEEK;
-                }
-            }
+            this.$el.html(this.template(JSON.stringify(this.adjustedModel)));
         },
 
 

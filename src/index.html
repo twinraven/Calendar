@@ -43,6 +43,30 @@
 
 		<!-- Templates ~~~~~~~~~~~~~~~~~~~~~~~ -->
 
+		<script type="text/template" id="event-template">
+			<a href="#"
+				class="event"
+				data-row="<%= custom.row %>"
+				data-pos="<%= custom.pos %>"
+				data-span="<%= custom.span %>"
+				data-fullday="<%= custom.isFullDay %>"
+				title="<% summary %>">
+					<%= summary %>
+			</a>
+		</script>
+
+		<script type="text/template" id="event-month-template">
+			<a href="#"
+				class="event event--single-line"
+				data-row="<%= custom.row %>"
+				data-pos="<%= custom.pos %>"
+				data-span="<%= custom.span %>"
+				data-fullday="<%= custom.isFullDay %>"
+				title="<% summary %>">
+					<%= summary %>
+			</a>
+		</script>
+
 		<script type="text/template" id="month-template">
 			<h4 class="cal__title"></h4>
 			<ul class="cal__labels"></ul>

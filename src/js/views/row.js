@@ -133,12 +133,15 @@ var App = App || {};
             var events = _.clone(this.activeDatesEventData);
 
             this.eventViews = events.map(function (event) {
-                event.attributes.custom.parentWeekNum = this.model.weekNum;
-                event.attributes.custom.parentWeekStartDate = this.selfWeek;
-                event.attributes.custom.parentWeekEndDate = App.Methods.getWeekEndDate(this.selfWeek);
+                 var context = {
+                    weekNum: this.model.weekNum,
+                    weekStartDate: this.selfWeek,
+                    weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
+                }
 
                 var view = new App.Views.eventInMonth({
-                    model: event
+                    model: event,
+                    context: context
                 });
 
                 return view;

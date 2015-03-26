@@ -41,7 +41,7 @@ var App = App || {};
         // Init methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         adjustModelIfWrappedEvent: function () {
-            if (this.isolatedModel.weekNum < this.context.weekNum) {
+            if (this.context && this.isolatedModel.weekNum < this.context.weekNum) {
                 this.isolatedModel.pos = 0;
 
                 if (this.isolatedModel.endDateTime < this.context.weekEndDate) {

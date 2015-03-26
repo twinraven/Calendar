@@ -9,34 +9,21 @@ var App = App || {};
 
     // Our overall **AppView** is the top-level piece of UI.
     App.Views.eventInWeek = App.Views.event.extend({
-        tagName: 'li',
 
-        className: 'event event--week',
-
-        attributes: function () {
-            var customData = this.model.get('custom');
-
-            return {
-                'class': 'event',
-                'title': customData.title,
-                'data-pos': customData.pos
-            };
-        },
+        template: Handlebars.compile($('#event-week-template').html()),
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            var data = this.model.get('custom');
-            var eventDurationInHrs = App.Methods.getHrsBetween(data.startDateTime, data.endDateTime);
+            var model = this.isolatedModel;
+            var eventDurationInHrs = App.Methods.getHrsBetween(model.startDateTime, model.endDateTime);
 
-            var startHr = new Date(data.startDateTime).getHours();
+            var startHr = new Date(model.startDateTime).getHours();
 
-            this.$el.text(this.model.get('summary'));
+            this.isolatedModel.eventHeight = (eventDurationInHrs * 2) * App.Constants.WEEK_VIEW_GRID_HEIGHT - 1;
+            this.isolatedModel.eventTop = (startHr * 2) * App.Constants.WEEK_VIEW_GRID_HEIGHT;
 
-            this.$el.css({
-                'height': (eventDurationInHrs * 2) * App.Constants.WEEK_VIEW_GRID_HEIGHT - 1,
-                'top': (startHr * 2) * App.Constants.WEEK_VIEW_GRID_HEIGHT
-            });
+            this.$el.html(this.template(this.isolatedModel));
         }
     });
 })(jQuery);

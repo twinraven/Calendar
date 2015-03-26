@@ -51,6 +51,7 @@ var App = App || {};
 					span: span,
 					isFullDay: isFullDay,
 					title: startTime + model.summary,
+					summary: model.summary,
 					weekNum: App.Methods.getWeekNum(startDateTime)
 				};
 

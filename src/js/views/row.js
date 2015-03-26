@@ -200,9 +200,6 @@ var App = App || {};
                     return (data.startDateTime <= firstDay && data.endDateTime > firstDay)
                         || (data.startDateTime >= firstDay && data.startDateTime < lastDay);
                 });
-
-                //console.log(this.activeDatesEventData);
-                //debugger;
             }
         },
 

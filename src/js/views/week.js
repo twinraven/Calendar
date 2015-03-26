@@ -9,7 +9,6 @@ var App = App || {};
 
     App.Views.week = Backbone.View.extend({
 
-        // templating and setup
         template: Handlebars.compile($('#week-template').html()), // for containing elem & markup
         titleTemplate: Handlebars.compile($('#day-week-title-template').html()), // for mon/tue/wed labels
         timeLabelTemplate: Handlebars.compile($('#time-label-template').html()),
@@ -197,6 +196,52 @@ var App = App || {};
             if (now.getHours() >= 12 && App.Methods.isCurrentWeek(this.selfWeek)) {
                 this.$grid.scrollTop(500);
             }
+        },
+
+
+        // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        createRowAry: function () {
+            var x, y;
+
+            this.rowAry = [];
+
+            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
+                this.rowAry[x] = [];
+            }
+        },
+
+        setRowFill: function (pos, span, row) {
+            var x, y;
+
+            for (x = pos, y = (pos + span); x < y; x++) {
+                this.rowAry[x][row] = true;
+            }
+        },
+
+        hasSpaceInRow: function (pos, span, row) {
+            var x, y;
+            var output = true;
+
+            for (x = pos, y = (pos + span); x < y; x++) {
+                if (this.rowAry[x][row]) {
+                    output = false;
+                }
+            }
+
+            return output;
+        },
+
+        findSpaceForEvent: function (pos, span) {
+            var row = 0;
+
+            while (!this.hasSpaceInRow(pos, span, row)) {
+              row++;
+            }
+
+            this.setRowFill(pos, span, row);
+
+            return row;
         },
 
 

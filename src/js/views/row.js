@@ -80,45 +80,41 @@ var App = App || {};
         },
 
         renderEvents: function () {
-            this.parseEvents();
+            this.createRowAry();
+
+            this.createEventViews();
 
             this.positionEvents();
 
-            var fragment = document.createDocumentFragment();
-
-            this.eventViews.forEach(function (view) {
-                fragment.appendChild(view.render());
-            }, this);
-
-            this.$weekEvents.empty();
-            this.$weekEvents.append(fragment);
+            this.renderEventFragment();
         },
 
-        parseEvents: function () {
-            this.createRowAry();
+        // Sort, parse, and render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        createEventViews: function () {
             this.eventViews = [];
 
             var events = _.clone(this.activeDatesEventData);
 
             if (events) {
                 this.eventViews = events.map(function (event) {
-                    // add some local context to each event - we need this if an
-                    // event is wrapped
-                    var context = {
-                        weekNum: this.model.weekNum,
-                        weekStartDate: this.selfWeek,
-                        weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
-                    };
-
                     var view = new App.Views.eventInMonth({
                         model: event,
-                        context: context
+                        context: this.createContext()
                     });
 
                     return view;
                 }, this);
             }
+        },
+
+        // add some local context to each event - we need this if an event is wrapped
+        createContext: function () {
+            return {
+                weekNum: this.model.weekNum,
+                weekStartDate: this.selfWeek,
+                weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
+            };
         },
 
         positionEvents: function () {
@@ -138,6 +134,17 @@ var App = App || {};
             this.eventViews.forEach(function (event) {
                 event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
             }, this);
+        },
+
+        renderEventFragment: function () {
+            var fragment = document.createDocumentFragment();
+
+            this.eventViews.forEach(function (view) {
+                fragment.appendChild(view.render());
+            }, this);
+
+            this.$weekEvents.empty();
+            this.$weekEvents.append(fragment);
         },
 
 

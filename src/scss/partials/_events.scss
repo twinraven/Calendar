@@ -63,7 +63,9 @@
         color: white;
     }
 
-    animation: fadein 0.19s linear;
+    .is-ready & {
+        animation: fadein 0.19s linear;
+    }
 
     &[data-pos="1"] {left: calc((100% / 7) + 2px);}
     &[data-pos="2"] {left: calc((100% / 7 * 2) + 2px);}

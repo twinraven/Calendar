@@ -1,9 +1,9 @@
 TODO:
 
 - Merge row & week? Increasingly shared functionality.
+- date popup - add/edit
 - Render events to month/week views:
-	- multiple dates on any one day - stacking/sorting?
-	- moveable dates in month view
+	- moveable dates in week/month view
 	- resizeable dates in week view
 	- Repeating events! YIKES
 

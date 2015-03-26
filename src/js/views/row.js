@@ -79,8 +79,69 @@ var App = App || {};
             this.$weekDays.append(fragment);
         },
 
+        renderEvents: function () {
+            this.parseEvents();
+
+            this.positionEvents();
+
+            var fragment = document.createDocumentFragment();
+
+            this.eventViews.forEach(function (view) {
+                fragment.appendChild(view.render());
+            }, this);
+
+            this.$weekEvents.empty();
+            this.$weekEvents.append(fragment);
+        },
+
+        parseEvents: function () {
+            this.createRowAry();
+
+            this.eventViews = [];
+
+            var events = _.clone(this.activeDatesEventData);
+
+            if (events) {
+                this.eventViews = events.map(function (event) {
+                    // add some local context to each event - we need this if an
+                    // event is wrapped
+                    var context = {
+                        weekNum: this.model.weekNum,
+                        weekStartDate: this.selfWeek,
+                        weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
+                    };
+
+                    var view = new App.Views.eventInMonth({
+                        model: event,
+                        context: context
+                    });
+
+                    return view;
+                }, this);
+            }
+        },
+
+        positionEvents: function () {
+            // re-order to put the longer-running events first
+            this.eventViews.sort(function (a, b) {
+                return b.model.attributes.custom.span - a.model.attributes.custom.span;
+            });
+
+            // then, make sure that full-day events are ahead of timed events in the list
+            // (will still maintain the key order above though)
+            this.eventViews.sort(function (a, b) {
+                return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
+            });
+
+            // finally, calculate the position of each event, using our stacking algorithm
+            // (if that's what it is? It's pretty faaancy)
+            this.eventViews.forEach(function (event) {
+                event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
+            }, this);
+        },
 
 
+        // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         createRowAry: function () {
             var x, y;
@@ -123,60 +184,6 @@ var App = App || {};
             this.setRowFill(pos, span, row);
 
             return row;
-        },
-
-
-        // TODO: refactor, getting too large
-        parseEvents: function () {
-            this.createRowAry();
-
-            var events = _.clone(this.activeDatesEventData);
-
-            this.eventViews = events.map(function (event) {
-                 var context = {
-                    weekNum: this.model.weekNum,
-                    weekStartDate: this.selfWeek,
-                    weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
-                }
-
-                var view = new App.Views.eventInMonth({
-                    model: event,
-                    context: context
-                });
-
-                return view;
-            }, this);
-
-            if (this.eventViews.length) {
-                // position the longer-running events first
-                this.eventViews.sort(function (a, b) {
-                    return b.model.attributes.custom.span - a.model.attributes.custom.span;
-                });
-
-                // always full-day events first
-                this.eventViews.sort(function (a, b) {
-                    return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
-                });
-
-                this.eventViews.forEach(function (event) {
-                    var customData = event.model.attributes.custom;
-
-                    customData.row = this.findSpaceForEvent(customData.pos, customData.span);
-                }, this);
-            }
-        },
-
-        renderEvents: function () {
-            this.parseEvents();
-
-            var fragment = document.createDocumentFragment();
-
-            this.eventViews.forEach(function (view) {
-                fragment.appendChild(view.render());
-            }, this);
-
-            this.$weekEvents.empty();
-            this.$weekEvents.append(fragment);
         },
 
 

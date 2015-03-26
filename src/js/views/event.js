@@ -20,10 +20,19 @@ var App = App || {};
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
-            this.options = params;
+            this.context = params.context;
 
-            this.adjustedModel = _.clone(this.model.attributes);
-            //this.setEventPosition();
+            var m = this.model.attributes;
+
+            // clone the model - because we may need to be able to adjust it locally, without
+            // the changes being propagated to all instances of this data, i.e. wrapped events
+            // (events that are longer than any 1 week).
+            // We still have a local reference to this.model, so if and when we do need to
+            // makes changes, it's not a problem.
+            // We could split it so that only wrapped events clone & modify the model, but
+            // the interface for handling cloned data (as below) and real models is different
+            this.isolatedModel = _.clone(this.model.get('custom'));
+            this.adjustModelIfWrappedEvent();
 
             this.listenTo(this.model, 'destroy', this.close);
         },
@@ -31,17 +40,15 @@ var App = App || {};
 
         // Init methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        setEventPosition: function () {
-            this.adjustedModel.custom.row = 0;
+        adjustModelIfWrappedEvent: function () {
+            if (this.isolatedModel.weekNum < this.context.weekNum) {
+                this.isolatedModel.pos = 0;
 
-            if (this.adjustedModel.custom.weekNum < this.options.context.weekNum) {
-                this.adjustedModel.custom.pos = 0;
-
-                if (this.adjustedModel.custom.endDateTime < this.options.context.weekEndDate) {
-                    this.adjustedModel.custom.span = App.Methods.getDayOfWeekNum(this.adjustedModel.custom.endDateTime);
+                if (this.isolatedModel.endDateTime < this.context.weekEndDate) {
+                    this.isolatedModel.span = App.Methods.getDayOfWeekNum(this.isolatedModel.endDateTime);
 
                 } else {
-                    this.adjustedModel.custom.span = App.Constants.DAYS_IN_WEEK;
+                    this.isolatedModel.span = App.Constants.DAYS_IN_WEEK;
                 }
             }
         },
@@ -59,7 +66,7 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            this.$el.html(this.template(this.adjustedModel));
+            this.$el.html(this.template(this.isolatedModel));
         },
 
 

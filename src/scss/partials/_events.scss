@@ -14,16 +14,12 @@
     border-left: 1px solid #ccc;
     box-sizing: border-box;
     left: 3rem;
-    min-height: 42px;
+    min-height: 38px;
     overflow-y: scroll;
     position: relative;
-    top: 0;
+    top: 3px;
     width: calc(100% - 3rem);
     z-index: 5;
-
-    .event[data-fullday="true"] {
-        opacity: 0.5;
-    }
 }
 
 .events__inner {

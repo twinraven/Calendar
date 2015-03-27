@@ -91,6 +91,7 @@ var App = App || {};
 
         // Sort, parse, and render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        // TODO
         createEventViews: function () {
             this.eventViews = [];
 
@@ -108,6 +109,7 @@ var App = App || {};
             }
         },
 
+        // TODO
         // add some local context to each event - we need this if an event is wrapped
         createContext: function () {
             return {
@@ -117,6 +119,7 @@ var App = App || {};
             };
         },
 
+        // TODO
         positionEvents: function () {
             // re-order to put the longer-running events first
             this.eventViews.sort(function (a, b) {
@@ -136,6 +139,7 @@ var App = App || {};
             }, this);
         },
 
+        // TODO
         renderEventFragment: function () {
             var fragment = document.createDocumentFragment();
 
@@ -150,6 +154,7 @@ var App = App || {};
 
         // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        // TODO
         createRowAry: function () {
             var x, y;
 
@@ -160,6 +165,7 @@ var App = App || {};
             }
         },
 
+        // TODO
         setRowFill: function (pos, span, row) {
             var x, y;
 
@@ -168,6 +174,7 @@ var App = App || {};
             }
         },
 
+        // TODO
         hasSpaceInRow: function (pos, span, row) {
             var x, y;
             var output = true;
@@ -181,6 +188,7 @@ var App = App || {};
             return output;
         },
 
+        // TODO
         findSpaceForEvent: function (pos, span) {
             var row = 0;
 

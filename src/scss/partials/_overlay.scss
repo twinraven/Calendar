@@ -1,0 +1,58 @@
+/**
+ * Overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ */
+
+@keyframes showOverlay {
+    from {
+        opacity: 0.8;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes hideOverlay {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0.8;
+        transform: translateX(100%);
+    }
+}
+
+.overlay {
+    background: #FFF;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    height: 100vh;
+    opacity: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform: translateX(100%);
+    width: 100%;
+    z-index: 1000;
+
+    .is-overlay & {
+        animation: showOverlay 0.35s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+    }
+
+    .is-overlay-hidden & {
+        animation: hideOverlay 0.25s;
+        animation-timing-function: ease-in;
+        animation-fill-mode: forwards;
+    }
+
+    @include respond-min($tablet-narrow) {
+        width: 60%;
+    }
+
+    @include respond-min($tablet-wide) {
+        width: 40%;
+    }
+}

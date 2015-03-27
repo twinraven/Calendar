@@ -130,30 +130,20 @@ var App = App || {};
             this.$week.append(fragment);
         },
 
-        renderAllDayEvents: function () {
-            this.renderEvents('event', this.$allDayEvents, function (event) {
-                return event.get('custom').isFullDay;
-            });
-
-            this.resizeAllDayEventsContainer();
-        },
+        // Render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderTimedEvents: function () {
-            this.renderEvents('eventInWeek', this.$events, function (event) {
-                return !event.get('custom').isFullDay;
-            });
-        },
-
-
-        renderEvents: function (eventView, $eventsElem, filterFn) {
             if (this.activeDatesEventData) {
                 var fragment = document.createDocumentFragment();
 
-                var events = _.filter(this.activeDatesEventData, filterFn);
+                var events = _.filter(this.activeDatesEventData,
+                    function (event) {
+                        return !event.get('custom').isFullDay;
+                    });
 
                 if (events) {
                     events.forEach(function (event) {
-                        var view = new App.Views[eventView]({
+                        var view = new App.Views.eventInWeek({
                             model: event,
                             context: this.createContext()
                         });
@@ -161,12 +151,46 @@ var App = App || {};
                         fragment.appendChild(view.render());
                     }, this);
 
-                    $eventsElem.empty();
-                    $eventsElem.append(fragment);
+                    this.$events.empty();
+                    this.$events.append(fragment);
                 }
             }
         },
 
+        renderAllDayEvents: function () {
+            this.createEventStackAry();
+
+            this.createEventViews();
+
+            this.positionEvents();
+
+            this.renderEventFragment();
+
+            this.resizeAllDayEventsContainer();
+        },
+
+        // TODO
+        createEventViews: function () {
+            this.eventViews = [];
+
+            var events = _.filter(this.activeDatesEventData,
+                function (event) {
+                    return event.get('custom').isFullDay;
+                });
+
+            if (events) {
+                this.eventViews = events.map(function (event) {
+                    var view = new App.Views.eventInMonth({
+                        model: event,
+                        context: this.createContext()
+                    });
+
+                    return view;
+                }, this);
+            }
+        },
+
+        // TODO
         createContext: function () {
             return {
                 weekNum: this.weekNum,
@@ -175,6 +199,7 @@ var App = App || {};
             };
         },
 
+        // TODO
         positionEvents: function () {
             // re-order to put the longer-running events first
             this.eventViews.sort(function (a, b) {
@@ -194,25 +219,32 @@ var App = App || {};
             }, this);
         },
 
+        // TODO
+        renderEventFragment: function () {
+            var fragment = document.createDocumentFragment();
+
+            this.eventViews.forEach(function (view) {
+                fragment.appendChild(view.render());
+            }, this);
+
+            this.$allDayEvents.empty();
+            this.$allDayEvents.append(fragment);
+        },
+
         resizeAllDayEventsContainer: function () {
             var containerHeight = this.$allDayEvents.height();
-            var maxHeight = App.Constants.MAX_ALL_DAY_EVENTS_HEIGHT;
-            var eventsHeight;
+            var maxRows = App.Constants.MAX_ALL_DAY_EVENTS_ROWS;
+            var eventHeight = App.Constants.WEEK_VIEW_GRID_HEIGHT - 2; // oops. Magic
+            var fulldayEventRows = this.getHighestFullRow();
 
-            this.$allDayEvents.find('.event').each(function () {
-                var thisHeight = $(this).outerHeight();
-
-                if (thisHeight > containerHeight) {
-                    eventsHeight = thisHeight;
-                }
-            });
-
-            eventsHeight = (eventsHeight > maxHeight) ? maxHeight : eventsHeight;
-
-            if (eventsHeight > containerHeight) {
-                this.$allDayEvents.parent().height(eventsHeight + 1);
+            if (fulldayEventRows > maxRows) {
+                fulldayEventRows = maxRows;
             }
+
+            this.$allDayEvents.parent().height(fulldayEventRows * eventHeight);
         },
+
+        // position viewport ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         scrollTimeIntoView: function () {
             var now = new Date();
@@ -225,30 +257,33 @@ var App = App || {};
 
         // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        createRowAry: function () {
+        // TODO
+        createEventStackAry: function () {
             var x, y;
 
-            this.rowAry = [];
+            this.stackAry = [];
 
             for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
-                this.rowAry[x] = [];
+                this.stackAry[x] = [];
             }
         },
 
+        // TODO
         setRowFill: function (pos, span, row) {
             var x, y;
 
             for (x = pos, y = (pos + span); x < y; x++) {
-                this.rowAry[x][row] = true;
+                this.stackAry[x][row] = true;
             }
         },
 
+        // TODO
         hasSpaceInRow: function (pos, span, row) {
             var x, y;
             var output = true;
 
             for (x = pos, y = (pos + span); x < y; x++) {
-                if (this.rowAry[x][row]) {
+                if (this.stackAry[x][row]) {
                     output = false;
                 }
             }
@@ -256,6 +291,23 @@ var App = App || {};
             return output;
         },
 
+        // TODO
+        getHighestFullRow: function () {
+            var x, y;
+            var highest = 0;
+
+            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
+                var len = this.stackAry[x].length;
+
+                if (len > highest) {
+                    highest = len;
+                }
+            }
+
+            return highest;
+        },
+
+        // TODO
         findSpaceForEvent: function (pos, span) {
             var row = 0;
 

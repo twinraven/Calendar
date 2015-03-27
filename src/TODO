@@ -1,17 +1,12 @@
 TODO:
 
-- Merge row & week? Increasingly shared functionality.
+- Merge row & week? Increasingly shared functionality
+- Refactor row/week generally - lots of repeated code.
 - date popup - add/edit
-- Render events to month/week views:
-	- moveable dates in week/month view
-	- resizeable dates in week view
-	- Repeating events! YIKES
 
-ISSUES:
-
-- somehow, event data is being set for all events, across all instances inside of each row (subsequent data manipulation affects prior instances). Shouldn't be possible, but is.
-- Need to duplicate packing algorithm for week view; then, refactor out duplication between row and week (somehow). Rename views?
-
+- moveable dates in week/month view
+- resizeable dates in week view
+- Recurring events! YIKES
 
 
 LONG-TERM:

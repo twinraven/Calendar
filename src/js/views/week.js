@@ -153,12 +153,9 @@ var App = App || {};
 
                 if (events) {
                     events.forEach(function (event) {
-                        event.attributes.custom.parentWeekNum = this.weekNum;
-                        event.attributes.custom.parentWeekStartDate = this.selfWeek;
-                        event.attributes.custom.parentWeekEndDate = App.Methods.getWeekEndDate(this.selfWeek);
-
                         var view = new App.Views[eventView]({
-                            model: event
+                            model: event,
+                            context: context
                         });
 
                         fragment.appendChild(view.render());
@@ -168,6 +165,33 @@ var App = App || {};
                     $eventsElem.append(fragment);
                 }
             }
+        },
+
+        createContext: function () {
+            return {
+                weekNum: this.weekNum,
+                weekStartDate: this.selfWeek,
+                weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
+            };
+        },
+
+        positionEvents: function () {
+            // re-order to put the longer-running events first
+            this.eventViews.sort(function (a, b) {
+                return b.model.attributes.custom.span - a.model.attributes.custom.span;
+            });
+
+            // then, make sure that full-day events are ahead of timed events in the list
+            // (will still maintain the key order above though)
+            this.eventViews.sort(function (a, b) {
+                return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
+            });
+
+            // finally, calculate the position of each event, using our stacking algorithm
+            // (if that's what it is? It's pretty faaancy)
+            this.eventViews.forEach(function (event) {
+                event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
+            }, this);
         },
 
         resizeAllDayEventsContainer: function () {

@@ -155,7 +155,7 @@ var App = App || {};
                     events.forEach(function (event) {
                         var view = new App.Views[eventView]({
                             model: event,
-                            context: context
+                            context: this.createContext()
                         });
 
                         fragment.appendChild(view.render());

@@ -23,6 +23,8 @@ var App = App || {};
             'click .control__link--week': 'setViewModeWeek',
             'click .control__link--month': 'setViewModeMonth',
 
+            'click .overlay-shield': 'handleCloseEvent',
+
             'mouseup': 'handleMouseUp'
         },
 
@@ -65,6 +67,7 @@ var App = App || {};
             this.$toggleSummary = this.$('.control__link--summary');
             this.$summary = this.$('.summary');
             this.$overlay = this.$('#overlay');
+            this.$overlayShield = this.$('.overlay-shield');
         },
 
         bindEvents: function () {
@@ -412,7 +415,7 @@ var App = App || {};
 
         handleShowEvent: function (newEvent) {
 
-            this.$overlay.removeClass('is-closed').addClass('is-active');
+            this.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
 
             console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');
             console.log('all day event: ' + (newEvent.fullday));
@@ -420,7 +423,7 @@ var App = App || {};
         },
 
         handleCloseEvent: function () {
-            this.$overlay.removeClass('is-active').addClass('is-closed');
+            this.$body.removeClass('is-overlay-active').addClass('is-overlay-hidden');
         }
     });
 })(jQuery);

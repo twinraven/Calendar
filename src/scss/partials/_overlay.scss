@@ -35,14 +35,14 @@
     width: 100%;
     z-index: 1100;
 
-    &.is-active {
+    .is-overlay-active & {
         animation: showOverlay 0.3s;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
         display: block;
     }
 
-    &.is-closed {
+    .is-overlay-hidden & {
         animation: hideOverlay 0.2s;
         animation-timing-function: ease-in;
         animation-fill-mode: forwards;
@@ -63,7 +63,18 @@
     height: 100vh;
     position: fixed;
     left: 0;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s;
     top: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 1000;
+
+    .is-overlay-active & {
+        opacity: 0.4;
+        pointer-events: all;
+    }
+
+    .is-overlay-hidden & {
+    }
 }

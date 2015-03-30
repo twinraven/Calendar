@@ -199,13 +199,16 @@ var App = App || {};
             // only re-render the calendar if we've got an element to put the elements in --
             // i.e. we've already run render. We've split the date marking out from the date
             // rendering, to reduce the number of times the DOM is redrawn, so this data is
-            // populated & modified before it's first rendered
+            // created & modified before it's first rendered
             if (this.$month) { this.renderDates();}
         },
 
         // broken?
         handleClockTick: function () {
-            if (!App.State.isDragging && !App.State.hasSelection) {
+            if (!App.State.isDragging &&
+                !App.State.hasSelection &&
+                 App.Methods.isCurrentMonth(this.selfMonth)) {
+
                 var now = App.Methods.newDate();
 
                 if (App.State.today.getTime() !== now.getTime()) {

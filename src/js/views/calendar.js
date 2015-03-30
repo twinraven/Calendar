@@ -17,6 +17,7 @@ var App = App || {};
             'click .control__link--prev': 'gotoPrevDateRange',
             'click .control__link--next': 'gotoNextDateRange',
             'click .control__link--today': 'gotoToday',
+            'click .control__link--add': 'addNewEvent',
 
             'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',
@@ -63,13 +64,15 @@ var App = App || {};
             this.$setModeWeek = this.$('.control__link--week');
             this.$toggleSummary = this.$('.control__link--summary');
             this.$summary = this.$('.summary');
+            this.$overlay = this.$('#overlay');
         },
 
         bindEvents: function () {
             var self = this;
 
             // custom events
-            this.listenTo(App.Events, 'add:event', this.handleAddEvent);
+            this.listenTo(App.Events, 'add:event', this.handleShowEvent);
+            this.listenTo(App.Events, 'close:event', this.handleCloseEvent);
             this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
@@ -375,6 +378,7 @@ var App = App || {};
             // escape key
             if (code === App.Constants.ESC_KEY) {
                 App.Events.trigger('clear:selection');
+                App.Events.trigger('close:event');
             }
         },
 
@@ -395,6 +399,10 @@ var App = App || {};
             App.Events.trigger('mouse:up');
         },
 
+        addNewEvent: function () {
+            App.Events.trigger('add:event', App.Methods.newDate(this.activeDate));
+        },
+
 
         // custom App events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -402,11 +410,17 @@ var App = App || {};
             this.gotoDate({'newDate': date});
         },
 
-        handleAddEvent: function (newEvent) {
-            // to be flesh out, when I get to events!
+        handleShowEvent: function (newEvent) {
+
+            this.$overlay.removeClass('is-closed').addClass('is-active');
+
             console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');
             console.log('all day event: ' + (newEvent.fullday));
             console.log('~~~~~~~~~~~~~~~~');
+        },
+
+        handleCloseEvent: function () {
+            this.$overlay.removeClass('is-active').addClass('is-closed');
         }
     });
 })(jQuery);

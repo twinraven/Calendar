@@ -4,48 +4,49 @@
 
 @keyframes showOverlay {
     from {
-        opacity: 0.8;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
         transform: translateX(100%);
     }
     to {
-        opacity: 1;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
         transform: translateX(0);
     }
 }
 
 @keyframes hideOverlay {
     from {
-        opacity: 1;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
         transform: translateX(0);
     }
     to {
-        opacity: 0.8;
+        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
         transform: translateX(100%);
     }
 }
 
 .overlay {
     background: #FFF;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    display: none;
     height: 100vh;
-    opacity: 0;
     position: fixed;
     right: 0;
     top: 0;
     transform: translateX(100%);
     width: 100%;
-    z-index: 1000;
+    z-index: 1100;
 
-    .is-overlay & {
-        animation: showOverlay 0.35s;
+    &.is-active {
+        animation: showOverlay 0.3s;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
+        display: block;
     }
 
-    .is-overlay-hidden & {
-        animation: hideOverlay 0.25s;
+    &.is-closed {
+        animation: hideOverlay 0.2s;
         animation-timing-function: ease-in;
         animation-fill-mode: forwards;
+        display: block;
     }
 
     @include respond-min($tablet-narrow) {
@@ -55,4 +56,14 @@
     @include respond-min($tablet-wide) {
         width: 40%;
     }
+}
+
+.overlay-shield {
+    background: black;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    z-index: 100;
 }

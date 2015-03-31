@@ -2,7 +2,6 @@
 V1.0
 -----------------------------------------
 
-- on dragging to create a new week-view event, show time span as event title
 - week view - click in 'fullday' section to create new full-day event
 - event detail overlay: new & edit
 	- fields, toggling display based on selections

@@ -334,17 +334,18 @@ var App = App || {};
 
         getHourAs12HourFormat: function (num) {
             var suffix = 'am';
+            var hrs = Math.floor(num);
+            var mins = num > hrs ? ':' + ((num - hrs) * 60) : '';
 
-            if (num === 0) {
-                num = 12;
+            if (hrs === 0) {
+                hrs = 12;
 
-            } else if (num > 12) {
-                num = num - 12;
+            } else if (hrs > 12) {
+                hrs = hrs - 12;
                 suffix = 'pm';
             }
 
-            //return this.asTwoDigits(num) + suffix;
-            return num + suffix;
+            return hrs + mins + suffix;
         },
 
         getHrsBetween: function (dateFrom, dateTo) {

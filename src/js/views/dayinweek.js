@@ -169,6 +169,7 @@ var App = App || {};
                 var height = blockHeight * (elemTo - elemFrom + 1) - 1; // to avoid 0-height blocks
 
                 this.$newEvent
+                    .text(this.getTimeSpanAsText(elemFrom, elemTo))
                     .removeClass('is-hidden')
                     .css({
                         'top': top,
@@ -178,6 +179,13 @@ var App = App || {};
             } else {
                 this.$newEvent.addClass('is-hidden');
             }
+        },
+
+        getTimeSpanAsText: function (elemFrom, elemTo) {
+            var fromTime = App.Methods.getHourAs12HourFormat(elemFrom / 2);
+            var toTime = App.Methods.getHourAs12HourFormat(elemTo / 2);
+
+            return fromTime + ' to ' + toTime;
         },
 
         createNewEvent: function () {

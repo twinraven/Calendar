@@ -1,16 +1,30 @@
 TODO:
 
-- date popup - add/edit
+- event detail overlay: new & edit
+	- fields, toggling display based on selections
+	- mini-cal popup for changing date
+
+- '+X items' text on month view (when greater than X events in 1 day)
+	- popup containing all day's events
+
+- on dragging to create a new week-view event, show time span as event title
+- week view - click in 'fullday' section to create new full-day event
+- touch events: dragging to select dates on touch device
+- event overlapping/stacking in week view (timed events)
+- handle timed events that cross midnight into next day; also timed events that are +1 day long (should be shown as full-day events in both month & week view)
 
 - moveable dates in week/month view
 - resizeable dates in week view
-- Recurring events! YIKES
+- Recurring events!
 
 
 LONG-TERM:
 
 - google calendar api integration:
 	- key fields: start.date / start.dateTime, end.date / end.dateTime, summary, recurrence, reminders / reminders.overrides
+- google integration:
+	- users (via email: people field)
+	- map-location-lookup in events
 - full accessibility: ARIA roles etc
 	- skip links
 - searchable events

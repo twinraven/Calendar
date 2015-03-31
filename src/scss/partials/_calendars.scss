@@ -150,15 +150,15 @@
     }
 
     &.is-highlight {
-        background: #eeee00 !important;
+        background: darken(desaturate($highlightColor, 30%), 5%) !important;
     }
 
     &.is-active.is-highlight {
-        background: yellow !important;
+        background: $highlightColor !important;
     }
 
     &.is-today.is-highlight {
-        background: #dddd00 !important;
+        background: darken(desaturate($highlightColor, 30%), 10%) !important;
     }
 }
 .day--title {
@@ -236,7 +236,7 @@
     width: 100%;
 
     &:hover {
-        background: rgba(255,255,0,0.3);
+        background: $highlightColor;
     }
 
     &:nth-child(odd) {
@@ -273,9 +273,7 @@
 
         &:hover {
             .day__inner {
-                background: rgba(255,255,0,0.3);
-                border-width: 1px 0 0 1px;
-                z-index: 10;
+                background: $highlightColor;
             }
         }
     }

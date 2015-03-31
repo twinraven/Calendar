@@ -38,8 +38,8 @@
 					<div id="cal--full" class="cal cal--full"></div>
 				</div>
 
-				<div class="overlay" id="overlay">
-					<div class="overlay__inner"></div>
+				<div class="overlay">
+					<div class="overlay__inner" id="overlay"></div>
 				</div>
 				<div class="overlay-shield"></div>
 			</main>
@@ -70,6 +70,10 @@
 				title="{{ title }}">
 					{{ title }}
 			</a>
+		</script>
+
+		<script type="text/template" id="detail-template">
+			<h1 class="detail__title">{{ title }}</h1>
 		</script>
 
 		<script type="text/template" id="event-week-template">

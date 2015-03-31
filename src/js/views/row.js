@@ -27,6 +27,9 @@ var App = App || {};
 
             this.getEventData();
 
+            // mixin common event methods here
+            _.extend(App.Views.row.prototype, App.Methods.Events);
+
             this.listenTo(App.Events, 'event:data', this.handleEventData);
         },
 
@@ -40,9 +43,7 @@ var App = App || {};
 
             this.renderDays();
 
-            if (App.eventData && App.eventData.models) {
-                this.renderEvents();
-            }
+            this.renderEvents();
 
             return this.el;
         },
@@ -80,36 +81,16 @@ var App = App || {};
         },
 
         renderEvents: function () {
-            this.createRowAry();
-
-            this.createEventViews();
-
+            // External methods - see App.Methods.Events
+            this.createEventStackAry();
+            this.createEventViews({ 'type': 'all' });
             this.positionEvents();
-
-            this.renderEventFragment();
+            this.renderEventFragment(this.$weekEvents);
         },
 
         // Sort, parse, and render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        // TODO
-        createEventViews: function () {
-            this.eventViews = [];
 
-            var events = _.clone(this.activeDatesEventData);
-
-            if (events) {
-                this.eventViews = events.map(function (event) {
-                    var view = new App.Views.eventInMonth({
-                        model: event,
-                        context: this.createContext()
-                    });
-
-                    return view;
-                }, this);
-            }
-        },
-
-        // TODO
         // add some local context to each event - we need this if an event is wrapped
         createContext: function () {
             return {
@@ -117,88 +98,6 @@ var App = App || {};
                 weekStartDate: this.selfWeek,
                 weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
             };
-        },
-
-        // TODO
-        positionEvents: function () {
-            // re-order to put the longer-running events first
-            this.eventViews.sort(function (a, b) {
-                return b.model.attributes.custom.span - a.model.attributes.custom.span;
-            });
-
-            // then, make sure that full-day events are ahead of timed events in the list
-            // (will still maintain the key order above though)
-            this.eventViews.sort(function (a, b) {
-                return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
-            });
-
-            // finally, calculate the position of each event, using our stacking algorithm
-            // (if that's what it is? It's pretty faaancy)
-            this.eventViews.forEach(function (event) {
-                event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
-            }, this);
-        },
-
-        // TODO
-        renderEventFragment: function () {
-            var fragment = document.createDocumentFragment();
-
-            this.eventViews.forEach(function (view) {
-                fragment.appendChild(view.render());
-            }, this);
-
-            this.$weekEvents.empty();
-            this.$weekEvents.append(fragment);
-        },
-
-
-        // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        // TODO
-        createRowAry: function () {
-            var x, y;
-
-            this.rowAry = [];
-
-            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
-                this.rowAry[x] = [];
-            }
-        },
-
-        // TODO
-        setRowFill: function (pos, span, row) {
-            var x, y;
-
-            for (x = pos, y = (pos + span); x < y; x++) {
-                this.rowAry[x][row] = true;
-            }
-        },
-
-        // TODO
-        hasSpaceInRow: function (pos, span, row) {
-            var x, y;
-            var output = true;
-
-            for (x = pos, y = (pos + span); x < y; x++) {
-                if (this.rowAry[x][row]) {
-                    output = false;
-                }
-            }
-
-            return output;
-        },
-
-        // TODO
-        findSpaceForEvent: function (pos, span) {
-            var row = 0;
-
-            while (!this.hasSpaceInRow(pos, span, row)) {
-              row++;
-            }
-
-            this.setRowFill(pos, span, row);
-
-            return row;
         },
 
 

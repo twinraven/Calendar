@@ -1,7 +1,5 @@
 TODO:
 
-- Merge row & week? Increasingly shared functionality
-- Refactor row/week generally - lots of repeated code.
 - date popup - add/edit
 
 - moveable dates in week/month view

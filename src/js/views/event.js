@@ -73,7 +73,10 @@ var App = App || {};
         // handle Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleEventClick: function (e) {
-            console.log(this.model.get('custom'));
+            App.Events.trigger('view:event', {
+                'id': this.model.get('id')
+            });
+
         },
 
 

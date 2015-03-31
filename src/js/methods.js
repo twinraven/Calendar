@@ -4,9 +4,152 @@ var App = App || {};
 (function ($) {
     'use strict';
 
+    // Reusable methods across views ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //
     App.Methods = {
 
+        // Event-specific methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
+        Events: {
+
+            // Creating a stacking context for all-day events  ~~~~~~~
+
+            createEventStackAry: function () {
+                var x, y;
+
+                this.stackAry = [];
+
+                for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
+                    this.stackAry[x] = [];
+                }
+            },
+
+
+            setRowFill: function (pos, span, row) {
+                var x, y;
+
+                for (x = pos, y = (pos + span); x < y; x++) {
+                    this.stackAry[x][row] = true;
+                }
+            },
+
+
+            hasSpaceInRow: function (pos, span, row) {
+                var x, y;
+                var output = true;
+
+                for (x = pos, y = (pos + span); x < y; x++) {
+                    if (this.stackAry[x][row]) {
+                        output = false;
+                    }
+                }
+
+                return output;
+            },
+
+
+            getHighestFullRow: function () {
+                var x, y;
+                var highest = 0;
+
+                for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
+                    var len = this.stackAry[x].length;
+
+                    if (len > highest) {
+                        highest = len;
+                    }
+                }
+
+                return highest;
+            },
+
+
+            findSpaceForEvent: function (pos, span) {
+                var row = 0;
+
+                while (!this.hasSpaceInRow(pos, span, row)) {
+                  row++;
+                }
+
+                this.setRowFill(pos, span, row);
+
+                return row;
+            },
+
+            // Rendering event views ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+            createEventViews: function (props) {
+                this.eventViews = [];
+
+                var events;
+
+                if (props.type === 'fullday') {
+                    events = _.filter(this.activeDatesEventData,
+                        function (event) {
+                            return event.get('custom').isFullDay;
+                        });
+
+                } else {
+                    events = _.clone(this.activeDatesEventData);
+                }
+
+                if (events) {
+                    this.eventViews = events.map(function (event) {
+                        var view = new App.Views.eventInMonth({
+                            model: event,
+                            context: this.createContext()
+                        });
+
+                        return view;
+                    }, this);
+                }
+            },
+
+
+            positionEvents: function () {
+                // re-order to put the longer-running events first
+                this.eventViews.sort(function (a, b) {
+                    return b.model.attributes.custom.span - a.model.attributes.custom.span;
+                });
+
+                // then, make sure that full-day events are ahead of timed events in the list
+                // (will still maintain the key order above though)
+                this.eventViews.sort(function (a, b) {
+                    return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
+                });
+
+                // finally, calculate the position of each event, using our stacking algorithm
+                // (if that's what it is? It's pretty faaancy)
+                this.eventViews.forEach(function (event) {
+                    event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
+                }, this);
+            },
+
+
+            renderEventFragment: function ($elem) {
+                var fragment = document.createDocumentFragment();
+
+                this.eventViews.forEach(function (view) {
+                    fragment.appendChild(view.render());
+                }, this);
+
+                $elem.empty();
+                $elem.append(fragment);
+            }
+        },
+
+
         // Basic date methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        //
+        // TODO: REFACTOR!
+        // could move into App.Methods.Dates -- but rather ugly interface
+        // for a v. highly used collection of methods.
+        // Possibilities:
+        //
+        // a) extend root View (and Collection?) to include these methods -- then just refer to this.Dates.XX
+        // b) Create own root View, with methods baked in, then all views are extension of this
+        // c) cache method collection as this.Dates, from the init function in each view
+        //
 
         newDate: function () { // using arguments, not params
             var args;

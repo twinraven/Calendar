@@ -25,9 +25,8 @@ var App = App || {};
 
             App.Views.day.prototype.initialize.apply(this, [params]);
 
-            this.listenTo(App.Events, 'mouse:up', function () { self.handleMouseUp(null, true); });
             this.listenTo(App.Events, 'clear:selection', this.handleClearSelection);
-            this.listenTo(App.Events, 'clock:tick', this.handleClockTick); // broken?
+            this.listenTo(App.Events, 'clock:tick', this.handleClockTick);
         },
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -139,7 +138,6 @@ var App = App || {};
             this.clearDrag();
         },
 
-        // broken?
         handleClockTick: function () {
             this.setTimeLinePosition();
         },

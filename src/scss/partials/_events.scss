@@ -17,7 +17,7 @@
     min-height: 38px;
     overflow-y: scroll;
     position: relative;
-    top: 3px;
+    top: 0;
     width: calc(100% - 3rem);
     z-index: 5;
 }
@@ -28,15 +28,6 @@
     position: absolute;
     top: 0;
     width: 100%;
-}
-
-@keyframes fadein {
-    from {
-        opacity: 0;
-    }
-    to {
-        opacity: 1;
-    }
 }
 
 .event {
@@ -50,7 +41,7 @@
     padding: 2px 5px;
     position: absolute;
     text-decoration: none;
-    top: 0;
+    top: 2px;
     user-select: none;
     width: calc((100% / 7) - 3px);
 
@@ -79,16 +70,16 @@
     &[data-span="6"] {width: calc((100% / 7 * 6) - 3px);}
     &[data-span="7"] {width: calc((100% / 7 * 7) - 3px);}
 
-    &[data-row="1"] {top: $eventRowHeight * 1;}
-    &[data-row="2"] {top: $eventRowHeight * 2;}
-    &[data-row="3"] {top: $eventRowHeight * 3;}
-    &[data-row="4"] {top: $eventRowHeight * 4;}
-    &[data-row="5"] {top: $eventRowHeight * 5;}
-    &[data-row="6"] {top: $eventRowHeight * 6;}
-    &[data-row="7"] {top: $eventRowHeight * 7;}
-    &[data-row="8"] {top: $eventRowHeight * 8;}
-    &[data-row="8"] {top: $eventRowHeight * 9;}
-    &[data-row="10"] {top: $eventRowHeight * 10;}
+    &[data-row="1"] {top: $eventRowHeight * 1 + 2px;}
+    &[data-row="2"] {top: $eventRowHeight * 2 + 2px;}
+    &[data-row="3"] {top: $eventRowHeight * 3 + 2px;}
+    &[data-row="4"] {top: $eventRowHeight * 4 + 2px;}
+    &[data-row="5"] {top: $eventRowHeight * 5 + 2px;}
+    &[data-row="6"] {top: $eventRowHeight * 6 + 2px;}
+    &[data-row="7"] {top: $eventRowHeight * 7 + 2px;}
+    &[data-row="8"] {top: $eventRowHeight * 8 + 2px;}
+    &[data-row="8"] {top: $eventRowHeight * 9 + 2px;}
+    &[data-row="10"] {top: $eventRowHeight * 10 + 2px;}
 
     &.event--single-line {
         overflow: hidden;

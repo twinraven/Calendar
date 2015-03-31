@@ -19,11 +19,11 @@ var App = App || {};
             'click .control__link--today': 'gotoToday',
             'click .control__link--add': 'addNewEvent',
 
+            'click .overlay-shield': 'handleCloseEvent',
+
             'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',
             'click .control__link--month': 'setViewModeMonth',
-
-            'click .overlay-shield': 'handleCloseEvent',
 
             'mouseup': 'handleMouseUp'
         },
@@ -73,9 +73,12 @@ var App = App || {};
         bindEvents: function () {
             var self = this;
 
-            // custom events
-            this.listenTo(App.Events, 'add:event', this.handleShowEvent);
+            // event handling
+            this.listenTo(App.Events, 'add:event', this.handleNewEvent);
+            this.listenTo(App.Events, 'view:event', this.handleViewEvent);
             this.listenTo(App.Events, 'close:event', this.handleCloseEvent);
+
+            // jump the calendar to a date
             this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
 
             // DOM/user events
@@ -373,6 +376,17 @@ var App = App || {};
         },
 
 
+        // Control overlay display ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        openOverlay: function () {
+            this.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
+        },
+
+        closeOverlay: function () {
+            this.$body.removeClass('is-overlay-active').addClass('is-overlay-hidden');
+        },
+
+
         // user events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         handleKeyPress: function (e) {
@@ -396,12 +410,6 @@ var App = App || {};
             }
         },
 
-        handleMouseUp: function (e) {
-            if (e) { e.preventDefault(); }
-
-            App.Events.trigger('mouse:up');
-        },
-
         addNewEvent: function () {
             App.Events.trigger('add:event', App.Methods.newDate(this.activeDate));
         },
@@ -413,17 +421,33 @@ var App = App || {};
             this.gotoDate({'newDate': date});
         },
 
-        handleShowEvent: function (newEvent) {
+        handleNewEvent: function (newEvent) {
+            this.openOverlay();
 
-            this.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
-
-            console.log('add new event from **' + newEvent.from + '** to **' + newEvent.to + '**');
+            console.log('ADD NEW EVENT');
+            console.log('from: ' + newEvent.from);
+            console.log('to: ' + newEvent.to);
             console.log('all day event: ' + (newEvent.fullday));
             console.log('~~~~~~~~~~~~~~~~');
         },
 
+        handleViewEvent: function (event) {
+            var eventData = App.eventData.get(event.id);
+            var customEventData = eventData.get('custom');
+
+            console.log('VIEW/EDIT EVENT');
+            console.log('title: ' + customEventData.summary);
+            console.log('from: ' + customEventData.startDateTime);
+            console.log('to: ' + customEventData.endDateTime);
+            console.log('all day event: ' + (customEventData.isFullDay));
+            console.log('~~~~~~~~~~~~~~~~');
+
+            this.openOverlay();
+
+        },
+
         handleCloseEvent: function () {
-            this.$body.removeClass('is-overlay-active').addClass('is-overlay-hidden');
+            this.closeOverlay();
         }
     });
 })(jQuery);

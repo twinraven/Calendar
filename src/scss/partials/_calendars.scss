@@ -61,6 +61,7 @@
     overflow-y: auto;
     position: relative;
     width: 100%;
+    z-index: 10;
 }
 .cal__grid--month {
     overflow: hidden;
@@ -117,7 +118,7 @@
     border-bottom: 1px solid #ccc;
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
     position: relative;
-    z-index: 5;
+    z-index: 12;
 }
 
 .day {
@@ -125,6 +126,7 @@
     align-items: stretch;
     box-sizing: border-box;
     color: #888;
+    cursor: pointer;
     float: left;
     font-weight: normal;
     list-style: none;
@@ -169,6 +171,7 @@
 
 .day__inner {
     border: 1px solid #ccc;
+    cursor: pointer;
     height: 100%;
     left: 0;
     position: absolute;

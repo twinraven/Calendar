@@ -1,0 +1,19 @@
+// Animations ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+@keyframes fadein {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0.6;
+    }
+}
+
+@keyframes fadeout {
+    from {
+        opacity: 0.6;
+    }
+    to {
+        opacity: 0;
+    }
+}

@@ -25,38 +25,41 @@ var App = App || {};
 
             this.getEventData();
 
-            this.listenTo(App.Events, 'change:date', this.handleChangeDate);
+            // mixin common event methods here
+            _.extend(App.Views.week.prototype, App.Methods.Events);
+
             this.listenTo(App.Events, 'event:data', this.handleEventData);
+            this.listenTo(App.Events, 'change:date', this.handleChangeDate);
         },
 
 
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         render: function () {
-            this.$el.html(this.template({}));
+            this.renderElem();
 
             this.cacheSelectors();
 
             this.renderMonthName();
 
-            this.renderDayLabels();
-
-            this.renderTimeLabels();
+            this.renderLabels();
 
             this.setWeekData();
 
             this.renderDates();
 
-            this.renderAllDayEvents();
-
-            this.renderTimedEvents();
+            this.renderEvents();
 
             this.scrollTimeIntoView();
 
             return this.el;
         },
 
-        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        renderElem: function () {
+            this.$el.html(this.template({}));
+        },
 
         cacheSelectors: function () {
             this.$title = this.$('.cal__title');
@@ -73,6 +76,11 @@ var App = App || {};
             var d = this.selfWeek;
 
             this.$title.text(App.Methods.getMonthName(d) + ' ' + App.Methods.getYear(d));
+        },
+
+        renderLabels: function () {
+            this.renderDayLabels();
+            this.renderTimeLabels();
         },
 
         renderDayLabels: function () {
@@ -157,40 +165,11 @@ var App = App || {};
             }
         },
 
-        renderAllDayEvents: function () {
-            this.createEventStackAry();
-
-            this.createEventViews();
-
-            this.positionEvents();
-
-            this.renderEventFragment();
-
-            this.resizeAllDayEventsContainer();
+        renderEvents: function () {
+            this.renderAllDayEvents();
+            this.renderTimedEvents();
         },
 
-        // TODO
-        createEventViews: function () {
-            this.eventViews = [];
-
-            var events = _.filter(this.activeDatesEventData,
-                function (event) {
-                    return event.get('custom').isFullDay;
-                });
-
-            if (events) {
-                this.eventViews = events.map(function (event) {
-                    var view = new App.Views.eventInMonth({
-                        model: event,
-                        context: this.createContext()
-                    });
-
-                    return view;
-                }, this);
-            }
-        },
-
-        // TODO
         createContext: function () {
             return {
                 weekNum: this.weekNum,
@@ -199,42 +178,20 @@ var App = App || {};
             };
         },
 
-        // TODO
-        positionEvents: function () {
-            // re-order to put the longer-running events first
-            this.eventViews.sort(function (a, b) {
-                return b.model.attributes.custom.span - a.model.attributes.custom.span;
-            });
+        renderAllDayEvents: function () {
+            // external methods - see App.Methods.Events
+            this.createEventStackAry();
+            this.createEventViews({ 'type': 'fullday' });
+            this.positionEvents();
+            this.renderEventFragment(this.$allDayEvents);
 
-            // then, make sure that full-day events are ahead of timed events in the list
-            // (will still maintain the key order above though)
-            this.eventViews.sort(function (a, b) {
-                return b.model.attributes.custom.isFullDay - a.model.attributes.custom.isFullDay;
-            });
-
-            // finally, calculate the position of each event, using our stacking algorithm
-            // (if that's what it is? It's pretty faaancy)
-            this.eventViews.forEach(function (event) {
-                event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
-            }, this);
-        },
-
-        // TODO
-        renderEventFragment: function () {
-            var fragment = document.createDocumentFragment();
-
-            this.eventViews.forEach(function (view) {
-                fragment.appendChild(view.render());
-            }, this);
-
-            this.$allDayEvents.empty();
-            this.$allDayEvents.append(fragment);
+            this.resizeAllDayEventsContainer();
         },
 
         resizeAllDayEventsContainer: function () {
             var containerHeight = this.$allDayEvents.height();
             var maxRows = App.Constants.MAX_ALL_DAY_EVENTS_ROWS;
-            var eventHeight = App.Constants.WEEK_VIEW_GRID_HEIGHT - 2; // oops. Magic
+            var eventHeight = App.Constants.WEEK_VIEW_GRID_HEIGHT - 1; // oops. Magic
             var fulldayEventRows = this.getHighestFullRow();
 
             if (fulldayEventRows > maxRows) {
@@ -252,72 +209,6 @@ var App = App || {};
             if (now.getHours() >= 12 && App.Methods.isCurrentWeek(this.selfWeek)) {
                 this.$grid.scrollTop(500);
             }
-        },
-
-
-        // Stacking/packing methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        // TODO
-        createEventStackAry: function () {
-            var x, y;
-
-            this.stackAry = [];
-
-            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
-                this.stackAry[x] = [];
-            }
-        },
-
-        // TODO
-        setRowFill: function (pos, span, row) {
-            var x, y;
-
-            for (x = pos, y = (pos + span); x < y; x++) {
-                this.stackAry[x][row] = true;
-            }
-        },
-
-        // TODO
-        hasSpaceInRow: function (pos, span, row) {
-            var x, y;
-            var output = true;
-
-            for (x = pos, y = (pos + span); x < y; x++) {
-                if (this.stackAry[x][row]) {
-                    output = false;
-                }
-            }
-
-            return output;
-        },
-
-        // TODO
-        getHighestFullRow: function () {
-            var x, y;
-            var highest = 0;
-
-            for (x = 0, y = App.Constants.DAYS_IN_WEEK; x < y; x++) {
-                var len = this.stackAry[x].length;
-
-                if (len > highest) {
-                    highest = len;
-                }
-            }
-
-            return highest;
-        },
-
-        // TODO
-        findSpaceForEvent: function (pos, span) {
-            var row = 0;
-
-            while (!this.hasSpaceInRow(pos, span, row)) {
-              row++;
-            }
-
-            this.setRowFill(pos, span, row);
-
-            return row;
         },
 
 

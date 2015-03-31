@@ -60,6 +60,7 @@
 
 .overlay-shield {
     background: black;
+    cursor: pointer;
     height: 100vh;
     position: fixed;
     left: 0;
@@ -71,10 +72,16 @@
     z-index: 1000;
 
     .is-overlay-active & {
-        opacity: 0.4;
+        animation: fadein 0.3s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
         pointer-events: all;
     }
 
     .is-overlay-hidden & {
+        animation: fadeout 0.3s;
+        animation-timing-function: ease-out;
+        animation-fill-mode: forwards;
+        pointer-events: none;
     }
 }

@@ -379,7 +379,11 @@ var App = App || {};
         // Control overlay display ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         openOverlay: function () {
-            this.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
+            var self = this;
+
+            setTimeout(function () {
+                self.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
+            }, 130);
         },
 
         closeOverlay: function () {
@@ -410,12 +414,22 @@ var App = App || {};
             }
         },
 
-        addNewEvent: function () {
-            App.Events.trigger('add:event', App.Methods.newDate(this.activeDate));
+        // global mouse-up event, so individual views can be aware of when mouse-ups
+        // fire anywhere in the app - to capture, for instance, a drag-out event
+        handleMouseUp: function (e) {
+            var $el = $(e.target);
+
+            if (App.State.isDragging) {
+                App.Events.trigger('mouse:up');
+            }
         },
 
 
         // custom App events (see events object, at top) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        addNewEvent: function () {
+            App.Events.trigger('add:event', App.Methods.newDate(this.activeDate));
+        },
 
         handleGotoDate: function (date) {
             this.gotoDate({'newDate': date});
@@ -448,6 +462,7 @@ var App = App || {};
 
         handleCloseEvent: function () {
             this.closeOverlay();
+            App.Events.trigger('clear:selection');
         }
     });
 })(jQuery);

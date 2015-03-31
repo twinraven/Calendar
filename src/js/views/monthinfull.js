@@ -27,6 +27,7 @@ var App = App || {};
             App.Views.month.prototype.initialize.apply(this, [params]);
 
             this.listenTo(App.Events, 'clear:selection', this.handleClearSelection);
+            this.listenTo(App.Events, 'mouse:up', this.handleMouseUp);
         },
 
 
@@ -79,25 +80,27 @@ var App = App || {};
         },
 
         handleMouseUp: function (e) {
-            var $el = $(e.target);
+            // this can be indirectly called from calendar.js via a custom event ('mouse:up')
+            // so 'e' may not refer to anything
+            var $el = e ? $(e.target) : null;
 
-            if ($el.is('.day__inner')) {
+            if ($el && $el.is('.day__inner')) {
                 this.setDragDateEnd($el, $el.data('date'));
-
-                App.State.isDragging = false;
-
-                if (this.dragDateStart > this.dragDateEnd) {
-                    this.swapDragStartEndDates();
-                }
-
-                App.Events.trigger('add:event', {
-                    'from': this.dragDateStart,
-                    'to': App.Methods.getDateTomorrow(this.dragDateEnd),
-                    'fullday': true
-                });
-
-                App.State.hasSelection = true;
             }
+
+            App.State.isDragging = false;
+
+            if (this.dragDateStart > this.dragDateEnd) {
+                this.swapDragStartEndDates();
+            }
+
+            App.Events.trigger('add:event', {
+                'from': this.dragDateStart,
+                'to': App.Methods.getDateTomorrow(this.dragDateEnd),
+                'fullday': true
+            });
+
+            App.State.hasSelection = true;
         },
 
         handleMouseOver: function (e) {

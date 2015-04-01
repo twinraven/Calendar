@@ -48,24 +48,24 @@ ul {
     left: 0;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.3s;
+    transition: all 0.2s;
     top: 0;
     width: 100%;
     z-index: 1000;
 
     .is-shield-active & {
-        animation: fadein 0.15s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
+        opacity: 0.6;
         pointer-events: all;
     }
 
     .is-shield-hidden & {
-        animation: fadeout 0.15s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
+        transition-duration: 0.15s;
         pointer-events: none;
     }
+}
+
+.preload * {
+    animation: none !important;
 }
 
 // helpers ~~~~~~~~~~~~~~~~~~~~~~

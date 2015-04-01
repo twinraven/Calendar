@@ -10,20 +10,18 @@
     right: 0;
     top: 0;
     transform: translateX(100%);
+    transition: all 0.25s;
     width: 100%;
     z-index: 1100;
 
     .is-overlay-active & {
-        animation: showOverlay 0.25s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
+        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
         display: block;
+        transform: translateX(0%);
     }
 
     .is-overlay-hidden & {
-        animation: hideOverlay 0.18s;
-        animation-timing-function: ease-in;
-        animation-fill-mode: forwards;
+        transition-duration: 0.18s;
         display: block;
     }
 

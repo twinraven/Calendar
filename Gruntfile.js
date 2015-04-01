@@ -23,6 +23,7 @@ module.exports = function ( grunt ) {
 		'src/js/views/eventinmonth.js',
 		'src/js/views/eventinweek.js',
 		'src/js/views/fulldaylink.js',
+		'src/js/views/moreeventslink.js',
 		'src/js/views/week.js',
 		'src/js/views/row.js',
 		'src/js/views/month.js',

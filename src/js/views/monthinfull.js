@@ -94,13 +94,18 @@ var App = App || {};
                 this.swapDragStartEndDates();
             }
 
-            App.Events.trigger('add:event', {
-                'from': this.dragDateStart,
-                'to': App.Methods.getDateTomorrow(this.dragDateEnd),
-                'fullday': true
-            });
+            if (this.dragDateStart && this.dragDateEnd) {
+                App.Events.trigger('add:event', {
+                    'from': this.dragDateStart,
+                    'to': App.Methods.getDateTomorrow(this.dragDateEnd),
+                    'fullday': true
+                });
 
-            App.State.hasSelection = true;
+                this.dragDateStart = null;
+                this.dragDateEnd = null;
+
+                App.State.hasSelection = true;
+            }
         },
 
         handleMouseOver: function (e) {

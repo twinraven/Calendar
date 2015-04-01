@@ -8,11 +8,14 @@ var App = App || {};
 
 	// immutable App-wide properties
 	App.Constants = {
+		MAX_EVENT_ROWS_IN_MONTH: 2,
 		MAX_ALL_DAY_EVENTS_ROWS: 5,
 		WEEK_VIEW_GRID_HEIGHT: 20,
+
+	    ESC_KEY : 27,
+
 	    DAYS_IN_WEEK : 7,
 	    MONTHS_IN_YEAR : 12,
-	    ESC_KEY : 27,
 	    WEEK : 'WEEK',
 	    MONTH : 'MONTH',
 	    MS_IN_DAY : 86400000,

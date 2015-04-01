@@ -25,11 +25,11 @@ var App = App || {};
             },
 
 
-            setRowFill: function (pos, span, row) {
+            setRowFill: function (event, pos, span, row) {
                 var x, y;
 
                 for (x = pos, y = (pos + span); x < y; x++) {
-                    this.stackAry[x][row] = true;
+                    this.stackAry[x][row] = event;
                 }
             },
 
@@ -63,15 +63,24 @@ var App = App || {};
                 return highest;
             },
 
+            isColTallerThanMax: function (col) {
+                var colHeight = this.getEventTotalInCol(col);
 
-            findSpaceForEvent: function (pos, span) {
+                return colHeight > App.Constants.MAX_EVENT_ROWS_IN_MONTH;
+            },
+
+            getEventTotalInCol: function (col) {
+                return this.stackAry[col].length;
+            },
+
+            findSpaceForEvent: function (event, pos, span) {
                 var row = 0;
 
                 while (!this.hasSpaceInRow(pos, span, row)) {
                   row++;
                 }
 
-                this.setRowFill(pos, span, row);
+                this.setRowFill(event, pos, span, row);
 
                 return row;
             },
@@ -121,7 +130,7 @@ var App = App || {};
                 // finally, calculate the position of each event, using our stacking algorithm
                 // (if that's what it is? It's pretty faaancy)
                 this.eventViews.forEach(function (event) {
-                    event.isolatedModel.stackRow = this.findSpaceForEvent(event.isolatedModel.pos, event.isolatedModel.span);
+                    event.isolatedModel.stackRow = this.findSpaceForEvent(event, event.isolatedModel.pos, event.isolatedModel.span);
                 }, this);
             },
 
@@ -223,7 +232,7 @@ var App = App || {};
             var year = date.getFullYear();
 
             // Adjust to Thursday in week 1 and count number of weeks from date to week1.
-            return Number(year + '.' + week); // results in number with decimal: e.g. 2015.43
+            return Number(year + '.' + week).toFixed(2); // results in number with decimal: e.g. 2015.43
         },
 
 

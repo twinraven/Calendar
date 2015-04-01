@@ -5,6 +5,7 @@ V1.0
 - event detail overlay: new & edit
 	- fields, toggling display based on selections
 	- mini-cal popup for changing date
+	- save details to model (new & existing)
 
 - '+X items' text on month view (when greater than X events in 1 day)
 	- popup containing all day's events

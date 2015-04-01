@@ -86,10 +86,11 @@ var App = App || {};
             this.createEventViews({ 'type': 'all' });
             this.positionEvents();
             this.renderEventFragment(this.$weekEvents);
+
+            this.checkEventCountPerDay();
         },
 
         // Sort, parse, and render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 
         // add some local context to each event - we need this if an event is wrapped
         createContext: function () {
@@ -98,6 +99,29 @@ var App = App || {};
                 weekStartDate: this.selfWeek,
                 weekEndDate: App.Methods.getWeekEndDate(this.selfWeek)
             };
+        },
+
+        checkEventCountPerDay: function () {
+            this.collection.forEach(function (day, col) {
+                if (this.isColTallerThanMax(col)) {
+                    this.renderViewMoreLink(day, col);
+                }
+            }, this);
+        },
+
+        renderViewMoreLink: function (day, col) {
+            var totalEvents = this.getEventTotalInCol(col);
+            var hiddenEvents = totalEvents - App.Constants.MAX_EVENT_ROWS_IN_MONTH;
+            var view = new App.Views.moreEventsLink({
+                    model: day,
+                    config: {
+                        col: col,
+                        hiddenEvents: hiddenEvents,
+                        stackAry: this.stackAry
+                    }
+                });
+
+            this.$weekEvents.append(view.render());
         },
 
 

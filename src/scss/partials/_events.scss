@@ -21,6 +21,18 @@
     width: calc(100% - 3rem);
     z-index: 5;
 }
+.events--month {
+    // hide stacked events...
+    .event[data-row] {
+        display: none;
+    }
+
+    // ... only show first 2 rows of items
+    .event[data-row="0"],
+    .event[data-row="1"] {
+        display: block;
+    }
+}
 
 .events__inner {
     left: 0;
@@ -86,6 +98,9 @@
         text-overflow: ellipsis;
         white-space: nowrap;
     }
+}
+.event--more {
+    top: 70px;
 }
 
 .week-events {

@@ -45,6 +45,7 @@ var App = App || {};
 
 				// namespace our custom properties
 				var customData = {
+					id: model.id,
 					startDateTime: startDateTime,
 					endDateTime: endDateTime,
 					pos: pos,

@@ -68,6 +68,7 @@ var App = App || {};
             this.$toggleSummary = this.$('.control__link--summary');
             this.$summary = this.$('.summary');
             this.$overlay = this.$('#overlay');
+            this.$popup = this.$('#popup');
         },
 
         bindEvents: function () {
@@ -394,12 +395,12 @@ var App = App || {};
         openOverlay: function () {
             var self = this;
 
+            //this.closePopup();
+
             setTimeout(function () {
                 self.$body
                     .removeClass('is-overlay-hidden')
                     .addClass('is-overlay-active');
-
-                self.showShield();
             }, 130);
         },
 
@@ -407,19 +408,17 @@ var App = App || {};
             this.$body
                 .removeClass('is-overlay-active')
                 .addClass('is-overlay-hidden');
-
-            this.hideShield();
         },
 
         openPopup: function () {
             var self = this;
 
+            //this.closeOverlay();
+
             setTimeout(function () {
                 self.$body
                     .removeClass('is-popup-hidden')
                     .addClass('is-popup-active');
-
-                self.showShield();
             }, 130);
         },
 
@@ -427,8 +426,6 @@ var App = App || {};
             this.$body
                 .removeClass('is-popup-active')
                 .addClass('is-popup-hidden');
-
-            this.hideShield();
         },
 
 
@@ -478,6 +475,7 @@ var App = App || {};
 
         handleNewEvent: function (newEvent) {
             this.openOverlay();
+            this.showShield();
 
             console.log('ADD NEW EVENT');
             console.log('from: ' + newEvent.from);
@@ -497,6 +495,8 @@ var App = App || {};
             console.log('all day event: ' + (customEventData.isFullDay));
             console.log('~~~~~~~~~~~~~~~~');
 
+            this.closePopup();
+            this.showShield();
             this.openOverlay();
 
         },
@@ -504,21 +504,30 @@ var App = App || {};
         handleHideShield: function () {
             if (this.$body.hasClass('is-overlay-active')) {
                 this.closeOverlay();
+                this.hideShield();
                 App.Events.trigger('clear:selection');
 
             } else if (this.$body.hasClass('is-popup-active')) {
                 this.closePopup();
+                this.hideShield();
             }
         },
 
-        handlePopupEventList: function (events) {
-            console.log(events);
+        handlePopupEventList: function (events, day) {
+            var view = new App.Views.eventsList({
+                model: day,
+                eventModels: events
+            });
 
+            this.$popup.html(view.render());
+
+            this.showShield();
             this.openPopup();
         },
 
         handleClosePopup: function () {
             this.closePopup();
+            this.hideShield();
         }
     });
 })(jQuery);

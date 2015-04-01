@@ -44,7 +44,7 @@
 
 				<div class="popup">
 					<div class="popup__inner" id="popup"></div>
-					<a href="#" class="popup__close"><span>Close</span></a>
+					<a href="#" class="popup__close"><span class="icon icon--close">Close</span></a>
 				</div>
 
 				<div class="shield"></div>
@@ -90,8 +90,15 @@
 			<h1 class="detail__title">{{ title }}</h1>
 		</script>
 
-		<script type="text/template" id="popup-template">
-			some things here
+		<script type="text/template" id="event-list-template">
+			<div>
+				<h3 class="popup__title">{{ date }}</h3>
+				<ul class="popup__events">
+				{{#each events}}
+					<li class="event event--popup" data-fullday="{{ isFullDay }}" data-id="{{ id }}">{{ summary }}</li>
+				{{/each}}
+				</ul>
+			</div>
 		</script>
 
 
@@ -102,7 +109,7 @@
 				title="{{ summary }}"
 				style="height:{{eventHeight}}px; top:{{eventTop}}px;">
 					{{ summary }}
-			</a>
+			</li>
 		</script>
 
 		<script type="text/template" id="month-template">

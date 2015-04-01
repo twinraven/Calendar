@@ -29,7 +29,7 @@ var App = App || {};
                 var x, y;
 
                 for (x = pos, y = (pos + span); x < y; x++) {
-                    this.stackAry[x][row] = event;
+                    this.stackAry[x][row] = event.model;
                 }
             },
 

@@ -102,6 +102,14 @@
 .event--more {
     top: 70px;
 }
+.event--popup {
+    font-size: 14px;
+    height: auto;
+    padding: 5px 10px;
+    position: static;
+    margin: 0 0 8px;
+    width: auto;
+}
 
 .week-events {
     @extend .week-days;

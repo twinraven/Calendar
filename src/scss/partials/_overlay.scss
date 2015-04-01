@@ -14,14 +14,14 @@
     z-index: 1100;
 
     .is-overlay-active & {
-        animation: showOverlay 0.3s;
+        animation: showOverlay 0.25s;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
         display: block;
     }
 
     .is-overlay-hidden & {
-        animation: hideOverlay 0.2s;
+        animation: hideOverlay 0.18s;
         animation-timing-function: ease-in;
         animation-fill-mode: forwards;
         display: block;

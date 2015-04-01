@@ -54,14 +54,14 @@ ul {
     z-index: 1000;
 
     .is-shield-active & {
-        animation: fadein 0.18s;
+        animation: fadein 0.15s;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
         pointer-events: all;
     }
 
     .is-shield-hidden & {
-        animation: fadeout 0.18s;
+        animation: fadeout 0.15s;
         animation-timing-function: ease-out;
         animation-fill-mode: forwards;
         pointer-events: none;

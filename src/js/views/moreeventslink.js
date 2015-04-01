@@ -45,7 +45,7 @@ var App = App || {};
         handleMoreEventsLinkClick: function (e) {
             e.preventDefault();
 
-            App.Events.trigger('popup:eventlist', this.eventsData);
+            App.Events.trigger('popup:eventlist', this.eventsData, this.model);
         },
 
 

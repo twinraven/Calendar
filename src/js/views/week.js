@@ -12,6 +12,7 @@ var App = App || {};
         template: Handlebars.compile($('#week-template').html()), // for containing elem & markup
         titleTemplate: Handlebars.compile($('#day-week-title-template').html()), // for mon/tue/wed labels
         timeLabelTemplate: Handlebars.compile($('#time-label-template').html()),
+        fullDayTemplate: Handlebars.compile($('#fullday-link-template').html()),
 
         collection: App.Collections.dates,
 
@@ -48,6 +49,8 @@ var App = App || {};
 
             this.renderDates();
 
+            this.renderFullDayLinks();
+
             this.renderEvents();
 
             this.scrollTimeIntoView();
@@ -68,6 +71,7 @@ var App = App || {};
             this.$grid = this.$('.cal__grid');
             this.$timeLabels = this.$('.time-labels');
             this.$allDayEvents = this.$('.events--fullday .events__inner');
+            this.$allDayLinks = this.$('.events__days');
             this.$events = this.$('.week-events');
         },
 
@@ -136,6 +140,23 @@ var App = App || {};
 
             this.$week.empty();
             this.$week.append(fragment);
+        },
+
+        renderFullDayLinks: function () {
+            var fragment = document.createDocumentFragment();
+
+            this.dayViews = this.weekData.map(function (day) {
+                var view = new App.Views.fullDayLink({
+                    model: day
+                });
+
+                fragment.appendChild(view.render());
+
+                return view;
+            }, this);
+
+            this.$allDayLinks.empty();
+            this.$allDayLinks.append(fragment);
         },
 
         // Render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

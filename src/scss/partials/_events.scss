@@ -23,11 +23,11 @@
 }
 
 .events__inner {
-    height: 100%;
     left: 0;
     position: absolute;
     top: 0;
     width: 100%;
+    z-index: 2;
 }
 
 .event {
@@ -117,4 +117,27 @@
     position: absolute;
     width: 99%;
     z-index: 15;
+}
+
+.events__days {
+    height: 100%;
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.event__fullday-link {
+    cursor: pointer;
+    display: block;
+    float: left;
+    height: 100%;
+    overflow: hidden;
+    text-indent: -9999px;
+    width: 14.2857%;
+
+    &:hover {
+        background: $highlightColor;
+    }
 }

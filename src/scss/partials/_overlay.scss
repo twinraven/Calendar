@@ -2,28 +2,6 @@
  * Overlay ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
  */
 
-@keyframes showOverlay {
-    from {
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        transform: translateX(100%);
-    }
-    to {
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-        transform: translateX(0);
-    }
-}
-
-@keyframes hideOverlay {
-    from {
-        box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
-        transform: translateX(0);
-    }
-    to {
-        box-shadow: 0 0 0 rgba(0, 0, 0, 0);
-        transform: translateX(100%);
-    }
-}
-
 .overlay {
     background: #FFF;
     display: none;
@@ -55,33 +33,5 @@
 
     @include respond-min($tablet-wide) {
         width: 40%;
-    }
-}
-
-.overlay-shield {
-    background: black;
-    cursor: pointer;
-    height: 100vh;
-    position: fixed;
-    left: 0;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s;
-    top: 0;
-    width: 100%;
-    z-index: 1000;
-
-    .is-overlay-active & {
-        animation: fadein 0.3s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
-        pointer-events: all;
-    }
-
-    .is-overlay-hidden & {
-        animation: fadeout 0.3s;
-        animation-timing-function: ease-out;
-        animation-fill-mode: forwards;
-        pointer-events: none;
     }
 }

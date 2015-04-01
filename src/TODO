@@ -2,25 +2,23 @@
 V1.0
 -----------------------------------------
 
+- popup containing all day's events
+- event overlapping/stacking in week view (timed events)
+- handle timed events that cross midnight into next day; also timed events that are +1 day long (should be shown as full-day events in both month & week view)
+
 - event detail overlay: new & edit
 	- fields, toggling display based on selections
 	- mini-cal popup for changing date
 	- save details to model (new & existing)
-
-- '+X items' text on month view (when greater than X events in 1 day)
-	- popup containing all day's events
-
-- event overlapping/stacking in week view (timed events)
-- handle timed events that cross midnight into next day; also timed events that are +1 day long (should be shown as full-day events in both month & week view)
 
 
 -----------------------------------------
 V2.0
 -----------------------------------------
 
-- touch events: dragging to select dates on touch device
-- moveable dates in week/month view
 - resizeable dates in week view
+- moveable dates in week/month view
+- touch events: dragging to select dates on touch device
 
 
 -----------------------------------------

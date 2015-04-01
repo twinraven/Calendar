@@ -8,7 +8,6 @@ var App = App || {};
     // ---------------
 
     App.Views.moreEventsLink = Backbone.View.extend({
-
         template: Handlebars.compile($('#more-events-template').html()),
 
         events: {
@@ -20,7 +19,7 @@ var App = App || {};
         initialize: function (params) {
             this.config = params.config;
 
-            this.events = this.config.stackAry[this.config.col];
+            this.eventsData = this.config.stackAry[this.config.col];
 
             this.listenTo(this.model, 'destroy', this.close);
         },
@@ -46,7 +45,7 @@ var App = App || {};
         handleMoreEventsLinkClick: function (e) {
             e.preventDefault();
 
-            console.log(this.events);
+            App.Events.trigger('popup:eventlist', this.eventsData);
         },
 
 

@@ -19,7 +19,8 @@ var App = App || {};
             'click .control__link--today': 'gotoToday',
             'click .control__link--add': 'addNewEvent',
 
-            'click .overlay-shield': 'handleCloseEvent',
+            'click .shield': 'handleHideShield',
+            'click .popup__close': 'handleClosePopup',
 
             'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',
@@ -67,7 +68,6 @@ var App = App || {};
             this.$toggleSummary = this.$('.control__link--summary');
             this.$summary = this.$('.summary');
             this.$overlay = this.$('#overlay');
-            this.$overlayShield = this.$('.overlay-shield');
         },
 
         bindEvents: function () {
@@ -76,7 +76,8 @@ var App = App || {};
             // event handling
             this.listenTo(App.Events, 'add:event', this.handleNewEvent);
             this.listenTo(App.Events, 'view:event', this.handleViewEvent);
-            this.listenTo(App.Events, 'close:event', this.handleCloseEvent);
+            this.listenTo(App.Events, 'close:event', this.handleHideShield);
+            this.listenTo(App.Events, 'popup:eventlist', this.handlePopupEventList);
 
             // jump the calendar to a date
             this.listenTo(App.Events, 'goto:date', this.handleGotoDate);
@@ -376,18 +377,58 @@ var App = App || {};
         },
 
 
-        // Control overlay display ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        // Control overlays/popups ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+        showShield: function () {
+            this.$body
+                .removeClass('is-shield-hidden')
+                .addClass('is-shield-active');
+        },
+
+        hideShield: function () {
+            this.$body
+                .removeClass('is-shield-active')
+                .addClass('is-shield-hidden');
+        },
 
         openOverlay: function () {
             var self = this;
 
             setTimeout(function () {
-                self.$body.removeClass('is-overlay-hidden').addClass('is-overlay-active');
+                self.$body
+                    .removeClass('is-overlay-hidden')
+                    .addClass('is-overlay-active');
+
+                self.showShield();
             }, 130);
         },
 
         closeOverlay: function () {
-            this.$body.removeClass('is-overlay-active').addClass('is-overlay-hidden');
+            this.$body
+                .removeClass('is-overlay-active')
+                .addClass('is-overlay-hidden');
+
+            this.hideShield();
+        },
+
+        openPopup: function () {
+            var self = this;
+
+            setTimeout(function () {
+                self.$body
+                    .removeClass('is-popup-hidden')
+                    .addClass('is-popup-active');
+
+                self.showShield();
+            }, 130);
+        },
+
+        closePopup: function () {
+            this.$body
+                .removeClass('is-popup-active')
+                .addClass('is-popup-hidden');
+
+            this.hideShield();
         },
 
 
@@ -416,7 +457,7 @@ var App = App || {};
 
         // global mouse-up event, so individual views can be aware of when mouse-ups
         // fire anywhere in the app - to capture, for instance, a drag-out event
-        handleMouseUp: function (e) {
+    handleMouseUp: function (e) {
             var $el = $(e.target);
 
             if (App.State.isDragging) {
@@ -460,9 +501,24 @@ var App = App || {};
 
         },
 
-        handleCloseEvent: function () {
-            this.closeOverlay();
-            App.Events.trigger('clear:selection');
+        handleHideShield: function () {
+            if (this.$body.hasClass('is-overlay-active')) {
+                this.closeOverlay();
+                App.Events.trigger('clear:selection');
+
+            } else if (this.$body.hasClass('is-popup-active')) {
+                this.closePopup();
+            }
+        },
+
+        handlePopupEventList: function (events) {
+            console.log(events);
+
+            this.openPopup();
+        },
+
+        handleClosePopup: function () {
+            this.closePopup();
         }
     });
 })(jQuery);

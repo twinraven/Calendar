@@ -41,7 +41,13 @@
 				<div class="overlay">
 					<div class="overlay__inner" id="overlay"></div>
 				</div>
-				<div class="overlay-shield"></div>
+
+				<div class="popup">
+					<div class="popup__inner" id="popup"></div>
+					<a href="#" class="popup__close"><span>Close</span></a>
+				</div>
+
+				<div class="shield"></div>
 			</main>
 		</div>
 
@@ -83,6 +89,11 @@
 		<script type="text/template" id="detail-template">
 			<h1 class="detail__title">{{ title }}</h1>
 		</script>
+
+		<script type="text/template" id="popup-template">
+			some things here
+		</script>
+
 
 		<script type="text/template" id="event-week-template">
 			<li

@@ -8,8 +8,6 @@ var App = App || {};
     // ---------------
 
     App.Views.fullDayLink = Backbone.View.extend({
-        tagName: 'a',
-        className: 'event__fullday-link',
 
         template: Handlebars.compile($('#fullday-link-template').html()),
 
@@ -35,7 +33,8 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            this.$el.html(this.template({}));
+            var html = this.template(this.model.toJSON());
+            this.setElement(html);
         },
 
         // Remove/destroy ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -59,6 +58,7 @@ var App = App || {};
         close: function () {
             this.undelegateEvents();
             this.stopListening();
+            this.remove();
         }
     });
 })(jQuery);

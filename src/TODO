@@ -2,7 +2,6 @@
 V1.0
 -----------------------------------------
 
-- week view - click in 'fullday' section to create new full-day event
 - event detail overlay: new & edit
 	- fields, toggling display based on selections
 	- mini-cal popup for changing date

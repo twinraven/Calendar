@@ -66,7 +66,8 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            this.$el.html(this.template(this.isolatedModel));
+            var html = this.template(this.isolatedModel);
+            this.setElement(html);
         },
 
 

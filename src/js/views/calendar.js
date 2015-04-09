@@ -67,6 +67,7 @@ var App = App || {};
 
         cacheSelectors: function () {
             this.$body = $('body');
+            this.$panels = $('#js-panels');
             this.$title = this.$('.nav__title');
             this.$modeLinks = this.$('.control--mode a');
             this.$setModeMonth = this.$('.control__link--month');
@@ -104,7 +105,7 @@ var App = App || {};
         },
 
         addTransitionClassesToBody: function () {
-            this.$body.addClass('is-overlay-hidden is-popup-hidden');
+            this.$panels.addClass('is-overlay-hidden is-popup-hidden');
         },
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -401,13 +402,13 @@ var App = App || {};
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         showShield: function () {
-            this.$body
+            this.$panels
                 .removeClass('is-shield-hidden')
                 .addClass('is-shield-active');
         },
 
         hideShield: function () {
-            this.$body
+            this.$panels
                 .removeClass('is-shield-active')
                 .addClass('is-shield-hidden');
         },
@@ -418,14 +419,14 @@ var App = App || {};
             //this.closePopup();
 
             setTimeout(function () {
-                self.$body
+                self.$panels
                     .removeClass('is-overlay-hidden')
                     .addClass('is-overlay-active');
             }, 130);
         },
 
         closeOverlay: function () {
-            this.$body
+            this.$panels
                 .removeClass('is-overlay-active')
                 .addClass('is-overlay-hidden');
         },
@@ -436,14 +437,14 @@ var App = App || {};
             //this.closeOverlay();
 
             setTimeout(function () {
-                self.$body
+                self.$panels
                     .removeClass('is-popup-hidden')
                     .addClass('is-popup-active');
             }, 130);
         },
 
         closePopup: function () {
-            this.$body
+            this.$panels
                 .removeClass('is-popup-active')
                 .addClass('is-popup-hidden');
         },
@@ -530,12 +531,12 @@ var App = App || {};
         },
 
         handleHideShield: function () {
-            if (this.$body.hasClass('is-overlay-active')) {
+            if (this.$panels.hasClass('is-overlay-active')) {
                 this.closeOverlay();
                 this.hideShield();
                 App.Events.trigger('clear:selection');
 
-            } else if (this.$body.hasClass('is-popup-active')) {
+            } else if (this.$panels.hasClass('is-popup-active')) {
                 this.closePopup();
                 this.hideShield();
             }

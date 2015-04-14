@@ -161,6 +161,11 @@ var App = App || {};
 
         // Render events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+        renderEvents: function () {
+            this.renderAllDayEvents();
+            this.renderTimedEvents();
+        },
+
         renderTimedEvents: function () {
             if (this.activeDatesEventData) {
                 var fragment = document.createDocumentFragment();
@@ -172,23 +177,36 @@ var App = App || {};
 
                 if (events) {
                     events.forEach(function (event) {
+                        var context = this.createContext();
+                        var custom = event.get('custom');
+
                         var view = new App.Views.eventInWeek({
                             model: event,
-                            context: this.createContext()
+                            context: context
                         });
 
                         fragment.appendChild(view.render());
+
+                        // if the start and end times are on different days, we need to show 2 date
+                        // blocks: one for the end of the first day, the second for the start
+                        // of the next. Only do this for dates before the last day of the week
+                        if (custom.isSplitDate &&
+                            custom.startDateTime.getDay() < 6) {
+
+                            view = new App.Views.eventInWeek({
+                                model: event,
+                                isEndOfSplitDate: true,
+                                context: context
+                            });
+
+                            fragment.appendChild(view.render());
+                        }
                     }, this);
 
                     this.$events.empty();
                     this.$events.append(fragment);
                 }
             }
-        },
-
-        renderEvents: function () {
-            this.renderAllDayEvents();
-            this.renderTimedEvents();
         },
 
         createContext: function () {

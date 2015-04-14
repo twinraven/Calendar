@@ -161,10 +161,10 @@
     "self": true
    },
    "start": {
-    "dateTime": "2010-06-22T15:00:00+01:00"
+    "dateTime": "2013-09-29T15:00:00+01:00"
    },
    "end": {
-    "dateTime": "2010-06-22T16:00:00+01:00"
+    "dateTime": "2013-09-30T14:30:00+01:00"
    },
    "iCalUID": "ot0et2ku2e1mamum62ndqjqs2o@google.com",
    "sequence": 0,
@@ -6727,11 +6727,11 @@
     "self": true
    },
    "start": {
-    "dateTime": "2013-10-06T09:00:00+01:00",
+    "dateTime": "2013-10-04T10:00:00+01:00",
     "timeZone": "Europe/London"
    },
    "end": {
-    "dateTime": "2013-10-06T10:00:00+01:00",
+    "dateTime": "2013-10-04T11:00:00+01:00",
     "timeZone": "Europe/London"
    },
    "transparency": "transparent",

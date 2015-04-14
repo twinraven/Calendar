@@ -20,6 +20,7 @@ var App = App || {};
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         initialize: function (params) {
+            this.params = params;
             this.context = params.context;
 
             var m = this.model.attributes;
@@ -44,11 +45,15 @@ var App = App || {};
             if (this.context && this.isolatedModel.weekNum < this.context.weekNum) {
                 this.isolatedModel.pos = 0;
 
-                if (this.isolatedModel.endDateTime < this.context.weekEndDate) {
-                    this.isolatedModel.span = App.Methods.getDayOfWeekNum(this.isolatedModel.endDateTime);
+                // if we're a split date (a timed event that runs through from one day to the next),
+                // then we don't need this adjustment, which only applies to true full-day events
+                if (!this.isolatedModel.isSplitDate) {
+                    if (this.isolatedModel.endDateTime < this.context.weekEndDate) {
+                        this.isolatedModel.span = App.Methods.getDayOfWeekNum(this.isolatedModel.endDateTime);
 
-                } else {
-                    this.isolatedModel.span = App.Constants.DAYS_IN_WEEK;
+                    } else {
+                        this.isolatedModel.span = App.Constants.DAYS_IN_WEEK;
+                    }
                 }
             }
         },

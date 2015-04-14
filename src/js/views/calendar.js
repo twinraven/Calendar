@@ -58,7 +58,7 @@ var App = App || {};
 
 
             // DEBUG
-            this.setActiveDate(App.Methods.newDate(2013, 11, 28));
+            this.setActiveDate(App.Methods.newDate(2013, 9, 4));
             this.markDates();
         },
 

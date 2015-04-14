@@ -334,6 +334,16 @@ var App = App || {};
         },
 
 
+        getDuration: function (startDate, endDate) {
+            var diff = endDate.getTime() - startDate.getTime();
+
+            return {
+                days: diff / App.Constants.MS_IN_DAY,
+                hours:  diff / App.Constants.MS_IN_DAY * App.Constants.HRS_IN_DAY
+            };
+        },
+
+
         getWeekEndDate: function (date) {
             var weekStartDate = this.getWeekStartDate(date);
             var d = this.getObjectFromDate(weekStartDate);
@@ -408,10 +418,21 @@ var App = App || {};
         },
 
         getDaysInRangeNum: function (dateFrom, dateTo) {
-            var dFrom = this.newDate(dateFrom);
-            var dTo = this.newDate(dateTo);
+            var dFrom = new Date(dateFrom);
+            var dTo = new Date(dateTo);
 
-            return Math.round((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
+            return Math.ceil((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
+        },
+
+        // we tweak the end date, moving it back by 1 second --
+        // so that events that end at midnight are not classes as 'split date' events,
+        // where the end is on the next day
+        isSameDate: function (dateA, dateB) {
+            var a = new Date(dateA);
+            var b = new Date(dateB);
+            var bAdjusted = new Date(b.getTime() - 1000);
+
+            return a.getDate() === bAdjusted.getDate();
         },
 
         isCurrentWeek: function (date) {
@@ -433,7 +454,7 @@ var App = App || {};
         },
 
         isDateToday: function (date) {
-            var now = new Date(); // not this.newDate as that creates a new data at 00:00am
+            var now = new Date(); // not this.newDate as that creates a new data at 00:00:00
             var active = new Date(date);
             var nowDate = now.getDate();
             var activeDate = active.getDate();

@@ -10,6 +10,8 @@ module.exports = function ( grunt ) {
 
 		'src/js/config.js',
 
+		'src/js/routers/router.js',
+
 		'src/js/events/*.js',
 
 		'src/js/models/*.js',

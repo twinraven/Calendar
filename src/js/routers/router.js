@@ -6,27 +6,17 @@ var App = App || {};
 
 	// Todo Router
 	// ----------
-	/*var Router = Backbone.Router.extend({
+	App.Router = new (Backbone.Router.extend({
 		routes : {
-			"MONTH" : "monthCalendar",
-			"WEEK" : "weekCalendar"
+			"" : "index"
 		},
-		monthCalendar : function () {
-			this.loadView(new App.Views.monthInFull(({
-		        dayTemplate: '#day-full-template'
-		    })));
+		index : function () {
+			console.log('start things');
+			var calApp = new App.Calendar(); // self-rendering in initialize()
 		},
-		weekCalendar : function () {
-			this.loadView(new App.Views.week());
-		},
-		loadView : function (view) {
-			this.view && (this.view.close ? this.view.close() : this.view.remove());
-			this.view = view;
 
-			this.view.render();
+		start: function () {
+			Backbone.history.start();
 		}
-	});
-
-	App.router = new Router();
-	Backbone.history.start();*/
+	}));
 })();

@@ -8,7 +8,7 @@
 
 		<link rel="stylesheet" href="css/main.css">
 	</head>
-	<body>
+	<body class="is-loading">
 		<div class="container" id="app">
 			<nav class="nav">
 				<ul class="control control--summary">
@@ -41,17 +41,20 @@
 				<div id="js-panels">
 					<div class="overlay">
 						<div class="overlay__inner" id="overlay"></div>
+						<a href="#" class="close overlay__close"><span class="icon icon--close">Close</span></a>
 					</div>
 
 					<div class="popup">
 						<div class="popup__inner" id="popup"></div>
-						<a href="#" class="popup__close"><span class="icon icon--close">Close</span></a>
+						<a href="#" class="close popup__close"><span class="icon icon--close">Close</span></a>
 					</div>
 
 					<div class="shield"></div>
 				</div
 			</main>
 		</div>
+
+		<div class="loading"><span class="icon icon--settings loading__icon"></span></div>
 
 
 		<!-- Templates ~~~~~~~~~~~~~~~~~~~~~~~ -->

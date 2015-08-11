@@ -48,7 +48,7 @@ ul {
     left: 0;
     opacity: 0;
     pointer-events: none;
-    transition: all 0.2s;
+    transition: all 0.2s 0.15s;
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -56,16 +56,42 @@ ul {
     .is-shield-active & {
         opacity: 0.6;
         pointer-events: all;
+        transition: all 0.2s;
     }
 
     .is-shield-hidden & {
-        transition-duration: 0.15s;
+        transition-duration: 0.25s;
         pointer-events: none;
     }
 }
 
 .preload * {
     animation: none !important;
+}
+
+.close {
+    color: #000;
+    border-radius: 20px;
+    height: 24px;
+    overflow: hidden;
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 24px;
+
+    .icon {
+        height: 24px;
+        overflow: hidden;
+        text-indent: -9999px;
+        width: 24px;
+
+        &:before {
+            left: 0;
+            position: absolute;
+            text-indent: 0;
+            top: 0;
+        }
+    }
 }
 
 // helpers ~~~~~~~~~~~~~~~~~~~~~~

@@ -8,6 +8,7 @@ V1.0
 	- fields, toggling display based on selections
 	- mini-cal popup for changing date
 	- save details to model (new & existing)
+    - Loading overlay
 
 
 -----------------------------------------

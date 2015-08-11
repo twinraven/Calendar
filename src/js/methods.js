@@ -420,8 +420,14 @@ var App = App || {};
         getDaysInRangeNum: function (dateFrom, dateTo) {
             var dFrom = new Date(dateFrom);
             var dTo = new Date(dateTo);
+            var tzOffsetDifference = dFrom.getTimezoneOffset() - dTo.getTimezoneOffset();
+            var diff = dTo.getTime() - dFrom.getTime();
 
-            return Math.ceil((dTo.getTime() - dFrom.getTime()) / App.Constants.MS_IN_DAY);
+            if (tzOffsetDifference !== 0) {
+                diff = diff + (tzOffsetDifference * 1000 * 60);
+            }
+
+            return Math.ceil(diff / App.Constants.MS_IN_DAY);
         },
 
         // we tweak the end date, moving it back by 1 second --

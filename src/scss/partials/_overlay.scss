@@ -6,6 +6,7 @@
     background: #FFF;
     display: none;
     height: 100vh;
+    max-width: 420px;
     position: fixed;
     right: 0;
     top: 0;
@@ -31,5 +32,49 @@
 
     @include respond-min($tablet-wide) {
         width: 40%;
+    }
+}
+
+.loading {
+    //box-shadow: 0 0 200px rgba(0,0,0,0.2) inset;
+    background: #f0f0f0;
+    display: block;
+    height: 100%;
+    opacity: 0;
+    pointer-events: none;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transition: opacity 0.25s;
+    width: 100%;
+    z-index: 1000;
+
+    .is-loading & {
+        opacity: 1;
+        pointer-events: all;
+    }
+}
+
+.loading__icon {
+    animation: spin 1.2s linear infinite;
+    color: #aaa;
+    display: block;
+    font-size: 40px;
+    height: 40px;
+    left: 50%;
+    margin: -20px 0 0 -20px;
+    overflow: hidden;
+    position: absolute;
+    top: 50%;
+    width: 40px;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(359deg);
     }
 }

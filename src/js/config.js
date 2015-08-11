@@ -29,7 +29,7 @@ var App = App || {};
 	App.State = {
 		today: App.Methods.newDate(),
 	    startDay : 'mon',
-		viewMode: App.Constants.MONTH
+		viewMode: App.Constants.WEEK
 	};
 
 	App.Models = {};

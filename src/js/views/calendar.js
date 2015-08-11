@@ -24,6 +24,8 @@ var App = App || {};
             'click .shield': 'handleHideShield',
             'click .popup__close': 'handleClosePopup',
 
+            'click .overlay__close': 'handleCloseOverlay',
+
             'click .control__link--summary': 'toggleSummaryDisplay',
             'click .control__link--week': 'setViewModeWeek',
             'click .control__link--month': 'setViewModeMonth',
@@ -58,7 +60,7 @@ var App = App || {};
 
 
             // DEBUG
-            this.setActiveDate(App.Methods.newDate(2013, 9, 4));
+            this.setActiveDate(App.Methods.newDate(2013, 9, 30));
             this.markDates();
         },
 
@@ -556,6 +558,11 @@ var App = App || {};
 
         handleClosePopup: function () {
             this.closePopup();
+            this.hideShield();
+        },
+
+        handleCloseOverlay: function () {
+            this.closeOverlay();
             this.hideShield();
         }
     });

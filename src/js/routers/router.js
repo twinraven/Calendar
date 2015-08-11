@@ -11,7 +11,7 @@ var App = App || {};
 			"" : "index"
 		},
 		index : function () {
-			console.log('start things');
+			console.log('Calendar start');
 			var calApp = new App.Calendar(); // self-rendering in initialize()
 		},
 

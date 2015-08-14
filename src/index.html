@@ -107,6 +107,55 @@
 			</div>
 		</script>
 
+		<script type="text/template" id="event-overlay-template">
+			<div>
+				<div class="event-row">
+					<h3 class="overlay__title">{{ summary }}</h3>
+					<input type="text" value="{{ summary }}" id="eventSummary" name="eventSummary" />
+				</div>
+
+				<div class="event-row">
+					<p>From: {{custom.startDateTime}}</p>
+
+					<label for="eventDateFrom">Date from:</label>
+					<select name="eventDateFrom" id="eventDateFrom">
+						<option value=""></option>
+					</select>
+				</div>
+
+				<div class="event-row">
+					<p>To: {{custom.endDateTime}}</p>
+
+					<label for="eventDateFrom">Date from:</label>
+					<select name="eventDateFrom" id="eventDateFrom">
+						<option value=""></option>
+					</select>
+				</div>
+
+				<div>
+					<div class="event-row">
+						<label for="eventFullDay">
+							<input type="checkbox" name="eventFullDay" id="eventFullDay" checked />
+							<span>Full day event?</span>
+						</label>
+					</div>
+				</div>
+
+				<div>
+					<div class="event-row">
+						<label for="eventFullDay">
+							<input type="checkbox" name="eventFullDay" id="eventFullDay" />
+							<span>Full day event?</span>
+						</label>
+					</div>
+
+					<div class="event-row">
+						<label for="eventTimeFrom">Time</label>
+					</div>
+				</div>
+			</div>
+		</script>
+
 
 		<script type="text/template" id="event-week-template">
 			<li

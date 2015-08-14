@@ -505,26 +505,25 @@ var App = App || {};
         },
 
         handleNewEvent: function (newEvent) {
-            this.openOverlay();
-            this.showShield();
+            var view = new App.Views.eventOverlay({
+                model: App.eventData.create(App.Models.Event)
+            });
 
-            console.log('ADD NEW EVENT');
-            console.log('from: ' + newEvent.from);
-            console.log('to: ' + newEvent.to);
-            console.log('all day event: ' + (newEvent.fullday));
-            console.log('~~~~~~~~~~~~~~~~');
+            this.$overlay.html(view.render());
+
+            this.showShield();
+            this.closePopup();
+            this.openOverlay();
         },
 
         handleViewEvent: function (event) {
             var eventData = App.eventData.get(event.id);
-            var customEventData = eventData.get('custom');
 
-            console.log('VIEW/EDIT EVENT');
-            console.log('title: ' + customEventData.summary);
-            console.log('from: ' + customEventData.startDateTime);
-            console.log('to: ' + customEventData.endDateTime);
-            console.log('all day event: ' + (customEventData.isFullDay));
-            console.log('~~~~~~~~~~~~~~~~');
+            var view = new App.Views.eventOverlay({
+                model: eventData
+            });
+
+            this.$overlay.html(view.render());
 
             this.showShield();
             this.closePopup();

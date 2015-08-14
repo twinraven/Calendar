@@ -5,6 +5,13 @@ var App = App || {};
     'use strict';
 
     App.Labels = {
+        minute: [
+            0,
+            15,
+            30,
+            45
+        ],
+        hour: [], // populate programmatically
         week : [
             'Monday',
             'Tuesday',
@@ -27,6 +34,7 @@ var App = App || {};
             'October',
             'November',
             'December'
-        ]
+        ],
+        year: [] // populate programmatically
     };
 })(jQuery);

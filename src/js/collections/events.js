@@ -19,7 +19,6 @@ var App = App || {};
 		parse: function (data) {
 			var events = data.items;
 
-			// TODO: refactor? getting quite long
 			events.map(function (model) {
 				var isFullDay = _.has(model.start, 'date');
 

@@ -191,7 +191,7 @@ var App = App || {};
             var monthEnd = this.newDate(d.year, d.month + 1, 1);
             var len = Math.round((monthEnd - monthStart) / App.Constants.MS_IN_DAY);
 
-            // add 1 to month, then request day 0 -- gets last day of previous month
+            // add 1 to month, then request day 0 -- gets last day of previous month (i.e. this month)
             return len;
         },
 

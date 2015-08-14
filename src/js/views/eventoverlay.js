@@ -8,22 +8,33 @@ var App = App || {};
     // ---------------
 
     // Our overall **AppView** is the top-level piece of UI.
-    App.Views.eventsList = Backbone.View.extend({
+    App.Views.eventOverlay = Backbone.View.extend({
 
-        template: Handlebars.compile($('#event-list-template').html()),
+        template: Handlebars.compile($('#event-overlay-template').html()),
 
-        collection: App.Collections.dates,
-
-        events: {
+        /*events: {
             'click .event': 'handleEventClick'
-        },
+        },*/
 
         // init ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        initialize: function (params) {
-            this.eventsData = params.eventModels.map(function (event) {
-                return event.get('custom');
-            });
+        initialize: function () {
+            if (this.model.isNew()) {
+                // new model
+
+            } else {
+                // grab existing customEventData
+                var customEventData = this.model.get('custom');
+
+                console.log('VIEW/EDIT EVENT');
+                console.log('title: ' + customEventData.summary);
+                console.log('from: ' + customEventData.startDateTime);
+                console.log('to: ' + customEventData.endDateTime);
+                console.log('all day event: ' + (customEventData.isFullDay));
+                console.log('~~~~~~~~~~~~~~~~');
+            }
+
+            //customEventData.isFullDayChecked = customEventData.isFullDay ? 'checked' : '';
 
             this.listenTo(this.model, 'destroy', this.close);
         },
@@ -31,7 +42,8 @@ var App = App || {};
 
         // render ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        render: function () {
+        render: function (params) {
+
             this.renderElem();
 
             return this.el;
@@ -41,22 +53,15 @@ var App = App || {};
         // Render methods ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
         renderElem: function () {
-            var date = App.Methods.newDate(this.model.get('id'));
-            var dateFormatted = App.Labels.week[date.getDay()] + ' ' + date.getDate() + ' ' + App.Labels.month[date.getMonth()] + ' ' + date.getFullYear();
 
-            var data = {
-                'date': dateFormatted,
-                'events': this.eventsData
-            };
-
-            var html = this.template(data);
-            this.setElement($(html));
+            var html = this.template(this.model.toJSON());
+            this.setElement(html);
         },
 
 
         // handle Events ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-        handleEventClick: function (e) {
+        /*handleEventClick: function (e) {
             var $el = $(e.target);
             var id = $el.data('id');
 
@@ -64,7 +69,7 @@ var App = App || {};
                 'id': id
             });
 
-        },
+        },*/
 
 
         // Kill switch ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

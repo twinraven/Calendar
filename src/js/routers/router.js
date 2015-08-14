@@ -11,8 +11,13 @@ var App = App || {};
 			"" : "index"
 		},
 		index : function () {
+
 			console.log('Calendar start');
 			var calApp = new App.Calendar(); // self-rendering in initialize()
+
+			setTimeout(function () {
+			    $('body').removeClass('is-loading');
+			}, 400);
 		},
 
 		start: function () {

@@ -58,6 +58,8 @@ var App = App || {};
 
             this.loadEventData();
 
+            this.generateLabels();
+
 
             // DEBUG
             this.setActiveDate(App.Methods.newDate(2013, 9, 30));
@@ -108,6 +110,20 @@ var App = App || {};
 
         addTransitionClassesToBody: function () {
             this.$panels.addClass('is-overlay-hidden is-popup-hidden');
+        },
+
+        generateLabels: function () {
+            var currentYear = App.Methods.newDate().getFullYear();
+            var yearOffsetStart = -App.Constants.DATE_SELECT_YRS_MAX_RANGE;
+            var yearRangeLength = (App.Constants.DATE_SELECT_YRS_MAX_RANGE * 2) + 1;
+
+            _.times(yearRangeLength, function (i) {
+                App.Labels.year[i] = currentYear + (yearOffsetStart + i);
+            });
+
+            _.times(App.Constants.HRS_IN_DAY, function (i) {
+                App.Labels.hour[i] = i;
+            });
         },
 
         // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -375,7 +375,7 @@ var App = App || {};
             return difference / App.Constants.MS_IN_HR;
         },
 
-        getTimeFormatted: function (date) {
+        getTimeFormatted: function (date, shortSuffix) {
             var dateStart = this.newDate(date);
             var dateTime = new Date(date);
             var timeAsMs = dateTime.getTime() - dateStart.getTime();
@@ -386,12 +386,18 @@ var App = App || {};
             var minutes = time % 60;
             time = time / 60;
             var hours = time % 24;
-            var suffix = 'a';
+            var suffix = 'AM';
 
-            if (hours >= 12) { suffix = 'p'; }
+            if (hours >= 12) { suffix = 'PM'; }
             if (Math.floor(hours) > 12) { hours = hours - 12; }
 
+            if (shortSuffix) { suffix = suffix.slice(0,1).toLowerCase(); }
+
             return Math.floor(hours) + ':' + this.asTwoDigits(minutes) + suffix;
+        },
+
+        getTimeFormattedShort: function (date) {
+            return this.getTimeFormatted(date, true);
         },
 
         getPercentDayComplete: function (date) {
@@ -423,6 +429,8 @@ var App = App || {};
             var tzOffsetDifference = dFrom.getTimezoneOffset() - dTo.getTimezoneOffset();
             var diff = dTo.getTime() - dFrom.getTime();
 
+            // handle timezone offset, by making sure we record and add/remove difference
+            // before we calculate total days
             if (tzOffsetDifference !== 0) {
                 diff = diff + (tzOffsetDifference * 1000 * 60);
             }
@@ -472,6 +480,8 @@ var App = App || {};
             var from = timeFrom.getTime();
             var to = timeTo.getTime();
             var diff = to - from;
+
+            // TODO: ensure this won't get caught up in timezone schenegans
 
             return diff === App.Constants.MS_IN_DAY;
         },
@@ -592,7 +602,7 @@ var App = App || {};
             var output = [];
 
 
-            // TODO: refactor? - code duplication. Rework ~~~~~~~~~~~~~~~~~~~~~~~
+            // TODO: refactor? - code duplication ~~~~~~~~~~~~~~~~~~~~~~~~~~~
             daysMissingAtFront = this.getMonthStartDayNum(date);
 
             if (daysMissingAtFront > 0) {

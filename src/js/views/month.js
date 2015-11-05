@@ -69,15 +69,14 @@ var App = App || {};
         },
 
         renderDayLabels: function () {
-            var self = this;
-
             _.each(App.Labels.week, function (day, i) {
                 var data = {
                     'label': App.Labels.week[i],
                     'initial': App.Labels.week[i].slice(0, 1)
                 };
-                self.$labels.append(self.titleTemplate(data));
-            });
+                this.$labels.append(this.titleTemplate(data));
+
+            }.bind(this));
         },
 
         // flagged for removal? depends if switching to table layout

@@ -11,7 +11,8 @@ var App = App || {};
             30,
             45
         ],
-        hour: [], // populate programmatically
+        hour: [], // populated programmatically - see calendar.js
+        day: [], // populated programmatically
         week : [
             'Monday',
             'Tuesday',
@@ -35,6 +36,6 @@ var App = App || {};
             'November',
             'December'
         ],
-        year: [] // populate programmatically
+        year: [] // populated programmatically
     };
 })(jQuery);

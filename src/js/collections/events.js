@@ -7,7 +7,7 @@ var App = App || {};
 	// Collection
 	// ---------------
 
-	// The collection of todos is backed by *localStorage* instead of a remote
+	// The collection of events is backed by *localStorage* instead of a remote
 	// server.
 	App.Collections.events = Backbone.Collection.extend({
 		url: 'api/data.json',

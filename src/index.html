@@ -115,30 +115,21 @@
 				</div>
 
 				<div class="event-row">
-					<p>From: {{custom.startDateTime}}</p>
-
-					<label for="eventDateFrom">Date from:</label>
-					<select name="eventDateFrom" id="eventDateFrom">
-						<option value=""></option>
-					</select>
+					<!--<p>From: {{custom.startDateTime}}</p>-->
+					<p>{{years}}</p>
+					<label for="eventDateFrom">From:</label>
+					<select name="eventDateFromYear" id="eventDateFromYear" class="select-year-from"></select>
+					<select name="eventDateFromMonth" id="eventDateFromMonth" class="select-month-from"></select>
+					<select name="eventDateFromDay" id="eventDateFromDay" class="select-day-from"></select>
 				</div>
 
 				<div class="event-row">
-					<p>To: {{custom.endDateTime}}</p>
+					<!--<p>To: {{custom.endDateTime}}</p>-->
 
-					<label for="eventDateFrom">Date from:</label>
-					<select name="eventDateFrom" id="eventDateFrom">
-						<option value=""></option>
-					</select>
-				</div>
-
-				<div>
-					<div class="event-row">
-						<label for="eventFullDay">
-							<input type="checkbox" name="eventFullDay" id="eventFullDay" checked />
-							<span>Full day event?</span>
-						</label>
-					</div>
+					<label for="eventDateFrom">To:</label>
+					<select name="eventDateToYear" id="eventDateToYear" class="select-year-to"></select>
+					<select name="eventDateToMonth" id="eventDateToMonth" class="select-month-to"></select>
+					<select name="eventDateToDay" id="eventDateToDay" class="select-day-to"></select>
 				</div>
 
 				<div>
@@ -148,6 +139,9 @@
 							<span>Full day event?</span>
 						</label>
 					</div>
+				</div>
+
+				<div>
 
 					<div class="event-row">
 						<label for="eventTimeFrom">Time</label>
@@ -218,6 +212,9 @@
 			</li>
 		</script>
 
+		<script type="text/template" id="select-option-template">
+			<option value="{{key}}" {{selected}}>{{value}}</option>
+		</script>
 
 		<script type="text/template" id="week-template">
 			<h4 class="cal__title"></h4>

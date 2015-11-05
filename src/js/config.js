@@ -24,7 +24,7 @@ var App = App || {};
 	    MINS_IN_DAY: 1440,
 	    HRS_IN_DAY: 24,
 
-	    DATE_SELECT_YEAR_MAX: 4
+	    DATE_SELECT_YRS_MAX_RANGE: 10
 	};
 
 	// mutable App-wide properties
